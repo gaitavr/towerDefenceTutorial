@@ -78,7 +78,7 @@ public class GameTile : MonoBehaviour
         neighbor._nextOnPath = this;
         neighbor.ExitPoint = neighbor.transform.localPosition + direction.GetHalfVector();
         neighbor.PathDirection = direction;
-        return neighbor.Content.Type != GameTileContentType.Wall ? neighbor : null;
+        return neighbor.Content.IsBlockingPath ? null : neighbor;
     }
 
     public GameTile GrowPathNorth() => GrowPathTo(_north, Direction.South);

@@ -22,6 +22,8 @@ public class GameBoard : MonoBehaviour
 
     public int SpawnPointCount => _spawnPoints.Count;
 
+    private List<GameTileContent> _contentToUpdate = new List<GameTileContent>();
+
     public void Initialize(Vector2Int size, GameTileContentFactory contentFactory)
     {
         _size = size;
@@ -61,6 +63,14 @@ public class GameBoard : MonoBehaviour
 
         ToggleDestination(_tiles[_tiles.Length / 2]);
         ToggleSpawnPoint(_tiles[0]);
+    }
+
+    public void GameUpdate()
+    {
+        for (int i = 0; i < _contentToUpdate.Count; i++)
+        {
+            _contentToUpdate[i].GameUpdate();
+        }
     }
 
     public bool FindPaths()
@@ -157,6 +167,35 @@ public class GameBoard : MonoBehaviour
         }
     }
 
+    public void ToggleTower(GameTile tile)
+    {
+        if (tile.Content.Type == GameTileContentType.Tower)
+        {
+            _contentToUpdate.Remove(tile.Content);
+            tile.Content = _contentFactory.Get(GameTileContentType.Empty);
+            FindPaths();
+        }
+        else if (tile.Content.Type == GameTileContentType.Empty)
+        {
+            tile.Content = _contentFactory.Get(GameTileContentType.Tower);
+           
+            if (FindPaths())
+            {
+                _contentToUpdate.Add(tile.Content);
+            }
+            else
+            {
+                tile.Content = _contentFactory.Get(GameTileContentType.Empty);
+                FindPaths();
+            }
+        }
+        else if (tile.Content.Type == GameTileContentType.Wall)
+        {
+            tile.Content = _contentFactory.Get(GameTileContentType.Tower);
+            _contentToUpdate.Add(tile.Content);
+        }
+    }
+
     public void ToggleSpawnPoint(GameTile tile)
     {
         if (tile.Content.Type == GameTileContentType.SpawnPoint)
@@ -177,7 +216,7 @@ public class GameBoard : MonoBehaviour
     public GameTile GetTile(Ray ray)
     {
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, float.MaxValue, 1))
         {
             int x = (int) (hit.point.x + _size.x * 0.5f);
             int y = (int) (hit.point.z + _size.y * 0.5f);
