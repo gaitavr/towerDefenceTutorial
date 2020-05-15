@@ -22,11 +22,24 @@ public class Game : MonoBehaviour
     [SerializeField, Range(0.1f, 10f)]
     private float _spawnSpeed;
 
+    [SerializeField]
+    private WarFactory _warFactory;
+
     private float _spawnProgress;
 
-    private EnemyCollection _enemies = new EnemyCollection();
+    private GameBehaviorCollection _enemies = new GameBehaviorCollection();
+    private GameBehaviorCollection _nonEnemies = new GameBehaviorCollection();
 
     private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
+
+    private TowerType _currentTowerType;
+
+    private static Game _instance;
+
+    private void OnEnable()
+    {
+        _instance = this;
+    }
 
     private void Start()
     {
@@ -35,6 +48,15 @@ public class Game : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            _currentTowerType = TowerType.Laser;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            _currentTowerType = TowerType.Mortar;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             HandleTouch();
@@ -54,6 +76,7 @@ public class Game : MonoBehaviour
         _enemies.GameUpdate();
         Physics.SyncTransforms();
         _board.GameUpdate();
+        _nonEnemies.GameUpdate();
     }
 
     private void SpawnEnemy()
@@ -71,7 +94,7 @@ public class Game : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                _board.ToggleTower(tile);
+                _board.ToggleTower(tile, _currentTowerType);
             }
             else
             {
@@ -94,5 +117,19 @@ public class Game : MonoBehaviour
                 _board.ToggleSpawnPoint(tile);
             }
         }
+    }
+
+    public static Shell SpawnShell()
+    {
+        Shell shell = _instance._warFactory.Shell;
+        _instance._nonEnemies.Add(shell);
+        return shell;
+    }
+
+    public static Explosion SpawnExplosion()
+    {
+        Explosion shell = _instance._warFactory.Explosion;
+        _instance._nonEnemies.Add(shell);
+        return shell;
     }
 }
