@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 
 [Serializable]
-public class GameBehaviorCollection
+public class EnemyCollection
 {
-    private List<GameBehavior> _behaviors = new List<GameBehavior>();
+    private List<Enemy> _enemies = new List<Enemy>();
 
-    public void Add(GameBehavior behavior)
+    public void Add(Enemy enemy)
     {
-        _behaviors.Add(behavior);
+        _enemies.Add(enemy);
     }
 
     public void GameUpdate()
     {
-        for (int i = 0; i < _behaviors.Count; i++)
+        for (int i = 0; i < _enemies.Count; i++)
         {
-            if (!_behaviors[i].GameUpdate())
+            if (!_enemies[i].GameUpdate())
             {
-                int lastIndex = _behaviors.Count - 1;
-                _behaviors[i] = _behaviors[lastIndex];
-                _behaviors.RemoveAt(lastIndex);
+                int lastIndex = _enemies.Count - 1;
+                _enemies[i] = _enemies[lastIndex];
+                _enemies.RemoveAt(lastIndex);
                 i -= 1;
             }
         }
