@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class Tower : GameTileContent
 {
@@ -33,7 +28,8 @@ public abstract class Tower : GameTileContent
 
         Vector3 myPos = transform.localPosition;
         Vector3 targetPos = target.Position;
-        if (Vector3.Distance(myPos, targetPos) > _targetingRange + target.ColliderSize * target.Enemy.Scale)
+        if (Vector3.Distance(myPos, targetPos) > _targetingRange + 
+            target.ColliderSize * target.Enemy.Scale || target.IsEnabled == false)
         {
             target = null;
             return false;
