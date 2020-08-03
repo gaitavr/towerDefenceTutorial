@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b63a288bdde1add4e9de7a5cce8eb308, type: 3}
-  m_Name: GameScenario
+  m_Script: {fileID: 11500000, guid: 930b946ab42f93b41a0c89c5d7127121, type: 3}
+  m_Name: GolemWaveTest
   m_EditorClassIdentifier: 
-  _waves:
-  - {fileID: 11400000, guid: 06a6c5d66be6d6641bf10f6a841b35ee, type: 2}
+  _spawnSequences:
+  - _factory: {fileID: 11400000, guid: c07de11739867694db89259905e2b165, type: 2}
+    _type: 0
+    _amount: 5
+    _cooldown: 1

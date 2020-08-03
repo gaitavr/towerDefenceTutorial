@@ -22,7 +22,7 @@ public class EnemyFactory : GameObjectFactory
         public FloatRange Health = new FloatRange(100f);
     }
 
-    [SerializeField] private EnemyConfig _small, _medium, _large;
+    [SerializeField] private EnemyConfig _small, _medium, _golem;
 
     public Enemy Get(EnemyType type)
     {
@@ -38,8 +38,8 @@ public class EnemyFactory : GameObjectFactory
     {
         switch (type)
         {
-            case EnemyType.Large:
-                return _large;
+            case EnemyType.Golem:
+                return _golem;
             case EnemyType.Medium:
                 return _medium;
             case EnemyType.Small:
