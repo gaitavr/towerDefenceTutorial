@@ -22,6 +22,8 @@ public class Enemy : GameBehavior
     public float Scale { get; private set; }
     public float Health { get; private set; }
 
+    private const float CHANGE_DIR_SPEED_MULTIPLIER = 0.8f;
+
     public void Initialize(float scale, float pathOffset, float speed, float health)
     {
         _model.localScale = new Vector3(scale, scale, scale);
@@ -139,7 +141,7 @@ public class Enemy : GameBehavior
         _directionAngleTo = _directionAngleFrom + 90f;
         _model.localPosition = new Vector3(_pathOffset - 0.5f, 0f);
         transform.localPosition = _positionFrom + _direction.GetHalfVector();
-        _progressFactor = _speed / (Mathf.PI * 0.5f * (0.5f - _pathOffset));
+        _progressFactor = _speed * CHANGE_DIR_SPEED_MULTIPLIER;
     }
 
     private void PrepareTurnLeft()
@@ -147,7 +149,7 @@ public class Enemy : GameBehavior
         _directionAngleTo = _directionAngleFrom - 90f;
         _model.localPosition = new Vector3(_pathOffset + 0.5f, 0f);
         transform.localPosition = _positionFrom + _direction.GetHalfVector();
-        _progressFactor = _speed / (Mathf.PI * 0.5f * (0.5f - _pathOffset));
+        _progressFactor = _speed * CHANGE_DIR_SPEED_MULTIPLIER;
     }
 
     private void PrepareTurnAround()
@@ -155,7 +157,7 @@ public class Enemy : GameBehavior
         _directionAngleTo = _directionAngleFrom + (_pathOffset < 0f ? 180f : -180f);
         _model.localPosition = new Vector3(_pathOffset, 0f);
         transform.localPosition = _positionFrom;
-        _progressFactor = _speed / (Mathf.PI * Mathf.Max(Mathf.Abs(_pathOffset), 0.2f));
+        _progressFactor = _speed * CHANGE_DIR_SPEED_MULTIPLIER;
     }
 
     public override void Recycle()
