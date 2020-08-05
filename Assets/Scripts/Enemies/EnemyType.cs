@@ -3,6 +3,6 @@
 public enum EnemyType
 {
     Golem,
-    Medium,
+    Elien,
     Chomper
 }

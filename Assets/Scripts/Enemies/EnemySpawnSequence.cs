@@ -8,7 +8,7 @@ public class EnemySpawnSequence
     private EnemyFactory _factory;
 
     [SerializeField]
-    private EnemyType _type = EnemyType.Medium;
+    private EnemyType _type = EnemyType.Elien;
 
     [SerializeField, Range(1, 100)]
     private int _amount = 1;

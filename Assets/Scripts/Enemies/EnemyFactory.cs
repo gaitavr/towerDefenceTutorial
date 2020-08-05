@@ -22,7 +22,7 @@ public class EnemyFactory : GameObjectFactory
         public FloatRange Health = new FloatRange(100f);
     }
 
-    [SerializeField] private EnemyConfig _chomper, _medium, _golem;
+    [SerializeField] private EnemyConfig _chomper, _elien, _golem;
 
     public Enemy Get(EnemyType type)
     {
@@ -40,13 +40,13 @@ public class EnemyFactory : GameObjectFactory
         {
             case EnemyType.Golem:
                 return _golem;
-            case EnemyType.Medium:
-                return _medium;
+            case EnemyType.Elien:
+                return _elien;
             case EnemyType.Chomper:
                 return _chomper;
         }
         Debug.LogError($"No config for: {type}");
-        return _medium;
+        return _elien;
     }
 
     public void Reclaim(Enemy enemy)

@@ -67,6 +67,10 @@ public class Enemy : GameBehavior
 
     public override bool GameUpdate()
     {
+        if (_view.IsInited == false)
+        {
+            return true;
+        }
         if (Health <= 0f)
         {
             DisableView();
@@ -167,7 +171,6 @@ public class Enemy : GameBehavior
 
     private void DisableView()
     {
-        _view.GetComponent<Collider>().enabled = false;
         _view.GetComponent<TargetPoint>().IsEnabled = false;
     }
 }

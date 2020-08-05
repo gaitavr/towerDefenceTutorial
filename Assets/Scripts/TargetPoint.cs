@@ -6,7 +6,16 @@ using UnityEngine;
 public class TargetPoint : MonoBehaviour
 {
     public Enemy Enemy { get; private set; }
-    public bool IsEnabled { get; set; } = true;
+    private bool _isEnabled;
+    public bool IsEnabled
+    {
+        get { return _isEnabled; }
+        set
+        {
+            _collider.enabled = value;
+            _isEnabled = value;
+        }
+    }
     public Vector3 Position => transform.position;
 
     public float ColliderSize { get; private set; }
@@ -16,10 +25,13 @@ public class TargetPoint : MonoBehaviour
     private static Collider[] _buffer = new Collider[100];
     public static int BufferedCount { get; private set; }
 
+    private SphereCollider _collider;
+
     private void Awake()
     {
         Enemy = transform.root.GetComponent<Enemy>();
-        ColliderSize = GetComponent<SphereCollider>().radius * transform.localScale.x;
+        _collider = GetComponent<SphereCollider>();
+        ColliderSize = _collider.radius * transform.localScale.x;
     }
 
     public static bool FillBuffer(Vector3 position, float range)

@@ -2,6 +2,8 @@
 
 public abstract class EnemyView : MonoBehaviour
 {
+    public bool IsInited { get; protected set; }
+
     protected Animator _animator;
     protected Enemy _enemy;
 
@@ -16,5 +18,11 @@ public abstract class EnemyView : MonoBehaviour
     public virtual void Die()
     {
         _animator.SetBool(DIED_KEY, true);
+    }
+
+    public void OnSpawnAnimationFinished()
+    {
+        IsInited = true;
+        GetComponent<TargetPoint>().IsEnabled = true;
     }
 }
