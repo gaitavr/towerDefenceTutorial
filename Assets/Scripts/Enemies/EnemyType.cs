@@ -4,5 +4,6 @@ public enum EnemyType
 {
     Golem,
     Elien,
-    Chomper
+    Chomper,
+    Grenadier
 }
