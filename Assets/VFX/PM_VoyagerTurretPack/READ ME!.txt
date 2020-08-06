@@ -1,0 +1,52 @@
+Ship Pack - By Pixel Make
+
+For use in your games please contact us at "pixelmake.contact@gmail.com".
+
+
+
+TO USE THE DEMO SCENES YOU NEED TO DOWNLOAD AND IMPORT THESE ASSET PACKS:
+
+Standard Assets Effects Pack
+Standard Assets ParticleSystems Pack
+Legacy Image Effects - https://www.assetstore.unity3d.com/#!/content/83913
+Asteroid Pack - By Pixel Make - https://www.assetstore.unity3d.com/en/#!/content/83951
+
+
+
+Model Verts/Tris
+
+01_Cockpit -------------  440 Verts / 248 Tris
+02_CockpitExtension ----  533 Verts / 272 Tris
+03_CoreChassy ----------  711 Verts / 404 Tris
+04_TwinChassy ----------  293 Verts / 148 Tris
+05_Wings --------------- 1046 Verts / 584 Tris
+06_BoosterPlug ---------  171 Verts / 100 Tris
+07_Booster -------------  369 Verts / 196 Tris
+08_Gun -----------------  418 Verts / 208 Tris
+
+
+
+Texture List For Models
+
+Albedo
+Specular
+Normal Map
+Emission (Not All Models)
+
+
+
+Objects With Emissions
+
+01_Cockpit
+02_CockpitExtension
+03_CoreChassy
+05_Wings
+07_Booster
+08_Gun
+
+
+
+Objects Without Emissions
+
+04_TwinChassy
+06_BoosterPlug
