@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0a073cb92d4913b488ad0024891e5c32
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Normal: {fileID: 2800000, guid: 10afce0a9c4cf0e43a53f7bb1adf382d, type: 3}
+  - _Albedo: {fileID: 2800000, guid: 51ed1188220a98742ad3c1cb24213833, type: 3}
+  - _Paintedmask: {fileID: 2800000, guid: b34437b3a84071b448b8a3264164ae12, type: 3}
+  - _Tintmask: {fileID: 2800000, guid: c0cb4e77c1a95e64091c6170db0d8480, type: 3}
+  - _Emissive: {fileID: 2800000, guid: fc208b44be1bdff4a8cc42550aa2408d, type: 3}
+  - _Flickermask: {fileID: 2800000, guid: 7bf2cf885c389ff4aaa2749b35a58073, type: 3}
+  - _MetalSmoothness: {fileID: 2800000, guid: 10754defc646d824c8151442ade4b5b7, type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
