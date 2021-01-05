@@ -12,7 +12,7 @@ namespace Loading
         {
             onProgress?.Invoke(0.5f);
             var loadOp = SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
-            while (loadOp.isDone)
+            while (loadOp.isDone == false)
             {
                 await Task.Delay(10);
             }
