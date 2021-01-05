@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: af1cf45400ac76f4782ccde9268d2897
+timeCreated: 1561175394
+licenseType: Store
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Cambria
+  fontNames:
+  - Cambria
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 6b3a0f588e46be740a99f2874774afb8, type: 3}
+  - {fileID: 12800000, guid: 326b0f6a960f9ef458922ee0de89a823, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 1bf0b04df2d21474f9bd6cd6c3aba3da
+timeCreated: 1561451743
+licenseType: Store
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Helvetica-Condensed-Thin
+  fontNames:
+  - Helvetica-Condensed-Thin
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

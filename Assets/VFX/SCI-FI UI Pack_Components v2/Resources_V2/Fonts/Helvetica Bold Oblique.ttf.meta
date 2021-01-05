@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 4c87f4565e8cbbd45b39b22cba6be493
+timeCreated: 1561175393
+licenseType: Store
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Helvetica
+  fontNames:
+  - Helvetica
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 065d0901516d99946981639106ef2b15, type: 3}
+  - {fileID: 12800000, guid: 40e7a912c29967b43895b12239e3232a, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

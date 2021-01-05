@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 69fe1d4bc3446d04eb01df6e30777ded
+timeCreated: 1579262336
+licenseType: Store
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Square721 BT
+  fontNames:
+  - Square721 BT
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
