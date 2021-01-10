@@ -1,17 +1,23 @@
 using System;
 using System.Threading.Tasks;
+using AppInfo;
 using Random = UnityEngine.Random;
 
 namespace Loading
 {
-    public class DeviceInfoOperation : ILoadingOperation
+    public class ConfigOperation : ILoadingOperation
     {
-        public string GetName => "Device data retrieving...";
+        public string GetName => "Configuration loading...";
+        
+        public ConfigOperation(AppInfoContainer appInfoContainer)
+        {
+            
+        }
         
         public async Task Load(Action<float> onProgress)
-        { 
-            var loadTime = Random.Range(1.1f, 1.4f);
-            const int steps = 3;
+        {
+            var loadTime = Random.Range(1.5f, 2.5f);
+            const int steps = 4;
             
             for (var i = 1; i <= steps; i++)
             {

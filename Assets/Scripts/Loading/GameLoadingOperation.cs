@@ -1,21 +1,20 @@
 using System;
 using System.Threading.Tasks;
-using Common;
 using UnityEngine.SceneManagement;
 
 namespace Loading
 {
-    public class MenuLoadingOperation : ILoadingOperation
+    public class GameLoadingOperation : ILoadingOperation
     {
-        public string GetName => "Main menu loading...";
+        public string GetName => "Game loading...";
         
         public async Task Load(Action<float> onProgress)
         {
             onProgress?.Invoke(0.5f);
-            var loadOp = SceneManager.LoadSceneAsync(Constants.Scenes.MAIN_MENU, LoadSceneMode.Additive);
+            var loadOp = SceneManager.LoadSceneAsync("Game", LoadSceneMode.Single);
             while (loadOp.isDone == false)
             {
-                await Task.Delay(1);
+                await Task.Delay(10);
             }
             onProgress?.Invoke(1f);
         }

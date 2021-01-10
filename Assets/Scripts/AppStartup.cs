@@ -1,23 +1,17 @@
 using System.Collections.Generic;
+using AppInfo;
 using Loading;
 using UnityEngine;
 
 public class AppStartup : MonoBehaviour
 {
-    [SerializeField]
-    private LoadingScreen loadingScreen;
-
     private void Start()
     {
+        var appInfoContainer = new AppInfoContainer();
         var loadingOperations = new Queue<ILoadingOperation>();
-        loadingOperations.Enqueue(new DeviceInfoOperation());
-        loadingOperations.Enqueue(new UpdateOperation());
+        loadingOperations.Enqueue(new LoginOperation(appInfoContainer));
+        loadingOperations.Enqueue(new ConfigOperation(appInfoContainer));
         loadingOperations.Enqueue(new MenuLoadingOperation());
-        loadingScreen.Load(loadingOperations, OnLoadingFinished);
-    }
-
-    private void OnLoadingFinished()
-    {
-        Debug.Log("Startup loading has been finished");
+        LoadingScreen.Instance.Load(loadingOperations);
     }
 }

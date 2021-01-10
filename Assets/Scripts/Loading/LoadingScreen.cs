@@ -19,56 +19,59 @@ namespace Loading
         [SerializeField]
         private float _barSpeed;
         
-        private float _toFill;
-        private Coroutine _progressBarRoutine;
+        private float _targetProgress;
+        private bool _isProgress;
+
+        public static LoadingScreen Instance { get; private set; }
         
-        public async void Load(Queue<ILoadingOperation> loadingOperations, Action onComplete)
+        private void Awake()
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
+        
+        public async void Load(Queue<ILoadingOperation> loadingOperations)
         {
             _canvas.enabled = true;
+            StartCoroutine(UpdateProgressBar());
+            
             foreach (var operation in loadingOperations)
             {
                 ResetFill();
                 _loadingInfo.text = operation.GetName;
-                
-                if(_progressBarRoutine != null)
-                    StopCoroutine(_progressBarRoutine);
-                _progressBarRoutine = StartCoroutine(UpdateProgressBar());
-                
+
                 await operation.Load(OnProgress);
                 await WaitForBarFill();
             }
             
-            StopCoroutine(_progressBarRoutine);
-            
             _canvas.enabled = false;
-            onComplete?.Invoke();
         }
 
         private void ResetFill()
         {
             _progressFill.value = 0;
-            _toFill = 0;
+            _targetProgress = 0;
         }
 
         private void OnProgress(float progress)
         {
-            _toFill = progress;
+            _targetProgress = progress;
         }
 
         private async Task WaitForBarFill()
         {
-            while (_progressFill.value < _toFill)
+            while (_progressFill.value < _targetProgress)
             {
                 await Task.Delay(1);
             }
-            await Task.Delay(TimeSpan.FromSeconds(0.3f));
+            await Task.Delay(TimeSpan.FromSeconds(0.15f));
         }
 
         private IEnumerator UpdateProgressBar()
         {
-            while (true)
+            while (_canvas.enabled)
             {
-                if(_progressFill.value < _toFill)
+                if(_progressFill.value < _targetProgress)
                     _progressFill.value += Time.deltaTime * _barSpeed;
                 yield return null;
             }
