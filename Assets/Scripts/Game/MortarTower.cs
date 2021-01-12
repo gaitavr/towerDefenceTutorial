@@ -17,7 +17,9 @@ public class MortarTower : Tower
     private float _damage;
 
     [SerializeField]
-    private Transform _mortar;
+    private Transform _rotator;
+    [SerializeField]
+    private Transform _spawnPoint;
 
     public override TowerType Type => TowerType.Mortar;
 
@@ -32,7 +34,7 @@ public class MortarTower : Tower
     private void OnValidate()
     {
         float x = _targetingRange + 0.251f;
-        float y = -_mortar.position.y;
+        float y = -_spawnPoint.position.y;
         _launchSpeed = Mathf.Sqrt(9.81f * (y + Mathf.Sqrt(x * x + y * y)));
        
     }
@@ -56,13 +58,14 @@ public class MortarTower : Tower
 
     private void Launch(TargetPoint target)
     {
-        Vector3 launchPoint = _mortar.position;
+        Vector3 launchPoint = _spawnPoint.position;
         Vector3 targetPoint = target.Position;
         targetPoint.y = 0f;
 
-        Vector2 dir;
+        Vector3 dir;
         dir.x = targetPoint.x - launchPoint.x;
-        dir.y = targetPoint.z - launchPoint.z;
+        dir.y = 0;
+        dir.z = targetPoint.z - launchPoint.z;
 
         float x = dir.magnitude;
         float y = -launchPoint.y;
@@ -73,14 +76,16 @@ public class MortarTower : Tower
         float s2 = s * s;
 
         float r = s2 * s2 - g * (g * x * x + 2f * y * s2);
+        r = Mathf.Max(0, r);
+        
         float tanTheta = (s2 + Mathf.Sqrt(r)) / (g * x);
         float cosTheta = Mathf.Cos(Mathf.Atan(tanTheta));
         float sinTheta = cosTheta * tanTheta;
         
-        _mortar.localRotation = Quaternion.LookRotation(new Vector3(dir.x , tanTheta, dir.y));
+        _rotator.localRotation = Quaternion.LookRotation(dir);
 
         Game.SpawnShell().Initialize(launchPoint, targetPoint, 
-            new Vector3(s * cosTheta * dir.x, s * sinTheta, s * cosTheta * dir.y), _shellBlastRadius, _damage);
+            new Vector3(s * cosTheta * dir.x, s * sinTheta, s * cosTheta * dir.z), _shellBlastRadius, _damage);
     }
 
 }
