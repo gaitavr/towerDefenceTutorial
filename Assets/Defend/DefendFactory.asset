@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4924a4fc4ec90484c8eb985abd3d6c4f, type: 3}
-  m_Name: ContentFactory
+  m_Name: DefendFactory
   m_EditorClassIdentifier: 
   _destinationPrefab: {fileID: 3813286592602269132, guid: d475cba94cc62e740877baed1de450e4,
     type: 3}
@@ -22,4 +22,4 @@ MonoBehaviour:
     type: 3}
   _towerPrefabs:
   - {fileID: 5966048511449462727, guid: 430504f886518aa4d8647b8016dd4b3b, type: 3}
-  - {fileID: 4916255332607255788, guid: 7b3005b1082ec9a459a06b3ac5a97658, type: 3}
+  - {fileID: 8176803063387225538, guid: 61bff52073cdaf648866eb6de66bb5ad, type: 3}

@@ -345,7 +345,7 @@ MonoBehaviour:
   _warFactory: {fileID: 11400000, guid: b358279ad725d2540a72b680e5dec1f4, type: 2}
   _scenario: {fileID: 11400000, guid: c64b1bd3289e2334eb98cec56e6ad09b, type: 2}
   _startingPlayerHealth: 50
-  _prepareTime: 5
+  _prepareTime: 30
 --- !u!4 &1521759510
 Transform:
   m_ObjectHideFlags: 0

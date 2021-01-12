@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: GameScenario
   m_EditorClassIdentifier: 
   _waves:
-  - {fileID: 11400000, guid: 06a6c5d66be6d6641bf10f6a841b35ee, type: 2}
+  - {fileID: 11400000, guid: 2a1fb323843ec5c4a90a60e36c648a73, type: 2}
+  - {fileID: 11400000, guid: d0a4fde210572fa4ca8949b214ed67a7, type: 2}
+  - {fileID: 11400000, guid: ce1249d6350d401489097770f718cfd6, type: 2}

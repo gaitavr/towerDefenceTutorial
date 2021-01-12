@@ -34,7 +34,7 @@ namespace Loading
         private async Task<UserInfoContainer> GetUserInfo(string deviceId)
         {
             UserInfoContainer result = null;
-            PlayerPrefs.DeleteAll();//Temp
+            
             //Fake login
             if (PlayerPrefs.HasKey(deviceId))
             {
@@ -61,6 +61,7 @@ namespace Loading
             {
                 await Task.Delay(1);
             }
+            
             var loginScene = SceneManager.GetSceneByName(Constants.Scenes.LOGIN);
             var rootObjects = loginScene.GetRootGameObjects();
 
