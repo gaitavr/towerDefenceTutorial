@@ -5,9 +5,6 @@ using UnityEngine;
 public class GameBoard : MonoBehaviour
 {
     [SerializeField]
-    private Transform _ground;
-
-    [SerializeField]
     private GameTile _tilePrefab;
 
     private Vector2Int _size;
@@ -27,7 +24,6 @@ public class GameBoard : MonoBehaviour
     public void Initialize(Vector2Int size, GameTileContentFactory contentFactory)
     {
         _size = size;
-        _ground.localScale = new Vector3(size.x, size.y, 1f);
 
         Vector2 offset = new Vector2((size.x - 1) * 0.5f, (size.y - 1) * 0.5f);
 
