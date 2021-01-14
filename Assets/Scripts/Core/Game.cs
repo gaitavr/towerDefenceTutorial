@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Core.UI;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -9,6 +10,9 @@ public class Game : MonoBehaviour
 
     [SerializeField]
     private GameBoard _board;
+
+    [SerializeField]
+    private DefenderHud _defenderHud;
 
     [SerializeField]
     private Camera _camera;
@@ -31,7 +35,6 @@ public class Game : MonoBehaviour
     private float _prepareTime = 15f;
 
     private bool _scenarioInProcess;
-    private bool _isPaused;
     private GameScenario.State _activeScenario;
 
     private GameBehaviorCollection _enemies = new GameBehaviorCollection();
@@ -50,19 +53,19 @@ public class Game : MonoBehaviour
 
     private void Start()
     {
+        _defenderHud.PauseClicked += OnPauseClicked;
         _currentPlayerHealth = _startingPlayerHealth;
         _board.Initialize(_boardSize, _contentFactory);
         BeginNewGame();
     }
 
+    private void OnPauseClicked(bool isPaused)
+    {
+        Time.timeScale = isPaused ? 0f : 1f;
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _isPaused = !_isPaused;
-            Time.timeScale = _isPaused ? 0f : 1f;
-        }
-
         if (Input.GetKeyDown(KeyCode.R))
         {
             BeginNewGame();
