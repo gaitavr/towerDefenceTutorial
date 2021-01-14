@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Core.UI;
+using Loading;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -77,7 +78,7 @@ public class Game : MonoBehaviour
     private void OnQuitGame()
     {
         Debug.Log("Quit game");
-        StopTheGame();
+        GoToMainMenu();
     }
 
     private void Update()
@@ -189,12 +190,12 @@ public class Game : MonoBehaviour
 
     private void BeginNewGame()
     {
-        StopTheGame();
+        Cleanup();
         PlayerHealth = _startingPlayerHealth;
         _prepare = StartCoroutine(PrepareRoutine());
     }
 
-    private void StopTheGame()
+    public void Cleanup()
     {
         _scenarioInProcess = false;
         if (_prepare != null)
@@ -204,6 +205,13 @@ public class Game : MonoBehaviour
         _enemies.Clear();
         _nonEnemies.Clear();
         _board.Clear();
+    }
+
+    private void GoToMainMenu()
+    {
+        var operations = new Queue<ILoadingOperation>();
+        operations.Enqueue(new ClearGameOperation(this));
+        LoadingScreen.Instance.Load(operations);
     }
 
     private Coroutine _prepare;
