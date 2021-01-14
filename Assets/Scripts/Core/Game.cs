@@ -29,8 +29,6 @@ public class Game : MonoBehaviour
     [SerializeField, Range(0, 100)]
     private int _startingPlayerHealth = 10;
 
-    private int _currentPlayerHealth;
-
     [SerializeField, Range(5f, 30f)]
     private float _prepareTime = 15f;
 
@@ -46,6 +44,17 @@ public class Game : MonoBehaviour
 
     private static Game _instance;
 
+    private int _playerHealth;
+    private int PlayerHealth
+    {
+        get => _playerHealth;
+        set
+        {
+            _playerHealth = value;
+            _defenderHud.UpdatePlayerHealth(_playerHealth, _startingPlayerHealth);
+        }
+    }
+
     private void OnEnable()
     {
         _instance = this;
@@ -54,14 +63,21 @@ public class Game : MonoBehaviour
     private void Start()
     {
         _defenderHud.PauseClicked += OnPauseClicked;
-        _currentPlayerHealth = _startingPlayerHealth;
+        _defenderHud.QuitGame += OnQuitGame;
         _board.Initialize(_boardSize, _contentFactory);
         BeginNewGame();
     }
 
     private void OnPauseClicked(bool isPaused)
     {
+        Debug.Log("Paused: " + isPaused);
         Time.timeScale = isPaused ? 0f : 1f;
+    }
+
+    private void OnQuitGame()
+    {
+        Debug.Log("Quit game");
+        StopTheGame();
     }
 
     private void Update()
@@ -91,7 +107,9 @@ public class Game : MonoBehaviour
 
         if (_scenarioInProcess)
         {
-            if (_currentPlayerHealth <= 0)
+            var waves = _activeScenario.GetWaves();
+            _defenderHud.UpdateScenarioWaves(waves.Item1, waves.Item2);
+            if (PlayerHealth <= 0)
             {
                 Debug.Log("Defeated!");
                 BeginNewGame();
@@ -112,15 +130,15 @@ public class Game : MonoBehaviour
 
     public static void SpawnEnemy(EnemyFactory factory, EnemyType enemyType)
     {
-        GameTile spawnPoint = _instance._board.GetSpawnPoint(Random.Range(0, _instance._board.SpawnPointCount));
-        Enemy enemy = factory.Get(enemyType);
+        var spawnPoint = _instance._board.GetSpawnPoint(Random.Range(0, _instance._board.SpawnPointCount));
+        var enemy = factory.Get(enemyType);
         enemy.SpawnOn(spawnPoint);
         _instance._enemies.Add(enemy);
     }
     
     private void HandleTouch()
     {
-        GameTile tile = _board.GetTile(TouchRay);
+        var tile = _board.GetTile(TouchRay);
         if (tile != null)
         {
             if (Input.GetKey(KeyCode.LeftShift))
@@ -136,7 +154,7 @@ public class Game : MonoBehaviour
 
     private void HandleAlternativeTouch()
     {
-        GameTile tile = _board.GetTile(TouchRay);
+        var tile = _board.GetTile(TouchRay);
         if (tile != null)
         {
             if (Input.GetKey(KeyCode.LeftShift))
@@ -152,35 +170,40 @@ public class Game : MonoBehaviour
 
     public static Shell SpawnShell()
     {
-        Shell shell = _instance._warFactory.Shell;
+        var shell = _instance._warFactory.Shell;
         _instance._nonEnemies.Add(shell);
         return shell;
     }
 
     public static Explosion SpawnExplosion()
     {
-        Explosion shell = _instance._warFactory.Explosion;
+        var shell = _instance._warFactory.Explosion;
         _instance._nonEnemies.Add(shell);
         return shell;
     }
 
     public static void EnemyReachedDestination()
     {
-        _instance._currentPlayerHealth--;
+        _instance.PlayerHealth--;
     }
 
     private void BeginNewGame()
+    {
+        StopTheGame();
+        PlayerHealth = _startingPlayerHealth;
+        _prepare = StartCoroutine(PrepareRoutine());
+    }
+
+    private void StopTheGame()
     {
         _scenarioInProcess = false;
         if (_prepare != null)
         {
             StopCoroutine(_prepare);
         }
-        _currentPlayerHealth = _startingPlayerHealth;
         _enemies.Clear();
         _nonEnemies.Clear();
         _board.Clear();
-        _prepare = StartCoroutine(PrepareRoutine());
     }
 
     private Coroutine _prepare;

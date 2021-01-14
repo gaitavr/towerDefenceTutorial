@@ -16,6 +16,11 @@ public class GameScenario : ScriptableObject
         private int _index;
         private EnemyWave.State _wave;
 
+        public (int, int) GetWaves()
+        {
+            return (_index + 1, _scenario._waves.Length + 1);
+        }
+
         public State(GameScenario scenario)
         {
             _scenario = scenario;
