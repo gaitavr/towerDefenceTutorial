@@ -18,7 +18,10 @@ public class GameTileContentFactory : GameObjectFactory
     private GameTileContent _spawnPrefab;
 
     [SerializeField]
-    private Tower[] _towerPrefabs;
+    private Tower _laserTower;
+
+    [SerializeField]
+    private Tower _mortarTower;
 
     public void Reclaim(GameTileContent content)
     {
@@ -37,17 +40,15 @@ public class GameTileContentFactory : GameObjectFactory
                 return Get(_wallPrefab);
             case GameTileContentType.SpawnPoint:
                 return Get(_spawnPrefab);
+            case GameTileContentType.LaserTower:
+                return Get(_laserTower);
+            case GameTileContentType.MortarTower:
+                return Get(_mortarTower);
         }
 
         return null;
     }
-
-    public Tower Get(TowerType type)
-    {
-        Tower prefab = _towerPrefabs[(int) type];
-        return Get(prefab);
-    }
-
+    
     private T Get<T>(T prefab) where T : GameTileContent
     {
         T instance = CreateGameObjectInstance(prefab);

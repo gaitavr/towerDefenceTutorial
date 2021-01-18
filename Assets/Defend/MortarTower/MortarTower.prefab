@@ -756,13 +756,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6e28c8e073a45469c72b2655158234, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 4
+  _type: 102
   _targetingRange: 2.89
   _shootsPerSeconds: 1
   _shellBlastRadius: 1
   _damage: 50
   _rotator: {fileID: 7378340027246384075}
-  _cannon: {fileID: 7384346677766173809}
   _spawnPoint: {fileID: 7631220494748588439}
 --- !u!1 &7380463379269330057
 GameObject:

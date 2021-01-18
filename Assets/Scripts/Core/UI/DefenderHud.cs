@@ -39,7 +39,7 @@ namespace Core.UI
         private async void OnQuitButtonClicked()
         {
             OnPauseClicked(true);
-            var isConfirmed = await AlertPopup.Instance.AwaitForDecision("Are sure to quit?");
+            var isConfirmed = await AlertPopup.Instance.AwaitForDecision("Are you sure to quit?");
             OnPauseClicked(false);
             if(isConfirmed)
                 QuitGame?.Invoke();

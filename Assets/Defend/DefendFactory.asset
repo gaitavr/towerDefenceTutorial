@@ -20,6 +20,7 @@ MonoBehaviour:
     type: 3}
   _spawnPrefab: {fileID: 3574776850434248552, guid: bdbff0f2cf54a404f93c1a4c7d4c0bed,
     type: 3}
-  _towerPrefabs:
-  - {fileID: 5966048511449462727, guid: 430504f886518aa4d8647b8016dd4b3b, type: 3}
-  - {fileID: 8176803063387225538, guid: 61bff52073cdaf648866eb6de66bb5ad, type: 3}
+  _laserTower: {fileID: 5966048511449462727, guid: 430504f886518aa4d8647b8016dd4b3b,
+    type: 3}
+  _mortarTower: {fileID: 8176803063387225538, guid: 61bff52073cdaf648866eb6de66bb5ad,
+    type: 3}

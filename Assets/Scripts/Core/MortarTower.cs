@@ -21,7 +21,7 @@ public class MortarTower : Tower
     [SerializeField]
     private Transform _spawnPoint;
 
-    public override TowerType Type => TowerType.Mortar;
+    public override GameTileContentType Type => GameTileContentType.MortarTower;
 
     private float _launchSpeed;
     private float _launchProgress;

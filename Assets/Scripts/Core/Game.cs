@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Core.Building;
 using Core.UI;
 using Loading;
 using UnityEngine;
@@ -14,6 +15,9 @@ public class Game : MonoBehaviour
 
     [SerializeField]
     private DefenderHud _defenderHud;
+
+    [SerializeField]
+    private TilesBuilder _tilesBuilder;
 
     [SerializeField]
     private Camera _camera;
@@ -38,10 +42,7 @@ public class Game : MonoBehaviour
 
     private GameBehaviorCollection _enemies = new GameBehaviorCollection();
     private GameBehaviorCollection _nonEnemies = new GameBehaviorCollection();
-
-    private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
-
-    private TowerType _currentTowerType;
+    
 
     private static Game _instance;
 
@@ -66,18 +67,17 @@ public class Game : MonoBehaviour
         _defenderHud.PauseClicked += OnPauseClicked;
         _defenderHud.QuitGame += OnQuitGame;
         _board.Initialize(_boardSize, _contentFactory);
+        _tilesBuilder.Initialize(_contentFactory, _camera, _board);
         BeginNewGame();
     }
 
     private void OnPauseClicked(bool isPaused)
     {
-        Debug.Log("Paused: " + isPaused);
         Time.timeScale = isPaused ? 0f : 1f;
     }
 
     private void OnQuitGame()
     {
-        Debug.Log("Quit game");
         GoToMainMenu();
     }
 
@@ -86,24 +86,6 @@ public class Game : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             BeginNewGame();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            _currentTowerType = TowerType.Laser;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            _currentTowerType = TowerType.Mortar;
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            HandleTouch();
-        }
-        else if (Input.GetMouseButtonDown(1))
-        {
-            HandleAlternativeTouch();
         }
 
         if (_scenarioInProcess)
@@ -136,38 +118,6 @@ public class Game : MonoBehaviour
         enemy.SpawnOn(spawnPoint);
         _instance._enemies.Add(enemy);
     }
-    
-    private void HandleTouch()
-    {
-        var tile = _board.GetTile(TouchRay);
-        if (tile != null)
-        {
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                _board.ToggleTower(tile, _currentTowerType);
-            }
-            else
-            {
-                _board.ToggleWall(tile);
-            }
-        }
-    }
-
-    private void HandleAlternativeTouch()
-    {
-        var tile = _board.GetTile(TouchRay);
-        if (tile != null)
-        {
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                _board.ToggleDestination(tile);
-            }
-            else
-            {
-                _board.ToggleSpawnPoint(tile);
-            }
-        }
-    }
 
     public static Shell SpawnShell()
     {
@@ -191,12 +141,14 @@ public class Game : MonoBehaviour
     private void BeginNewGame()
     {
         Cleanup();
+        _tilesBuilder.Enable();
         PlayerHealth = _startingPlayerHealth;
         _prepare = StartCoroutine(PrepareRoutine());
     }
 
     public void Cleanup()
     {
+        _tilesBuilder.Disable();
         _scenarioInProcess = false;
         if (_prepare != null)
         {

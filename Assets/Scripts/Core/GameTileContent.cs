@@ -12,7 +12,7 @@ public class GameTileContent : MonoBehaviour
 
     public GameTileContentFactory OriginFactory { get; set; }
 
-    public bool IsBlockingPath => Type == GameTileContentType.Wall || Type == GameTileContentType.Tower;
+    public bool IsBlockingPath => Type > GameTileContentType.BeforeBlockers;
 
     public void Recycle()
     {
@@ -27,15 +27,14 @@ public class GameTileContent : MonoBehaviour
 
 public enum GameTileContentType
 {
-    Empty,
-    Destination,
-    Wall,
-    SpawnPoint,
-    Tower
-}
-
-public enum TowerType
-{
-    Laser,
-    Mortar
+    Empty = 0,
+    Destination = 1,
+    SpawnPoint = 2,
+    
+    BeforeBlockers = 50,
+    Wall = 51,
+    
+    BeforeAttackers = 100,
+    LaserTower = 101,
+    MortarTower = 102
 }
