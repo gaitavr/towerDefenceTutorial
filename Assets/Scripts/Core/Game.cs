@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Core.Building;
 using Core.UI;
+using GameResult;
 using Loading;
 using UnityEngine;
 
@@ -18,6 +19,9 @@ public class Game : MonoBehaviour
 
     [SerializeField]
     private TilesBuilder _tilesBuilder;
+
+    [SerializeField]
+    private GameResultWindow _gameResultWindow;
 
     [SerializeField]
     private Camera _camera;
@@ -65,7 +69,7 @@ public class Game : MonoBehaviour
     private void Start()
     {
         _defenderHud.PauseClicked += OnPauseClicked;
-        _defenderHud.QuitGame += OnQuitGame;
+        _defenderHud.QuitGame += GoToMainMenu;
         _board.Initialize(_boardSize, _contentFactory);
         _tilesBuilder.Initialize(_contentFactory, _camera, _board);
         BeginNewGame();
@@ -75,12 +79,7 @@ public class Game : MonoBehaviour
     {
         Time.timeScale = isPaused ? 0f : 1f;
     }
-
-    private void OnQuitGame()
-    {
-        GoToMainMenu();
-    }
-
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
@@ -94,14 +93,17 @@ public class Game : MonoBehaviour
             _defenderHud.UpdateScenarioWaves(waves.Item1, waves.Item2);
             if (PlayerHealth <= 0)
             {
-                Debug.Log("Defeated!");
-                BeginNewGame();
+                _scenarioInProcess = false;
+                _gameResultWindow.Show(GameResultType.Defeat, BeginNewGame, GoToMainMenu);
+                // BeginNewGame();
             }
-            if (!_activeScenario.Progress() && _enemies.IsEmpty)
+            if (_activeScenario.Progress() == false && _enemies.IsEmpty)
             {
-                Debug.Log("Victory!");
-                BeginNewGame();
-                _activeScenario.Progress();
+                _scenarioInProcess = false;
+                _gameResultWindow.Show(GameResultType.Victory, BeginNewGame, GoToMainMenu);
+                // Debug.Log("Victory!");
+                // BeginNewGame();
+                // _activeScenario.Progress();
             }
         }
 
