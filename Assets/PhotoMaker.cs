@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
 using System.IO;
 
@@ -52,3 +53,4 @@ public class PhotoMaker : MonoBehaviour
         UnityEditor.EditorUtility.RevealInFinder(_path);
     }
 }
+#endif
