@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Core.Building;
 using Core.UI;
 using GameResult;
 using Loading;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Game : MonoBehaviour
 {
@@ -22,6 +25,9 @@ public class Game : MonoBehaviour
 
     [SerializeField]
     private GameResultWindow _gameResultWindow;
+
+    [SerializeField]
+    private PrepareGamePanel _prepareGamePanel;
 
     [SerializeField]
     private Camera _camera;
@@ -43,10 +49,10 @@ public class Game : MonoBehaviour
 
     private bool _scenarioInProcess;
     private GameScenario.State _activeScenario;
+    private CancellationTokenSource _prepareCancellation;
 
-    private GameBehaviorCollection _enemies = new GameBehaviorCollection();
-    private GameBehaviorCollection _nonEnemies = new GameBehaviorCollection();
-    
+    private readonly GameBehaviorCollection _enemies = new GameBehaviorCollection();
+    private readonly GameBehaviorCollection _nonEnemies = new GameBehaviorCollection();
 
     private static Game _instance;
 
@@ -95,15 +101,11 @@ public class Game : MonoBehaviour
             {
                 _scenarioInProcess = false;
                 _gameResultWindow.Show(GameResultType.Defeat, BeginNewGame, GoToMainMenu);
-                // BeginNewGame();
             }
             if (_activeScenario.Progress() == false && _enemies.IsEmpty)
             {
                 _scenarioInProcess = false;
                 _gameResultWindow.Show(GameResultType.Victory, BeginNewGame, GoToMainMenu);
-                // Debug.Log("Victory!");
-                // BeginNewGame();
-                // _activeScenario.Progress();
             }
         }
 
@@ -139,23 +141,33 @@ public class Game : MonoBehaviour
     {
         _instance.PlayerHealth--;
     }
-
-    private void BeginNewGame()
+    
+    private async void BeginNewGame()
     {
         Cleanup();
         _tilesBuilder.Enable();
         PlayerHealth = _startingPlayerHealth;
-        _prepare = StartCoroutine(PrepareRoutine());
+        
+        _prepareCancellation?.Dispose();
+        _prepareCancellation = new CancellationTokenSource();
+        
+        try
+        {
+            if (await _prepareGamePanel.Prepare(_prepareTime, _prepareCancellation.Token))
+            {
+                _activeScenario = _scenario.Begin();
+                _scenarioInProcess = true;
+            }
+        }
+        catch (TaskCanceledException e){}
     }
 
     public void Cleanup()
     {
         _tilesBuilder.Disable();
         _scenarioInProcess = false;
-        if (_prepare != null)
-        {
-            StopCoroutine(_prepare);
-        }
+        _prepareCancellation?.Cancel();
+        _prepareCancellation?.Dispose();
         _enemies.Clear();
         _nonEnemies.Clear();
         _board.Clear();
@@ -166,13 +178,5 @@ public class Game : MonoBehaviour
         var operations = new Queue<ILoadingOperation>();
         operations.Enqueue(new ClearGameOperation(this));
         LoadingScreen.Instance.Load(operations);
-    }
-
-    private Coroutine _prepare;
-    private IEnumerator PrepareRoutine()
-    {
-        yield return new WaitForSeconds(_prepareTime);
-        _activeScenario = _scenario.Begin();
-        _scenarioInProcess = true;
     }
 }
