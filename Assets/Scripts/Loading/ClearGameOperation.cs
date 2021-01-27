@@ -7,7 +7,7 @@ namespace Loading
 {
     public class ClearGameOperation : ILoadingOperation
     {
-        public string GetName => "Clearing...";
+        public string Description => "Clearing...";
 
         private Game _game;
 

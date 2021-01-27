@@ -7,7 +7,7 @@ namespace Loading
 {
     public class ConfigOperation : ILoadingOperation
     {
-        public string GetName => "Configuration loading...";
+        public string Description => "Configuration loading...";
         
         public ConfigOperation(AppInfoContainer appInfoContainer)
         {

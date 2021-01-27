@@ -6,7 +6,7 @@ namespace Loading
 {
     public class GameLoadingOperation : ILoadingOperation
     {
-        public string GetName => "Game loading...";
+        public string Description => "Game loading...";
         
         public async Task Load(Action<float> onProgress)
         {

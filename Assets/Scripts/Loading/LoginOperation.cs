@@ -10,7 +10,7 @@ namespace Loading
 {
     public class LoginOperation : ILoadingOperation
     {
-        public string GetName => "Login to server...";
+        public string Description => "Login to server...";
 
         private readonly AppInfoContainer _appInfoContainer;
 
@@ -56,7 +56,8 @@ namespace Loading
 
         private async Task<UserInfoContainer> ShowLoginWindow()
         {
-            var loadOp = SceneManager.LoadSceneAsync(Constants.Scenes.LOGIN, LoadSceneMode.Additive);
+            var loadOp = SceneManager.LoadSceneAsync(Constants.Scenes.LOGIN, 
+                LoadSceneMode.Additive);
             while (loadOp.isDone == false)
             {
                 await Task.Delay(1);

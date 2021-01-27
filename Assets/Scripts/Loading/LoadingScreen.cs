@@ -38,7 +38,7 @@ namespace Loading
             foreach (var operation in loadingOperations)
             {
                 ResetFill();
-                _loadingInfo.text = operation.GetName;
+                _loadingInfo.text = operation.Description;
 
                 await operation.Load(OnProgress);
                 await WaitForBarFill();
