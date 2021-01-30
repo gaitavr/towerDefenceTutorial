@@ -42,15 +42,24 @@ namespace Core.Building
                 _pendingTile.transform.position = TouchRay.GetPoint(position);
             }
             
-            if (Input.GetMouseButtonUp(0))
+            if (IsPointerUp())
             {
                 var tile = _gameBoard.GetTile(TouchRay);
-                if (tile != null)
+                if (tile != null && tile.Content.Type == GameTileContentType.Empty)
                     _gameBoard.Build(tile, _pendingTile.Type);
                 
                 Destroy(_pendingTile.gameObject);
                 _pendingTile = null;
             }
+        }
+
+        private bool IsPointerUp()
+        {
+            #if UNITY_EDITOR
+            return Input.GetMouseButtonUp(0);
+            #else
+            return Input.touches.Length == 0;
+            #endif
         }
 
         public void Enable()

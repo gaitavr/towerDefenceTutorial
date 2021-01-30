@@ -37,6 +37,9 @@ public class Game : MonoBehaviour
 
     [SerializeField]
     private WarFactory _warFactory;
+    
+    [SerializeField]
+    private EnemyFactory _enemyFactory;
 
     [SerializeField]
     private GameScenario _scenario;
@@ -62,10 +65,13 @@ public class Game : MonoBehaviour
         get => _playerHealth;
         set
         {
-            _playerHealth = value;
+            _playerHealth = Mathf.Max(0, value);
             _defenderHud.UpdatePlayerHealth(_playerHealth, _startingPlayerHealth);
         }
     }
+    
+    public IEnumerable<GameObjectFactory> Factories => new GameObjectFactory[3]{_contentFactory, 
+        _warFactory, _enemyFactory};
 
     private void OnEnable()
     {
@@ -96,7 +102,7 @@ public class Game : MonoBehaviour
         if (_scenarioInProcess)
         {
             var waves = _activeScenario.GetWaves();
-            _defenderHud.UpdateScenarioWaves(waves.Item1, waves.Item2);
+            _defenderHud.UpdateScenarioWaves(waves.currentWave, waves.wavesCount);
             if (PlayerHealth <= 0)
             {
                 _scenarioInProcess = false;
@@ -147,12 +153,11 @@ public class Game : MonoBehaviour
         Cleanup();
         _tilesBuilder.Enable();
         PlayerHealth = _startingPlayerHealth;
-        
-        _prepareCancellation?.Dispose();
-        _prepareCancellation = new CancellationTokenSource();
-        
+
         try
         {
+            _prepareCancellation?.Dispose();
+            _prepareCancellation = new CancellationTokenSource();
             if (await _prepareGamePanel.Prepare(_prepareTime, _prepareCancellation.Token))
             {
                 _activeScenario = _scenario.Begin();
