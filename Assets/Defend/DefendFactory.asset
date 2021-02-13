@@ -24,3 +24,5 @@ MonoBehaviour:
     type: 3}
   _mortarTower: {fileID: 8176803063387225538, guid: 61bff52073cdaf648866eb6de66bb5ad,
     type: 3}
+  _iceObstacle: {fileID: 4631750306096973811, guid: 80f57526968bdd34d9b1a449cb23f4c4,
+    type: 3}
