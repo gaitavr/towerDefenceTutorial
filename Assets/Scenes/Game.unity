@@ -1013,7 +1013,7 @@ RectTransform:
   m_GameObject: {fileID: 455452130}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_Children: []
   m_Father: {fileID: 784321311}
   m_RootOrder: 1
@@ -2966,7 +2966,7 @@ MonoBehaviour:
   _enemyFactory: {fileID: 11400000, guid: c07de11739867694db89259905e2b165, type: 2}
   _scenario: {fileID: 11400000, guid: c64b1bd3289e2334eb98cec56e6ad09b, type: 2}
   _startingPlayerHealth: 100
-  _prepareTime: 15
+  _prepareTime: 5
 --- !u!4 &1521759510
 Transform:
   m_ObjectHideFlags: 0
@@ -3227,13 +3227,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1618480991}
-    characterCount: 7
+    characterCount: 0
     spriteCount: 0
     spaceCount: 0
-    wordCount: 1
+    wordCount: 0
     linkCount: 0
-    lineCount: 1
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -5059,13 +5059,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 2136632245}
-    characterCount: 4
+    characterCount: 0
     spriteCount: 0
     spaceCount: 0
-    wordCount: 1
+    wordCount: 0
     linkCount: 0
-    lineCount: 1
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0

@@ -4,11 +4,12 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Ellen_Head_Mat
-  m_Shader: {fileID: 4800000, guid: 6e346c3fa450443dbaa9506ddb3a521d, type: 3}
-  m_ShaderKeywords: _EMISSION_ON _NORMALMAP _OCCLUSION_ON
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: _EMISSION_ON _METALLICGLOSSMAP _NORMALMAP _OCCLUSION_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -51,7 +52,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: aaf6c0fbd19ec2f4f8caa35ff92c9583, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -84,7 +85,7 @@ Material:
     - _Flutter: 0
     - _FlutterAmp: 0.1
     - _FlutterFreq: 0.1
-    - _GlossMapScale: 1
+    - _GlossMapScale: 0.346
     - _Glossiness: 0.75
     - _GlossyReflections: 1
     - _Metallic: 0.08
@@ -110,7 +111,7 @@ Material:
     - fLightAttentuation: 5.32
     - iLTPower: 1.8
     m_Colors:
-    - _Color: {r: 0.9188304, g: 0.9339623, b: 0.58592916, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _InternalColor: {r: 0.53676474, g: 0.015787214, b: 0.015787214, a: 1}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
