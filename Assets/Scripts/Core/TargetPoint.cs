@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TargetPoint : MonoBehaviour
 {
@@ -34,11 +31,18 @@ public class TargetPoint : MonoBehaviour
         ColliderSize = _collider.radius * transform.localScale.x;
     }
 
-    public static bool FillBuffer(Vector3 position, float range)
+    public static bool FillBufferInCapsule(Vector3 position, float range)
     {
         Vector3 top = position;
         top.y += 3f;
         BufferedCount = Physics.OverlapCapsuleNonAlloc(position, top, range, _buffer, ENEMY_LAYER_MASK);
+        return BufferedCount > 0;
+    }
+    
+    public static bool FillBufferInBox(Vector3 position, Vector3 halfSize)
+    {
+        BufferedCount = Physics.OverlapBoxNonAlloc(position, halfSize, _buffer, 
+            Quaternion.identity, ENEMY_LAYER_MASK);
         return BufferedCount > 0;
     }
 
