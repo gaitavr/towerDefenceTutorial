@@ -116,6 +116,7 @@ public class Enemy : GameBehavior
     {
         _speed = _originalSpeed * factor;
         HandleDirection();
+        _view.SetSpeedFactor(factor);
     }
 
     private void PrepareNextState()

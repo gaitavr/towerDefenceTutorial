@@ -20,6 +20,11 @@ public abstract class EnemyView : MonoBehaviour
         _animator.SetBool(DIED_KEY, true);
     }
 
+    public void SetSpeedFactor(float speedFactor)
+    {
+        _animator.speed = speedFactor;
+    }
+
     public void OnSpawnAnimationFinished()
     {
         IsInited = true;
