@@ -9,7 +9,7 @@ public abstract class Tower : GameTileContent
 
     protected bool IsAcquireTarget(out TargetPoint target)
     {
-        if (TargetPoint.FillBuffer(transform.localPosition, _targetingRange))
+        if (TargetPoint.FillBufferInCapsule(transform.localPosition, _targetingRange))
         {
             target = TargetPoint.GetBuffered(0);
             return true;

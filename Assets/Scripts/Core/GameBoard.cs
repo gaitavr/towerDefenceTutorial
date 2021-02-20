@@ -143,6 +143,9 @@ public class GameBoard : MonoBehaviour
             case GameTileContentType.MortarTower:
                 BuildTower(tile, type);
                 break;
+            case GameTileContentType.Ice:
+                BuildIce(tile);
+                break;
         }
     }
 
@@ -192,6 +195,15 @@ public class GameBoard : MonoBehaviour
             tile.Content = _contentFactory.Get(GameTileContentType.Empty);
             FindPaths();
         }
+    }
+    
+    private void BuildIce(GameTile tile)
+    {
+        if(tile.Content.Type != GameTileContentType.Empty)
+            return;
+        
+        tile.Content = _contentFactory.Get(GameTileContentType.Ice);
+        _contentToUpdate.Add(tile.Content);
     }
     
     private void DestroyDestination(GameTile tile)

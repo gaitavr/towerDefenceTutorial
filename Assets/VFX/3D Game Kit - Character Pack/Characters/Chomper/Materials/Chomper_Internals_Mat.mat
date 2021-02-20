@@ -4,21 +4,30 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Chomper_Internals_Mat
-  m_Shader: {fileID: 4800000, guid: df778dfc69de7fb48809501a413b8bbf, type: 3}
-  m_ShaderKeywords: _GRID_ON _METALLICGLOSSMAP _NORMALMAP _PARALLAXMAP _SPECGLOSSMAP
-    _USE_GRADIENT_ON
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_ShaderKeywords: _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2050
+  stringTagMap:
+    RenderType: Opaque
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AO:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 2800000, guid: 937c2229d98699c4f9ac979b18b24a85, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -112,10 +121,13 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _AlphaClip: 0
     - _Bias: 0
+    - _Blend: 0
     - _BlurStrength: 1
     - _BumpBias: 2
     - _BumpScale: 1
+    - _Cull: 2
     - _CurvatureInfluence: 0.5
     - _CurvatureScale: 0.02
     - _Cutoff: 0.691
@@ -124,11 +136,13 @@ Material:
     - _DiffuseScatteringBias2: 0
     - _DiffuseScatteringContraction: 8
     - _DiffuseScatteringContraction2: 8
+    - _DisplaceAmount: 0.4
     - _DstBlend: 0
     - _EdgeLength: 5
     - _EdgeSize: 0.2
     - _EnableIndependentPuddleMaskTiling: 0
     - _EnablePOM: 0
+    - _EnvironmentReflections: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.92
     - _GlossyReflections: 1
@@ -155,11 +169,14 @@ Material:
     - _ParallaxTiling: 1
     - _Phong: 1
     - _PuddleMaskTiling: 1
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _RimPower: 0.31
     - _RimPower2: 0.38
     - _SelfOcclusion: 0
     - _SelfOcclusionOffset: 0.01
     - _SelfOcclusionStrength: 0.6
+    - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _SnowDetailStrength: 0.5
     - _SnowNormalStrength: 1
@@ -168,19 +185,23 @@ Material:
     - _Specular: 0.046
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _Surface: 0
     - _UVSec: 0
     - _UVs: 0
     - _UseMicroBumps: 0
     - _Use_Gradient: 1
     - _WaterSlopeDamp: 0.5
+    - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - _BaseColor: {r: 0.2794118, g: 0.06985295, b: 0.06985295, a: 0.903}
     - _Color: {r: 0.2794118, g: 0.06985295, b: 0.06985295, a: 0.903}
     - _Color2: {r: 0.72794116, g: 0.72794116, b: 0.72794116, a: 1}
     - _DiffuseScatteringCol: {r: 0, g: 0, b: 0, a: 1}
     - _DiffuseScatteringCol2: {r: 0, g: 0, b: 0, a: 1}
     - _EdgeColor1: {r: 0, g: 1.2620687, b: 3.0000002, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Emission: {r: 0, g: 0, b: 0, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
     - _ParallaxToBaseRatio: {r: 1, g: 1, b: 0, a: 0}
     - _RimColor: {r: 0.29411763, g: 0.7371198, b: 1, a: 0}
@@ -194,3 +215,16 @@ Material:
     - _WaterAccumulationCracksPuddles2: {r: 0, g: 1, b: 0, a: 1}
     - _WaterColor: {r: 0, g: 0, b: 0, a: 0}
     - _WaterColor2: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &7682859356751184130
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1

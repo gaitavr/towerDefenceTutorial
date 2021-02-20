@@ -33,7 +33,7 @@ public class Explosion : WarEntity
     {
         if (damage > 0f)
         {
-            TargetPoint.FillBuffer(position, blastRadius);
+            TargetPoint.FillBufferInCapsule(position, blastRadius);
             for (int i = 0; i < TargetPoint.BufferedCount; i++)
             {
                 TargetPoint.GetBuffered(i).Enemy.TakeDamage(damage);

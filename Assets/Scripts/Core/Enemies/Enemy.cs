@@ -18,6 +18,7 @@ public class Enemy : GameBehavior
     private float _directionAngleFrom, _directionAngleTo;
     private float _pathOffset;
     private float _speed;
+    private float _originalSpeed;
 
     public float Scale { get; private set; }
     public float Health { get; private set; }
@@ -26,6 +27,7 @@ public class Enemy : GameBehavior
 
     public void Initialize(float scale, float pathOffset, float speed, float health)
     {
+        _originalSpeed = speed;
         _model.localScale = new Vector3(scale, scale, scale);
         _pathOffset = pathOffset;
         _speed = speed;
@@ -77,6 +79,7 @@ public class Enemy : GameBehavior
             _view.Die();
             return false;
         }
+        
         _progress += Time.deltaTime * _progressFactor;
         while (_progress >= 1)
         {
@@ -109,6 +112,13 @@ public class Enemy : GameBehavior
         Health -= damage;
     }
 
+    public void SetSpeed(float factor)
+    {
+        _speed = _originalSpeed * factor;
+        HandleDirection();
+        _view.SetSpeedFactor(factor);
+    }
+
     private void PrepareNextState()
     {
         _tileFrom = _tileTo;
@@ -123,6 +133,11 @@ public class Enemy : GameBehavior
         _direction = _tileFrom.PathDirection;
         _directionAngleFrom = _directionAngleTo;
 
+        HandleDirection();
+    }
+
+    private void HandleDirection()
+    {
         switch (_directionChange)
         {
             case DirectionChange.None: PrepareForward();break;
@@ -131,7 +146,7 @@ public class Enemy : GameBehavior
             default: PrepareTurnAround();break;
         }
     }
-
+    
     private void PrepareForward()
     {
         transform.localRotation = _direction.GetRotation();
