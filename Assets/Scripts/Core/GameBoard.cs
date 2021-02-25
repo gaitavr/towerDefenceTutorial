@@ -205,51 +205,17 @@ public class GameBoard : MonoBehaviour
         tile.Content = _contentFactory.Get(GameTileContentType.Ice);
         _contentToUpdate.Add(tile.Content);
     }
-    
-    private void DestroyDestination(GameTile tile)
-    {
-        if (tile.Content.Type != GameTileContentType.Destination)
-            return;
-        
-        tile.Content = _contentFactory.Get(GameTileContentType.Empty);
-        if (FindPaths() == false)
-        {
-            tile.Content = _contentFactory.Get(GameTileContentType.Destination);
-            FindPaths();
-        }
-    }
 
-    private void DestroySpawnPoint(GameTile tile)
+    private void ClearTile(GameTile tile)
     {
-        if (tile.Content.Type != GameTileContentType.SpawnPoint)
-            return;
-        if (_spawnPoints.Count <= 1) 
-            return;
-        
-        _spawnPoints.Remove(tile);
-        tile.Content = _contentFactory.Get(GameTileContentType.Empty);
-    }
-
-    private void DestroyWall(GameTile tile)
-    {
-        if (tile.Content.Type != GameTileContentType.Wall)
-            return;
-        
-        tile.Content = _contentFactory.Get(GameTileContentType.Empty);
-        FindPaths();
-    }
-
-    private void DestroyTower(GameTile tile)
-    {
-        if (tile.Content.Type <= GameTileContentType.BeforeAttackers)
+        if (tile.Content.Type <= GameTileContentType.Empty)
             return;
         
         _contentToUpdate.Remove(tile.Content);
         tile.Content = _contentFactory.Get(GameTileContentType.Empty);
         FindPaths();
     }
-
-
+    
     public GameTile GetTile(Ray ray)
     {
         RaycastHit hit;

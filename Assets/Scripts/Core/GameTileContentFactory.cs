@@ -10,19 +10,14 @@ public class GameTileContentFactory : GameObjectFactory
     private GameTileContent _destinationPrefab;
     [SerializeField]
     private GameTileContent _emptyPrefab;
-
     [SerializeField]
     private GameTileContent _wallPrefab;
-
     [SerializeField]
     private GameTileContent _spawnPrefab;
-
     [SerializeField]
     private Tower _laserTower;
-
     [SerializeField]
     private Tower _mortarTower;
-
     [SerializeField]
     private IceObstacle _iceObstacle;
 
