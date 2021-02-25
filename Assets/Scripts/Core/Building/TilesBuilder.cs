@@ -45,10 +45,11 @@ namespace Core.Building
             if (IsPointerUp())
             {
                 var tile = _gameBoard.GetTile(TouchRay);
-                if (tile != null && tile.Content.Type == GameTileContentType.Empty)
-                    _gameBoard.Build(tile, _pendingTile.Type);
-                
-                Destroy(_pendingTile.gameObject);
+                if (tile != null)
+                {
+                    if(_gameBoard.TryBuild(tile, _pendingTile) == false)
+                        Destroy(_pendingTile.gameObject);
+                }
                 _pendingTile = null;
             }
         }
