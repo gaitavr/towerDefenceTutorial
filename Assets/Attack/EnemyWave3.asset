@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: EnemyWave3
   m_EditorClassIdentifier: 
   _spawnSequences:
-  - _factory: {fileID: 11400000, guid: c07de11739867694db89259905e2b165, type: 2}
+  - _factory: {fileID: 11400000, guid: fdd41acef2eadbd4da91e45d35a19a59, type: 2}
     _type: 2
     _amount: 15
     _cooldown: 0.5
-  - _factory: {fileID: 11400000, guid: c07de11739867694db89259905e2b165, type: 2}
+  - _factory: {fileID: 11400000, guid: fdd41acef2eadbd4da91e45d35a19a59, type: 2}
     _type: 1
     _amount: 8
     _cooldown: 1
-  - _factory: {fileID: 11400000, guid: c07de11739867694db89259905e2b165, type: 2}
+  - _factory: {fileID: 11400000, guid: fdd41acef2eadbd4da91e45d35a19a59, type: 2}
     _type: 0
     _amount: 3
     _cooldown: 3

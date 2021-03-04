@@ -17,13 +17,13 @@ MonoBehaviour:
       type: 3}
     Scale:
       _min: 0.65
-      _max: 0.85
+      _max: 1.1537974
     PathOffset:
-      _min: -0.25
-      _max: 0.25
+      _min: -0.4
+      _max: 0.39999995
     Speed:
       _min: 1.5
-      _max: 2
+      _max: 3.3974683
     Health:
       _min: 100
       _max: 200
