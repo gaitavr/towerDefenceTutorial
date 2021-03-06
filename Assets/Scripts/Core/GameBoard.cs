@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Serialization;
 using UnityEngine;
 
 public class GameBoard : MonoBehaviour
@@ -21,10 +23,12 @@ public class GameBoard : MonoBehaviour
 
     private List<GameTileContent> _contentToUpdate = new List<GameTileContent>();
 
+    private readonly BoardSerializer _serializer = new BoardSerializer();
+    
     public void Initialize(Vector2Int size, GameTileContentFactory contentFactory)
     {
         _size = size;
-
+        TryLoad();
         Vector2 offset = new Vector2((size.x - 1) * 0.5f, (size.y - 1) * 0.5f);
 
         _tiles = new GameTile[size.x * size.y];
@@ -124,6 +128,15 @@ public class GameBoard : MonoBehaviour
         return true;
     }
 
+    public void ForceBuild(GameTile tile, GameTileContent content)
+    {
+        tile.Content = content;
+        _contentToUpdate.Add(content);
+        
+        if(content.Type == GameTileContentType.SpawnPoint)
+            _spawnPoints.Add(tile);
+    }
+    
     public bool TryBuild(GameTile tile, GameTileContent content)
     {
         if (tile.Content.Type != GameTileContentType.Empty)
@@ -183,7 +196,42 @@ public class GameBoard : MonoBehaviour
         }
         _spawnPoints.Clear();
         _contentToUpdate.Clear();
-        TryBuild(_tiles[_tiles.Length / 2], _contentFactory.Get(GameTileContentType.Destination));
-        TryBuild(_tiles[0], _contentFactory.Get(GameTileContentType.SpawnPoint));
+
+        for (int i = 0; i < _boardData.Content.Length; i++)
+        {
+            ForceBuild(_tiles[i], _contentFactory.Get(_boardData.Content[i]));
+        }
+
+        FindPaths();
+
+        // TryBuild(_tiles[_tiles.Length / 2], _contentFactory.Get(GameTileContentType.Destination));
+        // TryBuild(_tiles[0], _contentFactory.Get(GameTileContentType.SpawnPoint));
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            var data = new BoardData()
+            {
+                Version = Serialization.Serialization.VERSION,
+                AccountId = 1145,
+                X = (byte)_size.x,
+                Y = (byte)_size.y,
+                Content = _tiles.Select(t => t.Content.Type).ToArray()
+            };
+            _serializer.Save(data);
+        }
+    }
+
+    private BoardData _boardData;
+    
+    private void TryLoad()
+    {
+        _boardData = _serializer.Load();
+        if(_boardData == null)
+            return;
+        _size = new Vector2Int(_boardData.X, _boardData.Y);
+        
     }
 }
