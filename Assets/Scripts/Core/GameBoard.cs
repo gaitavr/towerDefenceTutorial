@@ -1,41 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Serialization;
 using UnityEngine;
 
 public class GameBoard : MonoBehaviour
 {
     [SerializeField]
     private GameTile _tilePrefab;
-
-    private Vector2Int _size;
-
+    
     private GameTile[] _tiles;
 
-    private Queue<GameTile> _searchFrontier = new Queue<GameTile>();
+    private readonly Queue<GameTile> _searchFrontier = new Queue<GameTile>();
 
     private GameTileContentFactory _contentFactory;
 
-    private List<GameTile> _spawnPoints = new List<GameTile>();
+    private readonly List<GameTile> _spawnPoints = new List<GameTile>();
+    private readonly List<GameTileContent> _contentToUpdate = new List<GameTileContent>();
 
-    public int SpawnPointCount => _spawnPoints.Count;
-
-    private List<GameTileContent> _contentToUpdate = new List<GameTileContent>();
-
-    private readonly BoardSerializer _serializer = new BoardSerializer();
+    private BoardData _boardData;
+    private byte X => _boardData.X;
+    private byte Y => _boardData.Y;
     
-    public void Initialize(Vector2Int size, GameTileContentFactory contentFactory)
+    public void Initialize(BoardData boardData, GameTileContentFactory contentFactory)
     {
-        _size = size;
-        TryLoad();
-        Vector2 offset = new Vector2((size.x - 1) * 0.5f, (size.y - 1) * 0.5f);
+        _boardData = boardData;
+        var offset = new Vector2((X - 1) * 0.5f, (Y - 1) * 0.5f);
 
-        _tiles = new GameTile[size.x * size.y];
+        _tiles = new GameTile[X * Y];
         _contentFactory = contentFactory;
-        for (int i = 0, y = 0; y < size.y; y++)
+        for (int i = 0, y = 0; y < Y; y++)
         {
-            for (int x = 0; x < size.x; x++, i++)
+            for (int x = 0; x < X; x++, i++)
             {
                 GameTile tile = _tiles[i] = Instantiate(_tilePrefab);
                 tile.transform.SetParent(transform, false);
@@ -48,13 +42,13 @@ public class GameBoard : MonoBehaviour
 
                 if (y > 0)
                 {
-                    GameTile.MakeNorthSouthNeighbors(tile, _tiles[i - size.x]);
+                    GameTile.MakeNorthSouthNeighbors(tile, _tiles[i - X]);
                 }
 
                 tile.IsAlternative = (x & 1) == 0;
                 if ((y & 1) == 0)
                 {
-                    tile.IsAlternative = !tile.IsAlternative;
+                    tile.IsAlternative = tile.IsAlternative == false;
                 }
             }
         }
@@ -70,7 +64,7 @@ public class GameBoard : MonoBehaviour
         }
     }
 
-    public bool FindPaths()
+    private bool FindPaths()
     {
         foreach (var t in _tiles)
         {
@@ -114,7 +108,7 @@ public class GameBoard : MonoBehaviour
 
         foreach (var t in _tiles)
         {
-            if (!t.HasPath)
+            if (t.HasPath == false)
             {
                 return false;
             }
@@ -157,12 +151,16 @@ public class GameBoard : MonoBehaviour
         return true;
     }
 
-    private void ClearTile(GameTile tile)
+    public void DestroyTile(GameTile tile)
     {
         if (tile.Content.Type <= GameTileContentType.Empty)
             return;
         
         _contentToUpdate.Remove(tile.Content);
+        
+        if(tile.Content.Type == GameTileContentType.SpawnPoint)
+            _spawnPoints.Remove(tile);
+        
         tile.Content = _contentFactory.Get(GameTileContentType.Empty);
         FindPaths();
     }
@@ -172,66 +170,47 @@ public class GameBoard : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, float.MaxValue, 1))
         {
-            int x = (int) (hit.point.x + _size.x * 0.5f);
-            int y = (int) (hit.point.z + _size.y * 0.5f);
-            if (x >= 0 && x < _size.x && y >= 0 && y < _size.y)
+            var x = (int) (hit.point.x + X * 0.5f);
+            var y = (int) (hit.point.z + Y * 0.5f);
+            if (x >= 0 && x < X && y >= 0 && y < Y)
             {
-                return _tiles[x + y * _size.x];
+                return _tiles[x + y * X];
             }
         }
-
         return null;
     }
 
-    public GameTile GetSpawnPoint(int index)
+    public GameTile GetRandomSpawnPoint()
     {
-        return _spawnPoints[index];
+        return _spawnPoints[Random.Range(0, _spawnPoints.Count)];
     }
 
     public void Clear()
     {
-        foreach (GameTile tile in _tiles)
-        {
-            tile.Content = _contentFactory.Get(GameTileContentType.Empty);
-        }
         _spawnPoints.Clear();
         _contentToUpdate.Clear();
 
-        for (int i = 0; i < _boardData.Content.Length; i++)
+        for (var i = 0; i < _boardData.Content.Length; i++)
         {
             ForceBuild(_tiles[i], _contentFactory.Get(_boardData.Content[i]));
         }
 
         FindPaths();
-
-        // TryBuild(_tiles[_tiles.Length / 2], _contentFactory.Get(GameTileContentType.Destination));
-        // TryBuild(_tiles[0], _contentFactory.Get(GameTileContentType.SpawnPoint));
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            var data = new BoardData()
-            {
-                Version = Serialization.Serialization.VERSION,
-                AccountId = 1145,
-                X = (byte)_size.x,
-                Y = (byte)_size.y,
-                Content = _tiles.Select(t => t.Content.Type).ToArray()
-            };
-            _serializer.Save(data);
-        }
-    }
-
-    private BoardData _boardData;
-    
-    private void TryLoad()
-    {
-        _boardData = _serializer.Load();
-        if(_boardData == null)
-            return;
-        _size = new Vector2Int(_boardData.X, _boardData.Y);
-        
-    }
+    // private void Update()
+    // {
+    //     if (Input.GetKeyUp(KeyCode.Space))
+    //     {
+    //         var data = new BoardData()
+    //         {
+    //             Version = Serialization.Serialization.VERSION,
+    //             AccountId = 1145,
+    //             X = (byte)_size.x,
+    //             Y = (byte)_size.y,
+    //             Content = _tiles.Select(t => t.Content.Type).ToArray()
+    //         };
+    //         _serializer.Save(data);
+    //     }
+    // }
 }

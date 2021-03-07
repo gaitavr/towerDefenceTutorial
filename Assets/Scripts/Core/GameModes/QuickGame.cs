@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Building;
@@ -7,9 +6,8 @@ using Core.UI;
 using GameResult;
 using Loading;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-public class Game : MonoBehaviour
+public class QuickGame : MonoBehaviour
 {
     [SerializeField]
     private Vector2Int _boardSize;
@@ -57,7 +55,7 @@ public class Game : MonoBehaviour
     private readonly GameBehaviorCollection _enemies = new GameBehaviorCollection();
     private readonly GameBehaviorCollection _nonEnemies = new GameBehaviorCollection();
 
-    private static Game _instance;
+    private static QuickGame _instance;
 
     private int _playerHealth;
     private int PlayerHealth
@@ -70,7 +68,7 @@ public class Game : MonoBehaviour
         }
     }
     
-    public IEnumerable<GameObjectFactory> Factories => new GameObjectFactory[3]{_contentFactory, 
+    public IEnumerable<GameObjectFactory> Factories => new GameObjectFactory[]{_contentFactory, 
         _warFactory, _enemyFactory};
 
     private void OnEnable()
@@ -82,9 +80,23 @@ public class Game : MonoBehaviour
     {
         _defenderHud.PauseClicked += OnPauseClicked;
         _defenderHud.QuitGame += GoToMainMenu;
-        _board.Initialize(_boardSize, _contentFactory);
+        var initialData = GenerateInitialData();
+        _board.Initialize(initialData, _contentFactory);
         _tilesBuilder.Initialize(_contentFactory, _camera, _board);
         BeginNewGame();
+    }
+
+    private BoardData GenerateInitialData()
+    {
+        var result = new BoardData
+        {
+            X = (byte) _boardSize.x,
+            Y = (byte) _boardSize.y,
+            Content = new GameTileContentType[_boardSize.x * _boardSize.y]
+        };
+        result.Content[0] = GameTileContentType.SpawnPoint;
+        result.Content[result.Content.Length - 1] = GameTileContentType.Destination;
+        return result;
     }
 
     private void OnPauseClicked(bool isPaused)
@@ -123,7 +135,7 @@ public class Game : MonoBehaviour
 
     public static void SpawnEnemy(EnemyFactory factory, EnemyType enemyType)
     {
-        var spawnPoint = _instance._board.GetSpawnPoint(Random.Range(0, _instance._board.SpawnPointCount));
+        var spawnPoint = _instance._board.GetRandomSpawnPoint();
         var enemy = factory.Get(enemyType);
         enemy.SpawnOn(spawnPoint);
         _instance._enemies.Add(enemy);
@@ -164,7 +176,7 @@ public class Game : MonoBehaviour
                 _scenarioInProcess = true;
             }
         }
-        catch (TaskCanceledException e){}
+        catch (TaskCanceledException _){}
     }
 
     public void Cleanup()

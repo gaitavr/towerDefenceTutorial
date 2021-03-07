@@ -43,7 +43,7 @@ public class EnemySpawnSequence
                     return _cooldown;
                 }
                 _count += 1;
-                Game.SpawnEnemy(_sequence._factory, _sequence._type);
+                QuickGame.SpawnEnemy(_sequence._factory, _sequence._type);
             }
             return -1f;
         }

@@ -9,19 +9,19 @@ namespace Loading
     {
         public string Description => "Clearing...";
 
-        private readonly Game _game;
+        private readonly QuickGame _quickGame;
 
-        public ClearGameOperation(Game game)
+        public ClearGameOperation(QuickGame quickGame)
         {
-            _game = game;
+            _quickGame = quickGame;
         }
 
         public async Task Load(Action<float> onProgress)
         {
             onProgress?.Invoke(0.2f);
-            _game.Cleanup();
+            _quickGame.Cleanup();
 
-            foreach (var factory in _game.Factories)
+            foreach (var factory in _quickGame.Factories)
             {
                 await factory.Unload();
             }

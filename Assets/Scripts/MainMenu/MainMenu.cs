@@ -9,10 +9,13 @@ namespace MainMenu
     {
         [SerializeField]
         private Button _quickGameBtn;
+        [SerializeField]
+        private Button _editBoardBtn;
         
         private void Start()
         {
             _quickGameBtn.onClick.AddListener(OnQuickGameBtnClicked);
+            _editBoardBtn.onClick.AddListener(OnQuickGameBtnClicked);
         }
 
         private void OnQuickGameBtnClicked()
