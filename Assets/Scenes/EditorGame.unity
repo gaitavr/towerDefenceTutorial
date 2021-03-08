@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -626,7 +626,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 3.2628e-41, z: 0, w: -35.25}
+  m_BoundingSphereOverride: {x: 0, y: 1e-45, z: 2.8333e-41, w: 5.9e-44}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -850,6 +850,7 @@ GameObject:
   - component: {fileID: 378775449}
   - component: {fileID: 378775448}
   - component: {fileID: 378775447}
+  - component: {fileID: 378775451}
   m_Layer: 5
   m_Name: Hud
   m_TagString: Untagged
@@ -940,6 +941,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &378775451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378775446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744076e3336048c6a835c8655f6c4980, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _saveButton: {fileID: 1355062892}
+  _quitButton: {fileID: 346125788}
 --- !u!1 &501734623
 GameObject:
   m_ObjectHideFlags: 0
@@ -2559,6 +2574,7 @@ MonoBehaviour:
   _tilesBuilder: {fileID: 1243357548}
   _camera: {fileID: 534669904}
   _contentFactory: {fileID: 11400000, guid: f933054d8aefe9a4a99647adfb002705, type: 2}
+  _hud: {fileID: 378775451}
 --- !u!1 &1615220986
 GameObject:
   m_ObjectHideFlags: 0

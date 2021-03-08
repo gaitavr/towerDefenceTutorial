@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Core.UI
 {
-    public class EditorHud
+    public class EditorHud : MonoBehaviour
     {
         [SerializeField]
         private Button _saveButton;
@@ -30,7 +30,7 @@ namespace Core.UI
 
         private void OnSaveButtonClicked()
         {
-            
+            SaveClicked?.Invoke("board");
         }
     }
 }

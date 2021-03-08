@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using Common;
+using Core.UI;
+using Loading;
 using UnityEngine;
 
-public class EditorGame : MonoBehaviour
+public class EditorGame : MonoBehaviour, ICleanUp
 {
     [SerializeField]
     private Vector2Int _boardSize;
@@ -13,21 +16,26 @@ public class EditorGame : MonoBehaviour
     private Camera _camera;
     [SerializeField]
     private GameTileContentFactory _contentFactory;
+    [SerializeField]
+    private EditorHud _hud;
     
     private readonly BoardSerializer _serializer = new BoardSerializer();
     
     public IEnumerable<GameObjectFactory> Factories => new GameObjectFactory[]{_contentFactory};
+    public string SceneName => Constants.Scenes.EDITOR_GAME;
     
     public void Init()
     {
+        _hud.QuitGame += GoToMainMenu;
+        _hud.SaveClicked += OnSaveClicked;
         var initialData = GenerateInitialData();
         _board.Initialize(initialData, _contentFactory);
         _tilesBuilder.Initialize(_contentFactory, _camera, _board);
     }
-    
+
     private BoardData GenerateInitialData()
     {
-        var result = _serializer.Load();
+        var result = _serializer.Load("board");
         if (result == null)
         {
             result = new BoardData
@@ -56,24 +64,21 @@ public class EditorGame : MonoBehaviour
     
     private void GoToMainMenu()
     {
-        // var operations = new Queue<ILoadingOperation>();
-        // operations.Enqueue(new ClearGameOperation(this));
-        // LoadingScreen.Instance.Load(operations);
+        var operations = new Queue<ILoadingOperation>();
+        operations.Enqueue(new ClearGameOperation(this));
+        LoadingScreen.Instance.Load(operations);
     }
     
-    // private void Update()
-    // {
-    //     if (Input.GetKeyUp(KeyCode.Space))
-    //     {
-    //         var data = new BoardData()
-    //         {
-    //             Version = Serialization.Serialization.VERSION,
-    //             AccountId = 1145,
-    //             X = (byte)_size.x,
-    //             Y = (byte)_size.y,
-    //             Content = _tiles.Select(t => t.Content.Type).ToArray()
-    //         };
-    //         _serializer.Save(data);
-    //     }
-    // }
+    private void OnSaveClicked(string fileName)
+    {
+        var data = new BoardData()
+        {
+            Version = Serialization.VERSION,
+            AccountId = 1145,
+            X = (byte)_boardSize.x,
+            Y = (byte)_boardSize.y,
+            Content = _board.GetAllContent
+        };
+        _serializer.Save(data, fileName);
+    }
 }

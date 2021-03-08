@@ -5,8 +5,9 @@ using Core.UI;
 using GameResult;
 using Loading;
 using UnityEngine;
+using Common;
 
-public class QuickGame : MonoBehaviour
+public class QuickGame : MonoBehaviour, ICleanUp
 {
     [SerializeField]
     private Vector2Int _boardSize;
@@ -70,6 +71,8 @@ public class QuickGame : MonoBehaviour
     public IEnumerable<GameObjectFactory> Factories => new GameObjectFactory[]{_contentFactory, 
         _warFactory, _enemyFactory};
 
+    public string SceneName => Constants.Scenes.QUICK_GAME;
+    
     private void OnEnable()
     {
         _instance = this;
