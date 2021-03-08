@@ -11,6 +11,8 @@ namespace MainMenu
         private Button _quickGameBtn;
         [SerializeField]
         private Button _editBoardBtn;
+        [SerializeField]
+        private EditorMenu _editorMenu;
         
         private void Start()
         {
@@ -27,9 +29,7 @@ namespace MainMenu
 
         private void OnEditorBtnClicked()
         {
-            var loadingOperations = new Queue<ILoadingOperation>();
-            loadingOperations.Enqueue(new EditorGameLoadingOperation());
-            LoadingScreen.Instance.Load(loadingOperations);
+            _editorMenu.Show();
         }
     }
 }

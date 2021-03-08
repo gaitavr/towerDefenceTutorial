@@ -9,6 +9,13 @@ namespace Loading
     public class EditorGameLoadingOperation : ILoadingOperation
     {
         public string Description => "Game loading...";
+
+        private readonly string _fileName;
+
+        public EditorGameLoadingOperation(string fileName)
+        {
+            _fileName = fileName;
+        }
         
         public async Task Load(Action<float> onProgress)
         {
@@ -22,7 +29,7 @@ namespace Loading
             
             var scene = SceneManager.GetSceneByName(Constants.Scenes.EDITOR_GAME);
             var editorGame = scene.GetRoot<EditorGame>();
-            editorGame.Init();
+            editorGame.Init(_fileName);
             onProgress?.Invoke(0.9f);
             
             editorGame.BeginNewGame();

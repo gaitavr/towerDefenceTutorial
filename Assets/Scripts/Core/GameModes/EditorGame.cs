@@ -23,9 +23,11 @@ public class EditorGame : MonoBehaviour, ICleanUp
     
     public IEnumerable<GameObjectFactory> Factories => new GameObjectFactory[]{_contentFactory};
     public string SceneName => Constants.Scenes.EDITOR_GAME;
+    private string _fileName;
     
-    public void Init()
+    public void Init(string fileName)
     {
+        _fileName = fileName;
         _hud.QuitGame += GoToMainMenu;
         _hud.SaveClicked += OnSaveClicked;
         var initialData = GenerateInitialData();
@@ -35,7 +37,7 @@ public class EditorGame : MonoBehaviour, ICleanUp
 
     private BoardData GenerateInitialData()
     {
-        var result = _serializer.Load("board");
+        var result = _serializer.Load(_fileName);
         if (result == null)
         {
             result = new BoardData
@@ -69,7 +71,7 @@ public class EditorGame : MonoBehaviour, ICleanUp
         LoadingScreen.Instance.Load(operations);
     }
     
-    private void OnSaveClicked(string fileName)
+    private void OnSaveClicked()
     {
         var data = new BoardData()
         {
@@ -79,6 +81,6 @@ public class EditorGame : MonoBehaviour, ICleanUp
             Y = (byte)_boardSize.y,
             Content = _board.GetAllContent
         };
-        _serializer.Save(data, fileName);
+        _serializer.Save(data, _fileName);
     }
 }

@@ -12,7 +12,7 @@ namespace Core.UI
         [SerializeField]
         private Button _quitButton;
         
-        public event Action<string> SaveClicked;
+        public event Action SaveClicked;
         public event Action QuitGame;
         
         private void Awake()
@@ -30,7 +30,7 @@ namespace Core.UI
 
         private void OnSaveButtonClicked()
         {
-            SaveClicked?.Invoke("board");
+            SaveClicked?.Invoke();
         }
     }
 }
