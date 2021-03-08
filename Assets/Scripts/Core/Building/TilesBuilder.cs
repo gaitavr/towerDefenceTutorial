@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Core.Building
-{
-    public class TilesBuilder : MonoBehaviour
+public class TilesBuilder : MonoBehaviour
     {
         [SerializeField]
         private List<BuildButton> _buttons;
@@ -79,4 +77,3 @@ namespace Core.Building
             _pendingTile = _contentFactory.Get(type);
         }
     }
-}

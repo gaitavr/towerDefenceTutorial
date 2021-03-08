@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameBoard : MonoBehaviour
@@ -198,19 +199,5 @@ public class GameBoard : MonoBehaviour
         FindPaths();
     }
 
-    // private void Update()
-    // {
-    //     if (Input.GetKeyUp(KeyCode.Space))
-    //     {
-    //         var data = new BoardData()
-    //         {
-    //             Version = Serialization.Serialization.VERSION,
-    //             AccountId = 1145,
-    //             X = (byte)_size.x,
-    //             Y = (byte)_size.y,
-    //             Content = _tiles.Select(t => t.Content.Type).ToArray()
-    //         };
-    //         _serializer.Save(data);
-    //     }
-    // }
+    public GameTileContentType[] GetAllContent => _tiles.Select(t => t.Content.Type).ToArray();
 }

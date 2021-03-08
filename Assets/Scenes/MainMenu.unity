@@ -1596,7 +1596,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: BOARD EDITOR
+  m_text: EDITOR
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5c975f1bdd997a94b86d6aee1ad8abb4, type: 2}
   m_sharedMaterial: {fileID: 3150521420399975424, guid: 5c975f1bdd997a94b86d6aee1ad8abb4,
@@ -1666,10 +1666,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 3430857433159466794}
-    characterCount: 12
+    characterCount: 6
     spriteCount: 0
-    spaceCount: 1
-    wordCount: 2
+    spaceCount: 0
+    wordCount: 1
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -2312,7 +2312,7 @@ GameObject:
   - component: {fileID: 9000702681202511827}
   - component: {fileID: 8999871176300360059}
   m_Layer: 5
-  m_Name: MapEditorButton
+  m_Name: EditorButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -34,7 +34,7 @@ namespace Loading
             }
             onProgress?.Invoke(0.75f);
            
-            var unloadOp = SceneManager.UnloadSceneAsync(Constants.Scenes.GAME);
+            var unloadOp = SceneManager.UnloadSceneAsync(Constants.Scenes.QUICK_GAME);
             while (unloadOp.isDone == false)
             {
                 await Task.Delay(1);

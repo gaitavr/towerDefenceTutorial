@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Building;
 using Core.UI;
 using GameResult;
 using Loading;
@@ -76,14 +75,13 @@ public class QuickGame : MonoBehaviour
         _instance = this;
     }
 
-    private void Start()
+    public void Init()
     {
         _defenderHud.PauseClicked += OnPauseClicked;
         _defenderHud.QuitGame += GoToMainMenu;
         var initialData = GenerateInitialData();
         _board.Initialize(initialData, _contentFactory);
         _tilesBuilder.Initialize(_contentFactory, _camera, _board);
-        BeginNewGame();
     }
 
     private BoardData GenerateInitialData()
@@ -160,7 +158,7 @@ public class QuickGame : MonoBehaviour
         _instance.PlayerHealth--;
     }
     
-    private async void BeginNewGame()
+    public async void BeginNewGame()
     {
         Cleanup();
         _tilesBuilder.Enable();

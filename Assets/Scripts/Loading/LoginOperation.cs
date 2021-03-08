@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using AppInfo;
 using Common;
+using Extensions;
 using Loading.Login;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -63,18 +64,8 @@ namespace Loading
                 await Task.Delay(1);
             }
             
-            var loginScene = SceneManager.GetSceneByName(Constants.Scenes.LOGIN);
-            var rootObjects = loginScene.GetRootGameObjects();
-
-            LoginWindow loginWindow = null;
-            
-            foreach (var go in rootObjects)
-            {
-                if (go.TryGetComponent(out loginWindow))
-                {
-                    break;
-                }
-            }
+            var scene = SceneManager.GetSceneByName(Constants.Scenes.LOGIN);
+            var loginWindow = scene.GetRoot<LoginWindow>();
 
             var result = await loginWindow.ProcessLogin();
 
