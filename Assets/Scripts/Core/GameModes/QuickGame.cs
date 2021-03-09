@@ -84,7 +84,7 @@ public class QuickGame : MonoBehaviour, ICleanUp
         _defenderHud.QuitGame += GoToMainMenu;
         var initialData = GenerateInitialData();
         _board.Initialize(initialData, _contentFactory);
-        _tilesBuilder.Initialize(_contentFactory, _camera, _board);
+        _tilesBuilder.Initialize(_contentFactory, _camera, _board, false);
     }
 
     private BoardData GenerateInitialData()

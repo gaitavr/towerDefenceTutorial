@@ -32,7 +32,7 @@ public class EditorGame : MonoBehaviour, ICleanUp
         _hud.SaveClicked += OnSaveClicked;
         var initialData = GenerateInitialData();
         _board.Initialize(initialData, _contentFactory);
-        _tilesBuilder.Initialize(_contentFactory, _camera, _board);
+        _tilesBuilder.Initialize(_contentFactory, _camera, _board, true);
     }
 
     private BoardData GenerateInitialData()
