@@ -14,32 +14,38 @@ namespace MainMenu
         [SerializeField]
         private Button _selectButton;
         [SerializeField]
-        private Button _deleteButton;//TODO implement
+        private Button _deleteButton;
 
-        private string _selectParameter;
+        public string FileName { get; private set; }
         
         public void Init(Data data)
         {
             _timeText.text = data.Time;
             _nameText.text = data.Name;
-            _selectParameter = data.Name;
+            FileName = data.Name;
             _selectButton.onClick.AddListener(() =>
             {
-                data.Selected?.Invoke(_selectParameter);
+                data.Selected?.Invoke(FileName);
+            });
+            _deleteButton.onClick.AddListener(() =>
+            {
+                data.Deleted?.Invoke(this);
             });
         }
         
         public class Data
         {
-            public string Time;
-            public string Name;
-            public Action<string> Selected;
+            public string Time { get; private set; }
+            public string Name { get; private set; }
+            public Action<string> Selected { get; private set; }
+            public Action<EditorElement> Deleted { get; private set; }
 
-            public Data(string time, string name, Action<string> selected)
+            public Data(string time, string name, Action<string> selected, Action<EditorElement> deleted)
             {
                 Time = time;
                 Name = name;
                 Selected = selected;
+                Deleted = deleted;
             }
         }
     }

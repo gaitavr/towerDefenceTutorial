@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Loading;
 using TMPro;
 using UnityEngine;
@@ -42,7 +43,7 @@ namespace MainMenu
                 var item = Instantiate(_elementPrefab, _contentParent);
                 item.gameObject.SetActive(true);
                 _elements.Add(item);
-                item.Init(new EditorElement.Data(save.CreationTime, save.FileName, OnElementSelected));
+                item.Init(new EditorElement.Data(save.CreationTime, save.FileName, OnElementSelected, OnElementDeleted));
             }
         }
 
@@ -63,6 +64,13 @@ namespace MainMenu
             var loadingOperations = new Queue<ILoadingOperation>();
             loadingOperations.Enqueue(new EditorGameLoadingOperation(name));
             LoadingScreen.Instance.Load(loadingOperations);
+        }
+        
+        private void OnElementDeleted(EditorElement element)
+        {
+            _boardSerializer.Delete(element.FileName);
+            _elements.Remove(element);
+            Destroy(element.gameObject);
         }
     }
 }
