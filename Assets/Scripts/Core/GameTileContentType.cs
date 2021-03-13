@@ -1,5 +1,5 @@
 
-public enum GameTileContentType
+public enum GameTileContentType : byte
 {
     Empty = 0,
     Destination = 1,

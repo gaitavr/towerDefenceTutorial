@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Core.Building
-{
-    public class TilesBuilder : MonoBehaviour
+public class TilesBuilder : MonoBehaviour
     {
         [SerializeField]
         private List<BuildButton> _buttons;
@@ -18,24 +16,38 @@ namespace Core.Building
         private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
 
         private GameTileContent _pendingTile;
+        private bool _isDestroyAllowed;
 
         private void Awake()
         {
             _buttons.ForEach(b => b.AddListener(OnBuildingSelected));
         }
         
-        public void Initialize(GameTileContentFactory contentFactory, Camera camera, GameBoard gameBoard)
+        public void Initialize(GameTileContentFactory contentFactory, Camera camera, GameBoard gameBoard, bool isDestroyAllowed)
         {
             _contentFactory = contentFactory;
+            _isDestroyAllowed = isDestroyAllowed;
             _camera = camera;
             _gameBoard = gameBoard;
         }
 
         private void Update()
         {
-            if(_isEnabled == false || _pendingTile == null)
+            if(_isEnabled == false)
                 return;
 
+            if (_pendingTile == null)
+            {
+                ProcessDestroying();
+            }
+            else
+            {
+                ProcessBuilding();
+            }
+        }
+
+        private void ProcessBuilding()
+        {
             var plane = new Plane(Vector3.up, Vector3.zero);
             if (plane.Raycast(TouchRay, out var position))
             {
@@ -45,12 +57,25 @@ namespace Core.Building
             if (IsPointerUp())
             {
                 var tile = _gameBoard.GetTile(TouchRay);
-                if (tile != null)
+                if (tile == null || _gameBoard.TryBuild(tile, _pendingTile) == false)
                 {
-                    if(_gameBoard.TryBuild(tile, _pendingTile) == false)
-                        Destroy(_pendingTile.gameObject);
+                    Destroy(_pendingTile.gameObject);
                 }
                 _pendingTile = null;
+            }
+        }
+
+        private void ProcessDestroying()
+        {
+            if(_isDestroyAllowed == false)
+                return;
+            if (IsPointerUp())
+            {
+                var tile = _gameBoard.GetTile(TouchRay);
+                if (tile != null)
+                {
+                    _gameBoard.DestroyTile(tile);
+                }
             }
         }
 
@@ -79,4 +104,3 @@ namespace Core.Building
             _pendingTile = _contentFactory.Get(type);
         }
     }
-}

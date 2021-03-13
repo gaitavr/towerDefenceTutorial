@@ -9,17 +9,27 @@ namespace MainMenu
     {
         [SerializeField]
         private Button _quickGameBtn;
+        [SerializeField]
+        private Button _editBoardBtn;
+        [SerializeField]
+        private EditorMenu _editorMenu;
         
         private void Start()
         {
             _quickGameBtn.onClick.AddListener(OnQuickGameBtnClicked);
+            _editBoardBtn.onClick.AddListener(OnEditorBtnClicked);
         }
 
         private void OnQuickGameBtnClicked()
         {
             var loadingOperations = new Queue<ILoadingOperation>();
-            loadingOperations.Enqueue(new GameLoadingOperation());
+            loadingOperations.Enqueue(new QuickGameLoadingOperation());
             LoadingScreen.Instance.Load(loadingOperations);
+        }
+
+        private void OnEditorBtnClicked()
+        {
+            _editorMenu.Show();
         }
     }
 }

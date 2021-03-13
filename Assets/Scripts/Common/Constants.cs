@@ -6,7 +6,8 @@ namespace Common
         {
             public const string MAIN_MENU = "MainMenu";
             public const string LOGIN = "Login";
-            public const string GAME = "Game";
+            public const string QUICK_GAME = "QuickGame";
+            public const string EDITOR_GAME = "EditorGame";
         }
     }
 }

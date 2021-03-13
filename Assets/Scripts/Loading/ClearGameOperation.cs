@@ -9,19 +9,19 @@ namespace Loading
     {
         public string Description => "Clearing...";
 
-        private readonly Game _game;
+        private readonly ICleanUp _gameCleanUp;
 
-        public ClearGameOperation(Game game)
+        public ClearGameOperation(ICleanUp gameCleanUp)
         {
-            _game = game;
+            _gameCleanUp = gameCleanUp;
         }
 
         public async Task Load(Action<float> onProgress)
         {
             onProgress?.Invoke(0.2f);
-            _game.Cleanup();
+            _gameCleanUp.Cleanup();
 
-            foreach (var factory in _game.Factories)
+            foreach (var factory in _gameCleanUp.Factories)
             {
                 await factory.Unload();
             }
@@ -34,7 +34,7 @@ namespace Loading
             }
             onProgress?.Invoke(0.75f);
            
-            var unloadOp = SceneManager.UnloadSceneAsync(Constants.Scenes.GAME);
+            var unloadOp = SceneManager.UnloadSceneAsync(_gameCleanUp.SceneName);
             while (unloadOp.isDone == false)
             {
                 await Task.Delay(1);
