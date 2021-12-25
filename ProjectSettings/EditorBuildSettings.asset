@@ -20,4 +20,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/QuickGame.unity
     guid: 99a85963493959341a197526b3d70e64
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 385f8339b535efb43afc1d2a8514ba18,
+      type: 2}
