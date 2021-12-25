@@ -17,5 +17,12 @@ namespace Editor
         {
             PlayerPrefs.DeleteAll();
         }
+        
+        [MenuItem("Tools/Assets/Clear Asset Bundle Cache")]
+        public static void DoClearAssetBundleCache()
+        {
+            AssetBundle.UnloadAllAssetBundles(true);
+            Debug.Log($"Clear Asset Bundle Cache result: {Caching.ClearCache()}");
+        }
     }
 }
