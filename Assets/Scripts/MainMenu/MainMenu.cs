@@ -22,9 +22,9 @@ namespace MainMenu
 
         private void OnQuickGameBtnClicked()
         {
-            var loadingOperations = new Queue<ILoadingOperation>();
-            loadingOperations.Enqueue(new QuickGameLoadingOperation());
-            LoadingScreen.Instance.Load(loadingOperations);
+            var operations = new Queue<ILoadingOperation>();
+            operations.Enqueue(new QuickGameLoadingOperation());
+            ProjectContext.Instance.LoadingScreenProvider.LoadAndDestroy(operations);
         }
 
         private void OnEditorBtnClicked()

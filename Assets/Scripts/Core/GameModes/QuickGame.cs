@@ -195,6 +195,6 @@ public class QuickGame : MonoBehaviour, ICleanUp
     {
         var operations = new Queue<ILoadingOperation>();
         operations.Enqueue(new ClearGameOperation(this));
-        LoadingScreen.Instance.Load(operations);
+        ProjectContext.Instance.LoadingScreenProvider.LoadAndDestroy(operations);
     }
 }

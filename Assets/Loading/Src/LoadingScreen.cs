@@ -21,16 +21,8 @@ namespace Loading
         
         private float _targetProgress;
         private bool _isProgress;
-
-        public static LoadingScreen Instance { get; private set; }
         
-        private void Awake()
-        {
-            Instance = this;
-            DontDestroyOnLoad(this);
-        }
-        
-        public async void Load(Queue<ILoadingOperation> loadingOperations)
+        public async Task Load(Queue<ILoadingOperation> loadingOperations)
         {
             _canvas.enabled = true;
             StartCoroutine(UpdateProgressBar());
