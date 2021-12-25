@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using AppInfo;
 using Loading;
+using Login;
 using UnityEngine;
 
 public class AppStartup : MonoBehaviour
 {
     private LoadingScreenProvider LoadingProvider => ProjectContext.Instance.LoadingScreenProvider;
     
-    private async void Start()
+    private void Start()
     {
         ProjectContext.Instance.Initialize();
         
@@ -17,8 +18,6 @@ public class AppStartup : MonoBehaviour
         loadingOperations.Enqueue(new ConfigOperation(appInfoContainer));
         loadingOperations.Enqueue(new MenuLoadingOperation());
 
-        var loadingScreen = await LoadingProvider.Load();
-        await loadingScreen.Load(loadingOperations);
-        LoadingProvider.Unload();
+        LoadingProvider.LoadAndDestroy(loadingOperations);
     }
 }

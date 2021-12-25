@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using AppInfo;
 using Common;
 using Extensions;
-using Loading.Login;
+using Loading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Loading
+namespace Login
 {
     public class LoginOperation : ILoadingOperation
     {
@@ -47,33 +47,11 @@ namespace Loading
 
             if (result == null)
             {
-                result = await ShowLoginWindow();
+                result = await ProjectContext.Instance.LoginWindowProvider.ShowAndHide();
             }
             
             PlayerPrefs.SetString(deviceId, JsonUtility.ToJson(result));
             
-            return result;
-        }
-
-        private async Task<UserInfoContainer> ShowLoginWindow()
-        {
-            var loadOp = SceneManager.LoadSceneAsync(Constants.Scenes.LOGIN, 
-                LoadSceneMode.Additive);
-            while (loadOp.isDone == false)
-            {
-                await Task.Delay(1);
-            }
-            
-            var scene = SceneManager.GetSceneByName(Constants.Scenes.LOGIN);
-            var loginWindow = scene.GetRoot<LoginWindow>();
-
-            var result = await loginWindow.ProcessLogin();
-
-            var unloadOp = SceneManager.UnloadSceneAsync(Constants.Scenes.LOGIN);
-            while (unloadOp.isDone == false)
-            {
-                await Task.Delay(1);
-            }
             return result;
         }
     }

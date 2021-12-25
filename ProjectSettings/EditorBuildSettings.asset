@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/EditorGame.unity
     guid: a4940a230cadcfd48ac256338e79c1f1
   - enabled: 1
-    path: Assets/Scenes/Login.unity
-    guid: 3e216c2a46146ab4682895f05d64b737
-  - enabled: 1
     path: Assets/Scenes/QuickGame.unity
     guid: 99a85963493959341a197526b3d70e64
   m_configObjects:

@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Loading.Login
+namespace Login
 {
     public class LoginWindow : MonoBehaviour
     {
