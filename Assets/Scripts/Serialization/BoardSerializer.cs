@@ -35,7 +35,9 @@ public class BoardSerializer
         {
             formatter.Serialize(stream, data);
         }
+        #if UNITY_EDITOR
         UnityEditor.EditorUtility.RevealInFinder(savePath);
+        #endif
     }
 
     public BoardData Load(string fileName)
