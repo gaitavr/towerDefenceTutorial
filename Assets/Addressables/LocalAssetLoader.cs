@@ -14,10 +14,10 @@ namespace Assets
         {
             var handle = Addressables.InstantiateAsync(assetId);
             _cachedObject = await handle.Task;
-            if(_cachedObject.TryGetComponent(out T loadingScreen) == false)
+            if(_cachedObject.TryGetComponent(out T component) == false)
                 throw new NullReferenceException($"Object of type {typeof(T)} is null on " +
                                                  "attempt to load it from addressables");
-            return loadingScreen;
+            return component;
         }
 
         protected void UnloadInternal()

@@ -30,6 +30,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2af6e5b232bbe42478b06c66bca41dcd, type: 2}
   - {fileID: 11400000, guid: a5abd7f5dcde59743aba7268cce431cc, type: 2}
   - {fileID: 11400000, guid: 7dad7b3240052b442b7199dee19d5e90, type: 2}
+  - {fileID: 11400000, guid: d6f5281408193a64ba60a316329f4e3f, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -51,6 +52,34 @@ MonoBehaviour:
         m_Value: ServerData/[BuildTarget]
       - m_Id: 328e5e80fce7eaa48935135660e0fe2f
         m_Value: http://localhost/[BuildTarget]
+    - m_InheritedParent: 
+      m_Id: da70b8a9ef416b34089b66657e9c9df3
+      m_ProfileName: Dev
+      m_Values:
+      - m_Id: f46d25aea22d8c748905c95dd7cfd01e
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: fecd56b29ea54fc48aef3778e8c9e66c
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+      - m_Id: b09b518c3f6e5a34ca265306604e28a7
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+      - m_Id: 8b60a119771567040a89edf21de6b35e
+        m_Value: ServerData/[BuildTarget]
+      - m_Id: 328e5e80fce7eaa48935135660e0fe2f
+        m_Value: http://localhost/[BuildTarget]
+    - m_InheritedParent: 
+      m_Id: b327f8d9932fc264ab8b6f799c4ba397
+      m_ProfileName: Prod
+      m_Values:
+      - m_Id: f46d25aea22d8c748905c95dd7cfd01e
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: fecd56b29ea54fc48aef3778e8c9e66c
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+      - m_Id: b09b518c3f6e5a34ca265306604e28a7
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+      - m_Id: 8b60a119771567040a89edf21de6b35e
+        m_Value: ServerData/[BuildTarget]
+      - m_Id: 328e5e80fce7eaa48935135660e0fe2f
+        m_Value: mySite.com/[BuildTarget]
     m_ProfileEntryNames:
     - m_Id: f46d25aea22d8c748905c95dd7cfd01e
       m_Name: BuildTarget
