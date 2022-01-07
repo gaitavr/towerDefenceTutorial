@@ -19,11 +19,13 @@ namespace Loading
             {
                 await Task.Delay(1);
             }
+            onProgress?.Invoke(0.7f);
+            
             var scene = SceneManager.GetSceneByName(Constants.Scenes.QUICK_GAME);
             var editorGame = scene.GetRoot<QuickGame>();
-            editorGame.Init();
-            onProgress?.Invoke(0.9f);
-            
+            var environment = await ProjectContext.Instance.AssetProvider.LoadSceneAdditive("Sand");
+            onProgress?.Invoke(0.85f);
+            editorGame.Init(environment);
             editorGame.BeginNewGame();
             onProgress?.Invoke(1.0f);
         }

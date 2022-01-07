@@ -7,7 +7,7 @@ using GameResult;
 using Loading;
 using UnityEngine;
 using Common;
-using UnityEngine.SceneManagement;
+using UnityEngine.ResourceManagement.ResourceProviders;
 
 public class QuickGame : MonoBehaviour, ICleanUp
 {
@@ -53,6 +53,7 @@ public class QuickGame : MonoBehaviour, ICleanUp
     private bool _scenarioInProcess;
     private GameScenario.State _activeScenario;
     private CancellationTokenSource _prepareCancellation;
+    private SceneInstance _environment;
 
     private readonly GameBehaviorCollection _enemies = new GameBehaviorCollection();
     private readonly GameBehaviorCollection _nonEnemies = new GameBehaviorCollection();
@@ -80,8 +81,9 @@ public class QuickGame : MonoBehaviour, ICleanUp
         _instance = this;
     }
 
-    public void Init()
+    public void Init(SceneInstance environment)
     {
+        _environment = environment;
         _defenderHud.PauseClicked += OnPauseClicked;
         _defenderHud.QuitGame += GoToMainMenu;
         var initialData = GenerateInitialData();
@@ -197,6 +199,7 @@ public class QuickGame : MonoBehaviour, ICleanUp
     {
         var operations = new Queue<ILoadingOperation>();
         operations.Enqueue(new ClearGameOperation(this));
+        ProjectContext.Instance.AssetProvider.UnloadAdditiveScene(_environment);
         ProjectContext.Instance.LoadingScreenProvider.LoadAndDestroy(operations);
     }
 }

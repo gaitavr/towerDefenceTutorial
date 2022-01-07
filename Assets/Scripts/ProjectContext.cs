@@ -5,6 +5,7 @@ public class ProjectContext : MonoBehaviour
 {
     public LoadingScreenProvider LoadingScreenProvider { get; private set; }
     public LoginWindowProvider LoginWindowProvider { get; private set; }
+    public AssetProvider AssetProvider { get; private set; }
 
     public static ProjectContext Instance { get; private set; }
 
@@ -18,5 +19,6 @@ public class ProjectContext : MonoBehaviour
     {
         LoadingScreenProvider = new LoadingScreenProvider();
         LoginWindowProvider = new LoginWindowProvider();
+        AssetProvider = new AssetProvider();
     }
 }
