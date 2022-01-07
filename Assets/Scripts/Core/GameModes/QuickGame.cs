@@ -87,14 +87,6 @@ public class QuickGame : MonoBehaviour, ICleanUp
         var initialData = GenerateInitialData();
         _board.Initialize(initialData, _contentFactory);
         _tilesBuilder.Initialize(_contentFactory, _camera, _board, false);
-        StartCoroutine(LoadEnvironment());
-    }
-
-    private IEnumerator LoadEnvironment()
-    {
-        var sceneOp = SceneManager.LoadSceneAsync(4, LoadSceneMode.Additive);
-        yield return sceneOp;
-        
     }
 
     private BoardData GenerateInitialData()

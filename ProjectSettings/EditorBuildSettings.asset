@@ -18,8 +18,8 @@ EditorBuildSettings:
     path: Assets/Scenes/QuickGame.unity
     guid: 99a85963493959341a197526b3d70e64
   - enabled: 1
-    path: Assets/VFX/LowPoly Environment Pack/Demo/Sand.unity
-    guid: 1728c33fb4b47e245a0598bcb1f88c83
+    path: Assets/VFX/LowPoly Environment Pack/Demo/Forest.unity
+    guid: 3968a21f23951b942811bf09fca9e1a0
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 385f8339b535efb43afc1d2a8514ba18,
       type: 2}
