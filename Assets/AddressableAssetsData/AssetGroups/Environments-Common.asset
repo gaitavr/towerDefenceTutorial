@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Environments-Common
+  m_EditorClassIdentifier: 
+  m_GroupName: Environments-Common
+  m_Data:
+    m_SerializedData: []
+  m_GUID: cf95a8638ac9a1f48b4c44beef8c788f
+  m_SerializeEntries:
+  - m_GUID: 18cea87bdb7d0fa46986e492321f3d1e
+    m_Address: Assets/VFX/LowPoly Environment Pack/FBX/Rock_5.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: dfed2e9fb3d8ac84da441095f9422543
+    m_Address: Assets/VFX/LowPoly Environment Pack/FBX/Rock_2.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: b58e7fdfb89fbc549b36a69243aee4c0
+    m_Address: Assets/VFX/LowPoly Environment Pack/FBX/Rock_4.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 933532a4fcc9baf4fa0491de14d08ed7
+    m_Address: Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: e6e9a19c3678ded42a3bc431ebef7dbd
+    m_Address: Packages/com.unity.render-pipelines.universal/Shaders/Utils/FallbackError.shader
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 000faa4a04445e244a1fd374e2f74356, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 8b0c19ff360bf5646a36cf45eac7a662, type: 2}
+    - {fileID: 11400000, guid: fd914092a98944c43bf6bd445636f5a3, type: 2}

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Environments-Remote
+  m_EditorClassIdentifier: 
+  m_GroupName: Environments-Remote
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 086b01bbaa60a5c45998b5144842bd2b
+  m_SerializeEntries:
+  - m_GUID: 3968a21f23951b942811bf09fca9e1a0
+    m_Address: Forest
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 102900000, guid: 3968a21f23951b942811bf09fca9e1a0, type: 3}
+    m_TargetAsset: {fileID: 102900000, guid: 3968a21f23951b942811bf09fca9e1a0, type: 3}
+  - m_GUID: 1728c33fb4b47e245a0598bcb1f88c83
+    m_Address: Sand
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 102900000, guid: 1728c33fb4b47e245a0598bcb1f88c83, type: 3}
+    m_TargetAsset: {fileID: 102900000, guid: 1728c33fb4b47e245a0598bcb1f88c83, type: 3}
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 000faa4a04445e244a1fd374e2f74356, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 4e1ee03b655711041b60c11efe83df19, type: 2}
+    - {fileID: 11400000, guid: 91c57e159f092304c85b162c6f845496, type: 2}
