@@ -7,9 +7,10 @@ using GameResult;
 using Loading;
 using UnityEngine;
 using Common;
+using Core.Pause;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-public class QuickGame : MonoBehaviour, ICleanUp
+public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
 {
     [SerializeField]
     private Vector2Int _boardSize;
@@ -60,6 +61,8 @@ public class QuickGame : MonoBehaviour, ICleanUp
 
     private static QuickGame _instance;
 
+    private bool IsPaused => ProjectContext.Instance.PauseManager.IsPaused;
+
     private int _playerHealth;
     private int PlayerHealth
     {
@@ -83,8 +86,8 @@ public class QuickGame : MonoBehaviour, ICleanUp
 
     public void Init(SceneInstance environment)
     {
+        ProjectContext.Instance.PauseManager.Register(this);
         _environment = environment;
-        _defenderHud.PauseClicked += OnPauseClicked;
         _defenderHud.QuitGame += GoToMainMenu;
         var initialData = GenerateInitialData();
         _board.Initialize(initialData, _contentFactory);
@@ -103,14 +106,12 @@ public class QuickGame : MonoBehaviour, ICleanUp
         result.Content[result.Content.Length - 1] = GameTileContentType.Destination;
         return result;
     }
-
-    private void OnPauseClicked(bool isPaused)
-    {
-        Time.timeScale = isPaused ? 0f : 1f;
-    }
     
     private void Update()
     {
+        if(IsPaused)
+            return;
+            
         if (Input.GetKeyDown(KeyCode.R))
         {
             BeginNewGame();
@@ -201,5 +202,10 @@ public class QuickGame : MonoBehaviour, ICleanUp
         operations.Enqueue(new ClearGameOperation(this));
         ProjectContext.Instance.AssetProvider.UnloadAdditiveScene(_environment);
         ProjectContext.Instance.LoadingScreenProvider.LoadAndDestroy(operations);
+    }
+
+    void IPauseHandler.SetPaused(bool isPaused)
+    {
+        _enemies.SetPaused(isPaused);
     }
 }

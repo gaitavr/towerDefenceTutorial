@@ -9,6 +9,8 @@ public abstract class EnemyView : MonoBehaviour
 
     protected const string DIED_KEY = "Died";
 
+    public float SpeedFactor => _animator.speed;
+
     public virtual void Init(Enemy enemy)
     {
         _animator = GetComponent<Animator>();
