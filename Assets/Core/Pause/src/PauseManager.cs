@@ -4,10 +4,19 @@ namespace Core.Pause
 {
     public class PauseManager : IPauseHandler
     {
+        private PauseHint _hint;
+        
         private readonly List<IPauseHandler> _handlers = 
             new List<IPauseHandler>();
         
         public bool IsPaused { get; private set; }
+
+        public void SetHint(PauseHint hint)
+        {
+            _hint = hint;
+        }
+
+        public void ShowHint() => _hint.TryShow();
 
         public void Register(IPauseHandler handler)
         {

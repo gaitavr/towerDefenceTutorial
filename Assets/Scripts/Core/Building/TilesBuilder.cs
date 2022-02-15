@@ -19,7 +19,8 @@ public class TilesBuilder : MonoBehaviour
     private GameTileContent _pendingTile;
     private bool _isDestroyAllowed;
 
-    private bool IsPaused => ProjectContext.Instance.PauseManager.IsPaused;
+    private PauseManager PauseManager => ProjectContext.Instance.PauseManager;
+    private bool IsPaused => PauseManager.IsPaused;
 
     private void Awake()
     {
@@ -105,8 +106,11 @@ public class TilesBuilder : MonoBehaviour
 
     private void OnBuildingSelected(GameTileContentType type)
     {
-        if(IsPaused)
+        if (IsPaused)
+        {
+            PauseManager.ShowHint();
             return;
+        }
         //TODO check money
         _pendingTile = _contentFactory.Get(type);
     }
