@@ -16,8 +16,6 @@ namespace Core.UI
         private ToggleWithSpriteSwap _pauseToggle;
         [SerializeField]
         private Button _quitButton;
-
-        public event Action<bool> PauseClicked;
         public event Action QuitGame;
 
         private void Awake()
@@ -47,7 +45,7 @@ namespace Core.UI
         
         private void OnPauseClicked(bool isPaused)
         {
-            PauseClicked?.Invoke(isPaused);
+            ProjectContext.Instance.PauseManager.SetPaused(isPaused);
         }
         
         private void OnDestroy()

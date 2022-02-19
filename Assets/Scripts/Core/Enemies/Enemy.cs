@@ -19,6 +19,7 @@ public class Enemy : GameBehavior
     private float _pathOffset;
     private float _speed;
     private float _originalSpeed;
+    private float _tempSpeedFactor;
 
     public float Scale { get; private set; }
     public float Health { get; private set; }
@@ -187,5 +188,12 @@ public class Enemy : GameBehavior
     private void DisableView()
     {
         _view.GetComponent<TargetPoint>().IsEnabled = false;
+    }
+
+    public override void SetPaused(bool isPaused)
+    {
+        if (isPaused)
+            _tempSpeedFactor = _view.SpeedFactor;
+        SetSpeed(isPaused ? 0 : _tempSpeedFactor);
     }
 }

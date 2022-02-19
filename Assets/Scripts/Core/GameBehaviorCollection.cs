@@ -35,4 +35,12 @@ public class GameBehaviorCollection
         }
         _behaviors.Clear();
     }
+
+    public void SetPaused(bool isPaused)
+    {
+        for (int i = 0; i < _behaviors.Count; i++)
+        {
+            _behaviors[i].SetPaused(isPaused);
+        }
+    }
 }
