@@ -26,3 +26,5 @@ MonoBehaviour:
     type: 3}
   _iceObstacle: {fileID: 4631750306096973811, guid: 80f57526968bdd34d9b1a449cb23f4c4,
     type: 3}
+  _fireObstacle: {fileID: 8395759037894642116, guid: bdae11a4c3b38184d9f6f14eb36c469b,
+    type: 3}
