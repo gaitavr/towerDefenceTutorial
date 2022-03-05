@@ -6,11 +6,6 @@ public class IceObstacle : GameTileContent
 {
     [SerializeField]
     private TargetPointTrigger _trigger;
-
-    private static readonly Dictionary<TargetPoint, Guid> _globalTargetStorage = 
-        new Dictionary<TargetPoint, Guid>();
-    private readonly Dictionary<TargetPoint, Guid> _internalTargetStorage = 
-        new Dictionary<TargetPoint, Guid>();
     
     private void Awake()
     {
@@ -20,21 +15,17 @@ public class IceObstacle : GameTileContent
 
     private void OnTargetEntered(TargetPoint targetPoint)
     {
-        var guid = Guid.NewGuid();
-        _globalTargetStorage[targetPoint] = guid;
-        _internalTargetStorage[targetPoint] = guid;
-        targetPoint.Enemy.SetSpeed(0.5f);
+        var iceSlower = targetPoint.gameObject.AddComponent<IceSlower>();
+        iceSlower.Assign(targetPoint.Enemy);
     }
     
     private void OnTargetExited(TargetPoint targetPoint)
     {
-        var guidGlobal = _globalTargetStorage[targetPoint];
-        var guidInternal = _internalTargetStorage[targetPoint];
-        _internalTargetStorage.Remove(targetPoint);
-        if(guidGlobal != guidInternal)
-            return;
-        targetPoint.Enemy.SetSpeed(1);
-        _globalTargetStorage.Remove(targetPoint);
+        if (targetPoint.gameObject.TryGetComponent<IceSlower>(out var slower))
+        {
+            slower.Delete(targetPoint.Enemy);
+            Destroy(slower);
+        }
     }
     
     private void OnDestroy()
