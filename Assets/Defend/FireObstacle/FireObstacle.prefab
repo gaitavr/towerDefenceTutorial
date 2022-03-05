@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3021318691352023376}
-  - component: {fileID: 4631750306096973811}
+  - component: {fileID: 8395759037894642116}
   m_Layer: 10
-  m_Name: IceObstacle
+  m_Name: FireObstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4631750306096973811
+--- !u!114 &8395759037894642116
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,10 +41,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2279609158917375516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fb4ebc237c04592b2efabfe16039765, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f4a01b0f005457ab084ef317d12835c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 10
+  _type: 11
   _trigger: {fileID: 6225033781868969900}
 --- !u!1 &5433780157103279404
 GameObject:
@@ -108,7 +108,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: de8d48b95cb10ba4f9043ef165d57c5c, type: 2}
+  - {fileID: 2100000, guid: 1fefd97b7c4f5bd47b969e889e7be5ff, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

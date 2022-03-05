@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider), typeof(Rigidbody))]
-public class IceTrigger : MonoBehaviour
+public class TargetPointTrigger : MonoBehaviour
 {
     public event Action<TargetPoint> Entered;
     public event Action<TargetPoint> Exited;

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class IceObstacle : GameTileContent
 {
     [SerializeField]
-    private IceTrigger _iceTrigger;
+    private TargetPointTrigger _trigger;
 
     private static readonly Dictionary<TargetPoint, Guid> _globalTargetStorage = 
         new Dictionary<TargetPoint, Guid>();
@@ -14,8 +14,8 @@ public class IceObstacle : GameTileContent
     
     private void Awake()
     {
-        _iceTrigger.Entered += OnTargetEntered;
-        _iceTrigger.Exited += OnTargetExited;
+        _trigger.Entered += OnTargetEntered;
+        _trigger.Exited += OnTargetExited;
     }
 
     private void OnTargetEntered(TargetPoint targetPoint)
@@ -39,7 +39,7 @@ public class IceObstacle : GameTileContent
     
     private void OnDestroy()
     {
-        _iceTrigger.Entered -= OnTargetEntered;
-        _iceTrigger.Exited -= OnTargetExited;
+        _trigger.Entered -= OnTargetEntered;
+        _trigger.Exited -= OnTargetExited;
     }
 }
