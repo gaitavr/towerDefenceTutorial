@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class IceSlower : MonoBehaviour
+public class IceSlower : IDebuff
 {
     public void Assign(Enemy enemy)
     {

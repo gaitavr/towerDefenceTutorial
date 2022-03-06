@@ -9,8 +9,8 @@ public class GameTileContentFactory : GameObjectFactory
     [SerializeField] private GameTileContent _spawnPrefab;
     [SerializeField] private Tower _laserTower;
     [SerializeField] private Tower _mortarTower;
-    [SerializeField] private IceObstacle _iceObstacle;
-    [SerializeField] private FireObstacle _fireObstacle;
+    [SerializeField] private GameTileContent _iceObstacle;
+    [SerializeField] private GameTileContent _fireObstacle;
 
     public void Reclaim(GameTileContent content)
     {

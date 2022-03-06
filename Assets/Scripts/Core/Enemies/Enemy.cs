@@ -23,6 +23,8 @@ public class Enemy : GameBehavior
 
     public float Scale { get; private set; }
     public float Health { get; private set; }
+    
+    public DebuffEnemyWrapper DebuffWrapper { get; private set; }
 
     private const float CHANGE_DIR_SPEED_MULTIPLIER = 0.8f;
 
@@ -34,6 +36,7 @@ public class Enemy : GameBehavior
         _speed = speed;
         Scale = scale;
         Health = health;
+        DebuffWrapper = new DebuffEnemyWrapper(this);
         _view.Init(this);
     }
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class TargetPoint : MonoBehaviour
 {
@@ -50,5 +51,15 @@ public class TargetPoint : MonoBehaviour
     {
         var target = _buffer[index].GetComponent<TargetPoint>();
         return target;
+    }
+
+    public static IEnumerable<TargetPoint> TargetPoints()
+    {
+        if(BufferedCount <= 0)
+            yield break;
+        for (var i = 0; i < BufferedCount; i++)
+        {
+            yield return GetBuffered(i);
+        }
     }
 }
