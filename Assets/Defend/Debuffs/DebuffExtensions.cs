@@ -7,7 +7,7 @@
             switch (contentType)
             {
                 case GameTileContentType.Ice: return new IceSlower();
-                case GameTileContentType.Fire: return new FireDamager();
+                case GameTileContentType.Lava: return new LavaObstacle();
                 default: return new EmptyDebuff();
             }
         }

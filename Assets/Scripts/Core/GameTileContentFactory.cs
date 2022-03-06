@@ -35,7 +35,7 @@ public class GameTileContentFactory : GameObjectFactory
                 return Get(_mortarTower);
             case GameTileContentType.Ice:
                 return Get(_iceObstacle);
-            case GameTileContentType.Fire:
+            case GameTileContentType.Lava:
                 return Get(_fireObstacle);
         }
 

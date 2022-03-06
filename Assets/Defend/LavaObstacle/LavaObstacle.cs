@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-public class FireDamager : IDebuff
+public class LavaObstacle : IDebuff
 {
     private const int DAMAGE = 1;
 
