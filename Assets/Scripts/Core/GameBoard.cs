@@ -200,4 +200,6 @@ public class GameBoard : MonoBehaviour
     }
 
     public GameTileContentType[] GetAllContent => _tiles.Select(t => t.Content.Type).ToArray();
+
+    public Vector3[] GetAllTilePositions => _tiles.Select(t => t.Position).ToArray();
 }

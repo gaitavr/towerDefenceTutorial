@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public class EnemyCollection
 {
     private List<Enemy> _enemies = new List<Enemy>();
+    private List<Transform> _transforms = new List<Transform>();
 
     public void Add(Enemy enemy)
     {
         _enemies.Add(enemy);
+        _transforms.Add(enemy.transform);
     }
 
     public void GameUpdate()
@@ -24,4 +27,6 @@ public class EnemyCollection
             }
         }
     }
+
+    public Transform[] GetAllTransforms() => _transforms.ToArray();
 }

@@ -12,38 +12,29 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 
 public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
 {
-    [SerializeField]
-    private Vector2Int _boardSize;
+    [SerializeField] private Vector2Int _boardSize;
 
-    [SerializeField]
-    private GameBoard _board;
+    [SerializeField] private GameBoard _board;
 
-    [SerializeField]
-    private DefenderHud _defenderHud;
+    [SerializeField] private DefenderHud _defenderHud;
 
-    [SerializeField]
-    private TilesBuilder _tilesBuilder;
+    [SerializeField] private TilesBuilder _tilesBuilder;
 
-    [SerializeField]
-    private GameResultWindow _gameResultWindow;
+    [SerializeField] private GameResultWindow _gameResultWindow;
 
-    [SerializeField]
-    private PrepareGamePanel _prepareGamePanel;
+    [SerializeField] private PrepareGamePanel _prepareGamePanel;
 
-    [SerializeField]
-    private Camera _camera;
+    [SerializeField] private Camera _camera;
 
-    [SerializeField]
-    private GameTileContentFactory _contentFactory;
+    [SerializeField] private GameTileContentFactory _contentFactory;
 
-    [SerializeField]
-    private WarFactory _warFactory;
-    
-    [SerializeField]
-    private EnemyFactory _enemyFactory;
+    [SerializeField] private WarFactory _warFactory;
 
-    [SerializeField]
-    private GameScenario _scenario;
+    [SerializeField] private EnemyFactory _enemyFactory;
+
+    [SerializeField] private GameScenario _scenario;
+
+    [SerializeField] private TileChecker _tileChecker;
 
     [SerializeField, Range(0, 100)]
     private int _startingPlayerHealth = 10;
@@ -92,6 +83,7 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
         var initialData = GenerateInitialData();
         _board.Initialize(initialData, _contentFactory);
         _tilesBuilder.Initialize(_contentFactory, _camera, _board, false);
+        _tileChecker.Init(_board, _enemies);
     }
 
     private BoardData GenerateInitialData()

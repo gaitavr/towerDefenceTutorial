@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public class GameBehaviorCollection
 {
     private List<GameBehavior> _behaviors = new List<GameBehavior>();
+    private List<Transform> _transforms = new List<Transform>();
 
     public bool IsEmpty => _behaviors.Count == 0;
 
     public void Add(GameBehavior behavior)
     {
         _behaviors.Add(behavior);
+        _transforms.Add(behavior.transform);
     }
 
     public void GameUpdate()
@@ -43,4 +46,6 @@ public class GameBehaviorCollection
             _behaviors[i].SetPaused(isPaused);
         }
     }
+    
+    public Transform[] GetAllTransforms() => _transforms.ToArray();
 }
