@@ -28,14 +28,12 @@ public class BoardSerializer
     public void Save(BoardData data, string fileName)
     {
         var formatter = new BinaryFormatter();
-        var savePath = $"{Application.persistentDataPath}/{Serialization.DEFEND_PATH}/{fileName}{Serialization.DEFEND_EXTENSION}";
-        var savePath2 = $"{Application.persistentDataPath}/{Serialization.DEFEND_PATH}/{fileName}.ttt";
+        var directoryPath = $"{Application.persistentDataPath}/{Serialization.DEFEND_PATH}";
+        if (Directory.Exists(directoryPath) == false)
+            Directory.CreateDirectory(directoryPath);
+        var savePath = $"{directoryPath}/{fileName}{Serialization.DEFEND_EXTENSION}";
         File.WriteAllBytes(savePath, data.Serialize());
-        using (FileStream stream = File.Create(savePath2))
-        {
-            formatter.Serialize(stream, data);
-        }
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorUtility.RevealInFinder(savePath);
         #endif
     }

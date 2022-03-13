@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Loading;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceProviders;
@@ -9,15 +10,15 @@ public class AssetProvider : ILoadingOperation
 {
     private bool _isReady;
 
-    private async Task WaitUntilReady()
+    private async UniTask WaitUntilReady()
     {
         while (_isReady == false)
         {
-            await Task.Yield();
+            await UniTask.Yield();
         }
     }
     
-    public async Task<SceneInstance> LoadSceneAdditive(string sceneId)
+    public async UniTask<SceneInstance> LoadSceneAdditive(string sceneId)
     {
         await WaitUntilReady();
         var op = Addressables.LoadSceneAsync(sceneId, 
@@ -25,7 +26,7 @@ public class AssetProvider : ILoadingOperation
         return await op.Task;
     }
 
-    public async Task UnloadAdditiveScene(SceneInstance scene)
+    public async UniTask UnloadAdditiveScene(SceneInstance scene)
     {
         await WaitUntilReady();
         var op = Addressables.UnloadSceneAsync(scene);
@@ -33,7 +34,7 @@ public class AssetProvider : ILoadingOperation
     }
 
     public string Description => "Assets Initialization...";
-    public async Task Load(Action<float> onProgress)
+    public async UniTask Load(Action<float> onProgress)
     {
         var operation = Addressables.InitializeAsync();
         await operation.Task;

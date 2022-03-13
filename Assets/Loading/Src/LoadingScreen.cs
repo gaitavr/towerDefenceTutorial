@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +23,7 @@ namespace Loading
         private float _targetProgress;
         private bool _isProgress;
         
-        public async Task Load(Queue<ILoadingOperation> loadingOperations)
+        public async UniTask Load(Queue<ILoadingOperation> loadingOperations)
         {
             _canvas.enabled = true;
             StartCoroutine(UpdateProgressBar());
@@ -50,13 +51,13 @@ namespace Loading
             _targetProgress = progress;
         }
 
-        private async Task WaitForBarFill()
+        private async UniTask WaitForBarFill()
         {
             while (_progressFill.value < _targetProgress)
             {
-                await Task.Delay(1);
+                await UniTask.Delay(1);
             }
-            await Task.Delay(TimeSpan.FromSeconds(0.15f));
+            await UniTask.Delay(TimeSpan.FromSeconds(0.15f));
         }
 
         private IEnumerator UpdateProgressBar()

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3021318691352023376}
-  - component: {fileID: 4631750306096973811}
+  - component: {fileID: 6302319853338591649}
   m_Layer: 10
   m_Name: IceObstacle
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4631750306096973811
+--- !u!114 &6302319853338591649
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,11 +41,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2279609158917375516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fb4ebc237c04592b2efabfe16039765, type: 3}
+  m_Script: {fileID: 11500000, guid: f4ed82ebd4951cc4a82b5a0e68b043ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 10
-  _iceTrigger: {fileID: 6225033781868969900}
+  _trigger: {fileID: 6225033781868969900}
 --- !u!1 &5433780157103279404
 GameObject:
   m_ObjectHideFlags: 0
@@ -61,7 +61,7 @@ GameObject:
   - component: {fileID: 1087213707894708788}
   - component: {fileID: 6225033781868969900}
   m_Layer: 10
-  m_Name: IceTrigger
+  m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,6 +104,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -128,6 +129,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &8112605389303556569
 BoxCollider:
   m_ObjectHideFlags: 0

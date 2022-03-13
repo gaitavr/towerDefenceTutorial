@@ -1,25 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
 [CreateAssetMenu]
 public class GameTileContentFactory : GameObjectFactory
 {
-    [SerializeField]
-    private GameTileContent _destinationPrefab;
-    [SerializeField]
-    private GameTileContent _emptyPrefab;
-    [SerializeField]
-    private GameTileContent _wallPrefab;
-    [SerializeField]
-    private GameTileContent _spawnPrefab;
-    [SerializeField]
-    private Tower _laserTower;
-    [SerializeField]
-    private Tower _mortarTower;
-    [SerializeField]
-    private IceObstacle _iceObstacle;
+    [SerializeField] private GameTileContent _destinationPrefab;
+    [SerializeField] private GameTileContent _emptyPrefab;
+    [SerializeField] private GameTileContent _wallPrefab;
+    [SerializeField] private GameTileContent _spawnPrefab;
+    [SerializeField] private Tower _laserTower;
+    [SerializeField] private Tower _mortarTower;
+    [SerializeField] private GameTileContent _iceObstacle;
+    [SerializeField] private GameTileContent _fireObstacle;
 
     public void Reclaim(GameTileContent content)
     {
@@ -44,6 +35,8 @@ public class GameTileContentFactory : GameObjectFactory
                 return Get(_mortarTower);
             case GameTileContentType.Ice:
                 return Get(_iceObstacle);
+            case GameTileContentType.Lava:
+                return Get(_fireObstacle);
         }
 
         return null;

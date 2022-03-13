@@ -6,6 +6,7 @@ public enum GameTileContentType : byte
     SpawnPoint = 2,
     
     Ice = 10,
+    Lava = 11,
     
     BeforeBlockers = 50,
     Wall = 51,

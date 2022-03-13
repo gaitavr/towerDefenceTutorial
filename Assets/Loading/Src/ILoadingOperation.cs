@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 namespace Loading
 {
@@ -7,6 +8,6 @@ namespace Loading
     {
         string Description { get; }
         
-        Task Load(Action<float> onProgress);
+        UniTask Load(Action<float> onProgress);
     }
 }

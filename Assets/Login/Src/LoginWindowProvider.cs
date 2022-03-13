@@ -1,12 +1,13 @@
 using System.Threading.Tasks;
 using AppInfo;
 using Assets;
+using Cysharp.Threading.Tasks;
 
 namespace Login
 {
     public class LoginWindowProvider : LocalAssetLoader
     {
-        public async Task<UserInfoContainer> ShowAndHide()
+        public async UniTask<UserInfoContainer> ShowAndHide()
         {
             var loginWindow = await Load();
             var result = await loginWindow.ProcessLogin();
@@ -14,7 +15,7 @@ namespace Login
             return result;
         }
     
-        public Task<LoginWindow> Load()
+        public UniTask<LoginWindow> Load()
         {
             return LoadInternal<LoginWindow>("LoginWindow");
         }

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Loading;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -10,7 +11,7 @@ namespace Assets
     {
         private GameObject _cachedObject;
         
-        protected async Task<T> LoadInternal<T>(string assetId)
+        protected async UniTask<T> LoadInternal<T>(string assetId)
         {
             var handle = Addressables.InstantiateAsync(assetId);
             _cachedObject = await handle.Task;
