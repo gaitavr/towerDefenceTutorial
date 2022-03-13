@@ -8,6 +8,8 @@ public class LavaObstacle : IDebuff
 
     private bool _isActive;
     private Enemy _enemy;
+
+    private bool IsNotPaused => ProjectContext.Instance.PauseManager.IsPaused;
     
     public void Assign(Enemy enemy)
     {
@@ -25,7 +27,8 @@ public class LavaObstacle : IDebuff
     {
         while (_isActive)
         {
-            _enemy.TakeDamage(DAMAGE);
+            if(IsNotPaused)
+                _enemy.TakeDamage(DAMAGE);
             await Task.Delay(TimeSpan.FromSeconds(0.1f));
         }
     }
