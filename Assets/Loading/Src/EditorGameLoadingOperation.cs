@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Common;
+using Cysharp.Threading.Tasks;
 using Extensions;
 using UnityEngine.SceneManagement;
 
@@ -17,14 +18,14 @@ namespace Loading
             _fileName = fileName;
         }
         
-        public async Task Load(Action<float> onProgress)
+        public async UniTask Load(Action<float> onProgress)
         {
             onProgress?.Invoke(0.3f);
             var loadOp = SceneManager.LoadSceneAsync(Constants.Scenes.EDITOR_GAME, 
                 LoadSceneMode.Single);
             while (loadOp.isDone == false)
             {
-                await Task.Delay(1);
+                await UniTask.Delay(1);
             }
             
             var scene = SceneManager.GetSceneByName(Constants.Scenes.EDITOR_GAME);

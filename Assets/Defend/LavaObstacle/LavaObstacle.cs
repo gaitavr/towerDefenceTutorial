@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 public class LavaObstacle : IDebuff
 {
@@ -20,7 +21,7 @@ public class LavaObstacle : IDebuff
         _isActive = false;
     }
 
-    private async Task DamageTask()
+    private async UniTask DamageTask()
     {
         while (_isActive)
         {

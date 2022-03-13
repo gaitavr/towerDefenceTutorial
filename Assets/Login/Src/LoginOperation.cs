@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using AppInfo;
 using Common;
+using Cysharp.Threading.Tasks;
 using Extensions;
 using Loading;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace Login
             _appInfoContainer = appInfoContainer;
         }
         
-        public async Task Load(Action<float> onProgress)
+        public async UniTask Load(Action<float> onProgress)
         {
             _onProgress = onProgress;
             _onProgress?.Invoke(0.3f);
@@ -32,7 +33,7 @@ namespace Login
             _onProgress?.Invoke(1f);
         }
 
-        private async Task<UserInfoContainer> GetUserInfo(string deviceId)
+        private async UniTask<UserInfoContainer> GetUserInfo(string deviceId)
         {
             UserInfoContainer result = null;
             
@@ -41,7 +42,7 @@ namespace Login
             {
                 result = JsonUtility.FromJson<UserInfoContainer>(PlayerPrefs.GetString(deviceId));
             }
-            await Task.Delay(TimeSpan.FromSeconds(1.5f));
+            await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
             _onProgress?.Invoke(0.6f);
             //Fake login
 

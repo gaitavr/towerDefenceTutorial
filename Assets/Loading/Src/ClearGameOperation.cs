@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Common;
+using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
 namespace Loading
@@ -16,7 +17,7 @@ namespace Loading
             _gameCleanUp = gameCleanUp;
         }
 
-        public async Task Load(Action<float> onProgress)
+        public async UniTask Load(Action<float> onProgress)
         {
             onProgress?.Invoke(0.2f);
             _gameCleanUp.Cleanup();
@@ -30,14 +31,14 @@ namespace Loading
             var loadOp = SceneManager.LoadSceneAsync(Constants.Scenes.MAIN_MENU, LoadSceneMode.Additive);
             while (loadOp.isDone == false)
             {
-                await Task.Delay(1);
+                await UniTask.Delay(1);
             }
             onProgress?.Invoke(0.75f);
            
             var unloadOp = SceneManager.UnloadSceneAsync(_gameCleanUp.SceneName);
             while (unloadOp.isDone == false)
             {
-                await Task.Delay(1);
+                await UniTask.Delay(1);
             }
             onProgress?.Invoke(1f);
         }
