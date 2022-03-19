@@ -79,7 +79,8 @@ public class EditorGame : MonoBehaviour, ICleanUp
             AccountId = 1145,
             X = (byte)_boardSize.x,
             Y = (byte)_boardSize.y,
-            Content = _board.GetAllContent
+            Content = _board.GetAllContentTypes,
+            Levels = _board.GetAllContentLevels
         };
         _serializer.Save(data, _fileName);
     }

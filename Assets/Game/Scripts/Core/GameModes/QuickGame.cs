@@ -85,11 +85,13 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
 
     private BoardData GenerateInitialData()
     {
+        var size = _boardSize.x * _boardSize.y;
         var result = new BoardData
         {
             X = (byte) _boardSize.x,
             Y = (byte) _boardSize.y,
-            Content = new GameTileContentType[_boardSize.x * _boardSize.y]
+            Content = new GameTileContentType[size],
+            Levels = new byte[size]
         };
         result.Content[0] = GameTileContentType.SpawnPoint;
         result.Content[result.Content.Length - 1] = GameTileContentType.Destination;

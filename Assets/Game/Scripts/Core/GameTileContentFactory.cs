@@ -19,33 +19,35 @@ public class GameTileContentFactory : GameObjectFactory
 
     public GameTileContent Get(GameTileContentType type)
     {
+        int level = Random.Range(0, 5);
         switch (type)
         {
             case GameTileContentType.Destination:
-                return Get(_destinationPrefab);
+                return Get(_destinationPrefab, level);
             case GameTileContentType.Empty:
-                return Get(_emptyPrefab);
+                return Get(_emptyPrefab, level);
             case GameTileContentType.Wall:
-                return Get(_wallPrefab);
+                return Get(_wallPrefab, level);
             case GameTileContentType.SpawnPoint:
-                return Get(_spawnPrefab);
+                return Get(_spawnPrefab, level);
             case GameTileContentType.LaserTower:
-                return Get(_laserTower);
+                return Get(_laserTower, level);
             case GameTileContentType.MortarTower:
-                return Get(_mortarTower);
+                return Get(_mortarTower, level);
             case GameTileContentType.Ice:
-                return Get(_iceObstacle);
+                return Get(_iceObstacle, level);
             case GameTileContentType.Lava:
-                return Get(_fireObstacle);
+                return Get(_fireObstacle, level);
         }
 
         return null;
     }
     
-    private T Get<T>(T prefab) where T : GameTileContent
+    private T Get<T>(T prefab, int level) where T : GameTileContent
     {
         T instance = CreateGameObjectInstance(prefab);
         instance.OriginFactory = this;
+        instance.Level = level;
         return instance;
     }
 }

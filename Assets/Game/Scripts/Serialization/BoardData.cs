@@ -8,11 +8,12 @@ public class BoardData
     public byte X;
     public byte Y;
     public GameTileContentType[] Content;
+    public byte[] Levels;
 
     public byte[] Serialize()
     {
         var result = new byte[sizeof(int) + sizeof(int) + sizeof(byte) * 2 +
-                              sizeof(byte) * Content.Length];
+                              sizeof(byte) * Content.Length + sizeof(byte) * Levels.Length];
 
         var offset = 0;
         offset += ByteConverter.AddToStream(Version, result, offset);
@@ -22,6 +23,11 @@ public class BoardData
         foreach (var c in Content)
         {
             offset += ByteConverter.AddToStream((byte) c, result, offset);
+        }
+        
+        foreach (var l in Levels)
+        {
+            offset += ByteConverter.AddToStream(l, result, offset);
         }
 
         return result;
@@ -43,7 +49,8 @@ public class BoardData
         offset += ByteConverter.ReturnFromStream(data, offset, out result.X);
         offset += ByteConverter.ReturnFromStream(data, offset, out result.Y);
         offset += ByteConverter.ReturnFromStream(data, offset, data.Length - offset, out byte[] content);
-
+        offset += ByteConverter.ReturnFromStream(data, offset, data.Length - offset, out result.Levels);
+        
         result.Content = new GameTileContentType[content.Length];
         for (var i = 0; i < content.Length; i++)
         {

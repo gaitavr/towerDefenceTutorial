@@ -199,7 +199,8 @@ public class GameBoard : MonoBehaviour
         FindPaths();
     }
 
-    public GameTileContentType[] GetAllContent => _tiles.Select(t => t.Content.Type).ToArray();
+    public GameTileContentType[] GetAllContentTypes => _tiles.Select(t => t.Content.Type).ToArray();
+    public byte[] GetAllContentLevels => _tiles.Select(t => (byte)t.Content.Level).ToArray();
 
     public Vector3[] GetAllTilePositions => _tiles.Select(t => t.Position).ToArray();
 }

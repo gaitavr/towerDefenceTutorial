@@ -12,6 +12,8 @@ public class GameTileContent : MonoBehaviour
     public GameTileContentType Type => _type;
 
     public GameTileContentFactory OriginFactory { get; set; }
+    
+    public int Level { get; set; }
 
     public bool IsBlockingPath => Type > GameTileContentType.BeforeBlockers;
 
