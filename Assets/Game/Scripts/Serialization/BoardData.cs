@@ -48,8 +48,10 @@ public class BoardData
         offset += ByteConverter.ReturnFromStream(data, offset, out result.AccountId);
         offset += ByteConverter.ReturnFromStream(data, offset, out result.X);
         offset += ByteConverter.ReturnFromStream(data, offset, out result.Y);
-        offset += ByteConverter.ReturnFromStream(data, offset, data.Length - offset, out byte[] content);
-        offset += ByteConverter.ReturnFromStream(data, offset, data.Length - offset, out result.Levels);
+
+        int size = result.X * result.Y;
+        offset += ByteConverter.ReturnFromStream(data, offset, size, out byte[] content);
+        offset += ByteConverter.ReturnFromStream(data, offset, size, out result.Levels);
         
         result.Content = new GameTileContentType[content.Length];
         for (var i = 0; i < content.Length; i++)
