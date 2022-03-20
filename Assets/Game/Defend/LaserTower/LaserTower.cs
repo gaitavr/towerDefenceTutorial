@@ -13,8 +13,11 @@ public class LaserTower : Tower
     [SerializeField]
     private Transform _turret;
 
-    [SerializeField]
+    [SerializeField] 
     private Transform _laserBeam;
+
+    [SerializeField, ColorUsage(true, true)] 
+    private Color _laserBeamColor;
 
     private Vector3 _laserBeamScale;
     private Vector3 _laserBeamStartPosition;
@@ -22,10 +25,21 @@ public class LaserTower : Tower
 
     public override GameTileContentType Type => GameTileContentType.LaserTower;
 
+    private Material _tempMaterial;
+
     private void Awake()
     {
         _laserBeamScale = _laserBeam.localScale;
         _laserBeamStartPosition = _laserBeam.localPosition;
+        ManageBeamMaterial();
+    }
+
+    private void ManageBeamMaterial()
+    {
+        var meshRenderer = _laserBeam.GetComponent<MeshRenderer>();
+        _tempMaterial = new Material(meshRenderer.material);
+        _tempMaterial.SetColor("_EmissionColor", _laserBeamColor);
+        meshRenderer.material = _tempMaterial;
     }
 
     public override void GameUpdate()
@@ -53,5 +67,10 @@ public class LaserTower : Tower
             + 0.5f * distance * _laserBeam.forward;
 
         _target.Enemy.TakeDamage(_damagePerSecond * Time.deltaTime);
+    }
+
+    private void OnDestroy()
+    {
+        Destroy(_tempMaterial);
     }
 }

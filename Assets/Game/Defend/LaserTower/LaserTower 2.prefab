@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 634173160281125626}
   - component: {fileID: 5966048511449462727}
   m_Layer: 0
-  m_Name: LaserTower
+  m_Name: LaserTower 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,10 +46,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 101
+  _trigger: {fileID: 0}
   _targetingRange: 2.16
   _damagePerSecond: 100
   _turret: {fileID: 6268575990643392391}
   _laserBeam: {fileID: 6116604892998860557}
+  _laserBeamColor: {r: 8, g: 0, b: 0, a: 1}
 --- !u!1 &1584397171737570137
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,6 +107,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -129,6 +132,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &6268575990643392390
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,6 +188,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -208,6 +213,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &6268575991465388252
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,6 +271,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -289,6 +296,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &8944164895269824773
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ public class GameTileContentFactory : GameObjectFactory
     [SerializeField] private GameTileContent _emptyPrefab;
     [SerializeField] private GameTileContent _wallPrefab;
     [SerializeField] private GameTileContent _spawnPrefab;
-    [SerializeField] private Tower _laserTower;
+    [SerializeField] private Tower[] _laserTowers;
     [SerializeField] private Tower _mortarTower;
     [SerializeField] private GameTileContent _iceObstacle;
     [SerializeField] private GameTileContent _fireObstacle;
@@ -17,9 +17,11 @@ public class GameTileContentFactory : GameObjectFactory
         Destroy(content.gameObject);
     }
 
-    public GameTileContent Get(GameTileContentType type)
+    private static int _test;
+
+    public GameTileContent Get(GameTileContentType type, int level = 0)
     {
-        int level = Random.Range(0, 5);
+        level = _test;
         switch (type)
         {
             case GameTileContentType.Destination:
@@ -31,7 +33,9 @@ public class GameTileContentFactory : GameObjectFactory
             case GameTileContentType.SpawnPoint:
                 return Get(_spawnPrefab, level);
             case GameTileContentType.LaserTower:
-                return Get(_laserTower, level);
+                _test++;
+                _test = Mathf.Clamp(_test, 0, 3);
+                return Get(_laserTowers[level], level);
             case GameTileContentType.MortarTower:
                 return Get(_mortarTower, level);
             case GameTileContentType.Ice:
