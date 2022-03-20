@@ -5,7 +5,7 @@
         
     }
 
-    public void Delete(Enemy enemy)
+    public void Remove()
     {
         
     }

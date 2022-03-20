@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 public class LavaObstacle : IDebuff
 {
@@ -26,7 +25,7 @@ public class LavaObstacle : IDebuff
         DamageTask();
     }
 
-    public void Delete(Enemy enemy)
+    public void Remove()
     {
         _isActive = false;
     }
@@ -38,7 +37,6 @@ public class LavaObstacle : IDebuff
             if (IsNotPaused)
             {
                 var damage = _configuration.GetDamage(_level);
-                Debug.LogError(damage);
                 _enemy.TakeDamage(damage);
             }
             await Task.Delay(TimeSpan.FromSeconds(0.1f));

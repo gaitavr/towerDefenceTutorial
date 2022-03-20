@@ -24,6 +24,28 @@ public class GameTileContentFactory : GameObjectFactory
         Destroy(content.gameObject);
     }
 
+    public bool IsNextUpgradeAllowed(GameTileContentType type, int nextLevel)
+    {
+        switch (type)
+        {
+            case GameTileContentType.Destination:
+            case GameTileContentType.Empty:
+            case GameTileContentType.Wall:
+            case GameTileContentType.SpawnPoint:
+                return false;
+            case GameTileContentType.LaserTower:
+                return _laserTowers.Length > nextLevel;
+            case GameTileContentType.MortarTower:
+                return _mortarTowers.Length > nextLevel;
+            case GameTileContentType.Ice:
+                return _iceObstacles.Length > nextLevel;
+            case GameTileContentType.Lava:
+                return _lavaObstacles.Length > nextLevel;
+        }
+
+        return false;
+    }
+
     public GameTileContent Get(GameTileContentType type, int level = 0)
     {
         switch (type)

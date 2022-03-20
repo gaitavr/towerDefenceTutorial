@@ -74,13 +74,33 @@ public class TilesBuilder : MonoBehaviour
     private void ProcessDestroying()
     {
         if (_isDestroyAllowed == false)
+        {
+            ProcessUpgrade();
             return;
+        }
         if (IsPointerUp())
         {
             var tile = _gameBoard.GetTile(TouchRay);
             if (tile != null)
             {
                 _gameBoard.DestroyTile(tile);
+            }
+        }
+    }
+
+    private void ProcessUpgrade()
+    {
+        if (IsPointerUp())
+        {
+            var tile = _gameBoard.GetTile(TouchRay);
+            if (tile != null && _contentFactory.IsNextUpgradeAllowed(tile.Content.Type, tile.Content.Level + 1))
+            {
+                _pendingTile = _contentFactory.Get(tile.Content.Type, tile.Content.Level + 1);
+                
+                _gameBoard.DestroyTile(tile);
+                
+                _gameBoard.TryBuild(tile, _pendingTile);
+                _pendingTile = null;
             }
         }
     }

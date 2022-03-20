@@ -12,13 +12,13 @@ public class DebuffEnemyWrapper : IDisposable
 
     public void Replace(IDebuff debuff)
     {
-        _currentDebuff?.Delete(_enemy);
+        _currentDebuff?.Remove();
         _currentDebuff = debuff;
         _currentDebuff.Assign(_enemy);
     }
 
     public void Dispose()
     {
-        _currentDebuff?.Delete(_enemy);
+        _currentDebuff?.Remove();
     }
 }

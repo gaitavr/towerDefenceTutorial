@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3021318691352023376}
-  - component: {fileID: 6302319853338591649}
+  - component: {fileID: 7303828051020432445}
   m_Layer: 10
   m_Name: IceObstacle 0
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6302319853338591649
+--- !u!114 &7303828051020432445
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2279609158917375516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4ed82ebd4951cc4a82b5a0e68b043ce, type: 3}
+  m_Script: {fileID: 11500000, guid: 30b9f34df5f140d2b921501f4ff5b7ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 10
