@@ -7,9 +7,6 @@ using UnityEngine;
 
 public class MortarTower : Tower
 {
-    [SerializeField, Range(0.5f, 2f)]
-    private float _shootsPerSeconds = 1f;
-
     [SerializeField, Range(0.5f, 3f)]
     private float _shellBlastRadius = 1f;
 
@@ -25,6 +22,7 @@ public class MortarTower : Tower
 
     private float _launchSpeed;
     private float _launchProgress;
+    private float _shootsPerSeconds = 1f;
 
     private void Awake()
     {
@@ -36,7 +34,12 @@ public class MortarTower : Tower
         float x = _targetingRange + 0.251f;
         float y = -_spawnPoint.position.y;
         _launchSpeed = Mathf.Sqrt(9.81f * (y + Mathf.Sqrt(x * x + y * y)));
-       
+    }
+    
+    public override void Initialize(GameTileContentFactory factory, int level)
+    {
+        base.Initialize(factory, level);
+        _shootsPerSeconds = OriginFactory.MortarConfig.GetShootsPerSecond(Level);
     }
 
     public override void GameUpdate()

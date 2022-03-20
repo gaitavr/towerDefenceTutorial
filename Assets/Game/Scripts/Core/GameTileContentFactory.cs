@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Game.Defend.MortarTower;
+using UnityEngine;
 
 [CreateAssetMenu]
 public class GameTileContentFactory : GameObjectFactory
@@ -8,20 +9,20 @@ public class GameTileContentFactory : GameObjectFactory
     [SerializeField] private GameTileContent _wallPrefab;
     [SerializeField] private GameTileContent _spawnPrefab;
     [SerializeField] private Tower[] _laserTowers;
-    [SerializeField] private Tower _mortarTower;
+    [SerializeField] private Tower[] _mortarTowers;
     [SerializeField] private GameTileContent _iceObstacle;
     [SerializeField] private GameTileContent _fireObstacle;
 
+    public LaserTowerConfigurationProvider LaserConfig { get; private set; } = new LaserTowerConfigurationProvider();
+    public MortarTowerConfigurationProvider MortarConfig { get; private set; } = new MortarTowerConfigurationProvider();
+    
     public void Reclaim(GameTileContent content)
     {
         Destroy(content.gameObject);
     }
 
-    private static int _test;
-
     public GameTileContent Get(GameTileContentType type, int level = 0)
     {
-        level = _test;
         switch (type)
         {
             case GameTileContentType.Destination:
@@ -33,11 +34,13 @@ public class GameTileContentFactory : GameObjectFactory
             case GameTileContentType.SpawnPoint:
                 return Get(_spawnPrefab, level);
             case GameTileContentType.LaserTower:
-                _test++;
-                _test = Mathf.Clamp(_test, 0, 3);
+                if (level >= _laserTowers.Length)
+                    level = _laserTowers.Length - 1;
                 return Get(_laserTowers[level], level);
             case GameTileContentType.MortarTower:
-                return Get(_mortarTower, level);
+                if (level >= _mortarTowers.Length)
+                    level = _mortarTowers.Length - 1;
+                return Get(_mortarTowers[level], level);
             case GameTileContentType.Ice:
                 return Get(_iceObstacle, level);
             case GameTileContentType.Lava:
@@ -50,8 +53,7 @@ public class GameTileContentFactory : GameObjectFactory
     private T Get<T>(T prefab, int level) where T : GameTileContent
     {
         T instance = CreateGameObjectInstance(prefab);
-        instance.OriginFactory = this;
-        instance.Level = level;
+        instance.Initialize(this, level);
         return instance;
     }
 }

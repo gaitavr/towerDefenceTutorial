@@ -11,9 +11,9 @@ public class GameTileContent : MonoBehaviour
 
     public GameTileContentType Type => _type;
 
-    public GameTileContentFactory OriginFactory { get; set; }
+    protected GameTileContentFactory OriginFactory { get; private set; }
     
-    public int Level { get; set; }
+    public int Level { get; private set; }
 
     public bool IsBlockingPath => Type > GameTileContentType.BeforeBlockers;
 
@@ -21,6 +21,12 @@ public class GameTileContent : MonoBehaviour
     {
         if(_trigger != null)
             _trigger.Entered += OnTargetEntered;
+    }
+
+    public virtual void Initialize(GameTileContentFactory factory, int level)
+    {
+        OriginFactory = factory;
+        Level = level;
     }
 
     private void OnTargetEntered(TargetPoint targetPoint)

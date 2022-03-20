@@ -25,8 +25,10 @@ MonoBehaviour:
   - {fileID: 5966048511449462727, guid: 789b90a17d531534a95a853358535509, type: 3}
   - {fileID: 5966048511449462727, guid: 9b8229c62368d0649bbf688a7d119066, type: 3}
   - {fileID: 5966048511449462727, guid: 430504f886518aa4d8647b8016dd4b3b, type: 3}
-  _mortarTower: {fileID: 8176803063387225538, guid: 61bff52073cdaf648866eb6de66bb5ad,
-    type: 3}
+  _mortarTowers:
+  - {fileID: 8176803063387225538, guid: 6e1dc97a90d1bf34e8a88c8d499e1b67, type: 3}
+  - {fileID: 8176803063387225538, guid: 499bb7350471f874fa8d81a7c19fc162, type: 3}
+  - {fileID: 8176803063387225538, guid: 61bff52073cdaf648866eb6de66bb5ad, type: 3}
   _iceObstacle: {fileID: 6302319853338591649, guid: 80f57526968bdd34d9b1a449cb23f4c4,
     type: 3}
   _fireObstacle: {fileID: 3388812749519259132, guid: bdae11a4c3b38184d9f6f14eb36c469b,

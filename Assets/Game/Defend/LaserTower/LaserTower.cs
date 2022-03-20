@@ -7,12 +7,8 @@ using UnityEngine;
 
 public class LaserTower : Tower
 {
-    [SerializeField, Range(1f, 100f)]
-    private float _damagePerSecond = 10f;
-
     [SerializeField]
     private Transform _turret;
-
     [SerializeField] 
     private Transform _laserBeam;
 
@@ -22,6 +18,7 @@ public class LaserTower : Tower
     private Vector3 _laserBeamScale;
     private Vector3 _laserBeamStartPosition;
     private TargetPoint _target;
+    private float _damagePerSecond;
 
     public override GameTileContentType Type => GameTileContentType.LaserTower;
 
@@ -32,6 +29,12 @@ public class LaserTower : Tower
         _laserBeamScale = _laserBeam.localScale;
         _laserBeamStartPosition = _laserBeam.localPosition;
         ManageBeamMaterial();
+    }
+
+    public override void Initialize(GameTileContentFactory factory, int level)
+    {
+        base.Initialize(factory, level);
+        _damagePerSecond = OriginFactory.LaserConfig.GetDamagePerSecond(Level);
     }
 
     private void ManageBeamMaterial()
