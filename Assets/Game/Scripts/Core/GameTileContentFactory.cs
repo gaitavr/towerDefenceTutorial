@@ -24,9 +24,10 @@ public class GameTileContentFactory : GameObjectFactory
         Destroy(content.gameObject);
     }
 
-    public bool IsNextUpgradeAllowed(GameTileContentType type, int nextLevel)
+    public bool IsNextUpgradeAllowed(GameTileContent gameTileContent)
     {
-        switch (type)
+        var nextLevel = gameTileContent.Level + 1;
+        switch (gameTileContent.Type)
         {
             case GameTileContentType.Destination:
             case GameTileContentType.Empty:

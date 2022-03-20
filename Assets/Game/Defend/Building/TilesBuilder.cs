@@ -93,14 +93,11 @@ public class TilesBuilder : MonoBehaviour
         if (IsPointerUp())
         {
             var tile = _gameBoard.GetTile(TouchRay);
-            if (tile != null && _contentFactory.IsNextUpgradeAllowed(tile.Content.Type, tile.Content.Level + 1))
+            if (tile != null && _contentFactory.IsNextUpgradeAllowed(tile.Content))
             {
-                _pendingTile = _contentFactory.Get(tile.Content.Type, tile.Content.Level + 1);
-                
+                var newTile = _contentFactory.Get(tile.Content.Type, tile.Content.Level + 1);
                 _gameBoard.DestroyTile(tile);
-                
-                _gameBoard.TryBuild(tile, _pendingTile);
-                _pendingTile = null;
+                _gameBoard.TryBuild(tile, newTile);
             }
         }
     }
