@@ -31,7 +31,8 @@ public class GameTileContent : MonoBehaviour
 
     private void OnTargetEntered(TargetPoint targetPoint)
     {
-        targetPoint.Enemy.DebuffWrapper.Replace(Type.GetDebuff());
+        var debuff = Type.GetDebuff(OriginFactory, Level);
+        targetPoint.Enemy.DebuffWrapper.Replace(debuff);
     }
     
     private void OnDestroy()

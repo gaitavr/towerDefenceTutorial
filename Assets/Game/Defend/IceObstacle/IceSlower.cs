@@ -2,9 +2,19 @@
 
 public class IceSlower : IDebuff
 {
+    private readonly IceConfigurationProvider _configuration;
+    private readonly int _level;
+
+    public IceSlower(IceConfigurationProvider configuration, int level)
+    {
+        _configuration = configuration;
+        _level = level;
+    }
+    
     public void Assign(Enemy enemy)
     {
-        enemy.SetSpeed(0.5f);
+        var slow = _configuration.GetSlow(_level);
+        enemy.SetSpeed(slow);
     }
 
     public void Delete(Enemy enemy)

@@ -1,5 +1,4 @@
-﻿using Game.Defend.MortarTower;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu]
 public class GameTileContentFactory : GameObjectFactory
@@ -10,11 +9,14 @@ public class GameTileContentFactory : GameObjectFactory
     [SerializeField] private GameTileContent _spawnPrefab;
     [SerializeField] private Tower[] _laserTowers;
     [SerializeField] private Tower[] _mortarTowers;
-    [SerializeField] private GameTileContent _iceObstacle;
+    [SerializeField] private GameTileContent[] _iceObstacles;
     [SerializeField] private GameTileContent _fireObstacle;
 
-    public LaserTowerConfigurationProvider LaserConfig { get; private set; } = new LaserTowerConfigurationProvider();
-    public MortarTowerConfigurationProvider MortarConfig { get; private set; } = new MortarTowerConfigurationProvider();
+    public LaserTowerConfigurationProvider LaserConfig { get; } = new LaserTowerConfigurationProvider();
+    public MortarTowerConfigurationProvider MortarConfig { get; } = new MortarTowerConfigurationProvider();
+    public IceConfigurationProvider IceConfig { get; } = new IceConfigurationProvider();
+
+    private static int test;
     
     public void Reclaim(GameTileContent content)
     {
@@ -42,7 +44,11 @@ public class GameTileContentFactory : GameObjectFactory
                     level = _mortarTowers.Length - 1;
                 return Get(_mortarTowers[level], level);
             case GameTileContentType.Ice:
-                return Get(_iceObstacle, level);
+                level = test;
+                test++;
+                if (level >= _iceObstacles.Length)
+                    level = _iceObstacles.Length - 1;
+                return Get(_iceObstacles[level], level);
             case GameTileContentType.Lava:
                 return Get(_fireObstacle, level);
         }
