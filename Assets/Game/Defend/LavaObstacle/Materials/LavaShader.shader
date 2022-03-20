@@ -3,6 +3,7 @@ Shader "Unlit/LavaShader"
     Properties {
         _MainTex ("Base (RGB)", 2D) = "white" {}
         _FlowMap ("Flow Map", 2D) = "grey" {}
+        _BaseColor ("Base Color", Color) = (1,1,1,1)
         _Speed ("Speed", Range(-1, 1)) = 0.2
     }
 
@@ -22,6 +23,7 @@ Shader "Unlit/LavaShader"
 
             sampler2D _MainTex;
             sampler2D _FlowMap;
+            fixed4 _BaseColor;
             fixed _Speed;
 
             fixed4 _MainTex_ST;
@@ -46,6 +48,7 @@ Shader "Unlit/LavaShader"
                 half4 col2 = tex2D(_MainTex, v.uv - flowVal.xy * dif2);
 
                 c = lerp(col1, col2, lerpVal);
+                c *= _BaseColor;
                 return c;
             }
 

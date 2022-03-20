@@ -7,7 +7,7 @@
             switch (contentType)
             {
                 case GameTileContentType.Ice: return new IceSlower(factory.IceConfig, level);
-                case GameTileContentType.Lava: return new LavaObstacle();
+                case GameTileContentType.Lava: return new LavaObstacle(factory.LavaConfig, level);
                 default: return new EmptyDebuff();
             }
         }

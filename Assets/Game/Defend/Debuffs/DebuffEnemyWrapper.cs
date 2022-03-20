@@ -1,4 +1,6 @@
-﻿public class DebuffEnemyWrapper
+﻿using System;
+
+public class DebuffEnemyWrapper : IDisposable
 {
     private readonly Enemy _enemy;
     private IDebuff _currentDebuff;
@@ -13,5 +15,10 @@
         _currentDebuff?.Delete(_enemy);
         _currentDebuff = debuff;
         _currentDebuff.Assign(_enemy);
+    }
+
+    public void Dispose()
+    {
+        _currentDebuff?.Delete(_enemy);
     }
 }

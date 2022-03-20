@@ -199,4 +199,9 @@ public class Enemy : GameBehavior
             _tempSpeedFactor = _view.SpeedFactor;
         SetSpeed(isPaused ? 0 : _tempSpeedFactor);
     }
+
+    private void OnDestroy()
+    {
+        DebuffWrapper?.Dispose();
+    }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3021318691352023376}
   - component: {fileID: 3388812749519259132}
   m_Layer: 10
-  m_Name: LavaObstacle
+  m_Name: LavaObstacle 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108,7 +108,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1fefd97b7c4f5bd47b969e889e7be5ff, type: 2}
+  - {fileID: 2100000, guid: 55e1a38600a3e3e4688edd3b54ff333f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

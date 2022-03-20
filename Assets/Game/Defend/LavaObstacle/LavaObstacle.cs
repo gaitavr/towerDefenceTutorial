@@ -1,15 +1,23 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 public class LavaObstacle : IDebuff
 {
-    private const int DAMAGE = 1;
+    private readonly LavaConfigurationProvider _configuration;
+    private readonly int _level;
 
     private bool _isActive;
     private Enemy _enemy;
 
-    private bool IsNotPaused => ProjectContext.Instance.PauseManager.IsPaused;
+    private bool IsNotPaused => ProjectContext.Instance.PauseManager.IsPaused == false;
+    
+    public LavaObstacle(LavaConfigurationProvider configuration, int level)
+    {
+        _configuration = configuration;
+        _level = level;
+    }
     
     public void Assign(Enemy enemy)
     {
@@ -27,8 +35,12 @@ public class LavaObstacle : IDebuff
     {
         while (_isActive)
         {
-            if(IsNotPaused)
-                _enemy.TakeDamage(DAMAGE);
+            if (IsNotPaused)
+            {
+                var damage = _configuration.GetDamage(_level);
+                Debug.LogError(damage);
+                _enemy.TakeDamage(damage);
+            }
             await Task.Delay(TimeSpan.FromSeconds(0.1f));
         }
     }

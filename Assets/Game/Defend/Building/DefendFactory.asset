@@ -33,5 +33,7 @@ MonoBehaviour:
   - {fileID: 6302319853338591649, guid: 80f57526968bdd34d9b1a449cb23f4c4, type: 3}
   - {fileID: 6302319853338591649, guid: 78ad271df2383f745aecefe44920f86c, type: 3}
   - {fileID: 6302319853338591649, guid: 04f7f1f2ca2de894da0445a72dfbd44a, type: 3}
-  _fireObstacle: {fileID: 3388812749519259132, guid: bdae11a4c3b38184d9f6f14eb36c469b,
-    type: 3}
+  _lavaObstacles:
+  - {fileID: 3388812749519259132, guid: bdae11a4c3b38184d9f6f14eb36c469b, type: 3}
+  - {fileID: 3388812749519259132, guid: 750ee0cb7de57bd4cbd49dc0727b2c08, type: 3}
+  - {fileID: 3388812749519259132, guid: 4dc0a73970c46a747955f5c892f018d7, type: 3}

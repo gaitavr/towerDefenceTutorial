@@ -10,11 +10,12 @@ public class GameTileContentFactory : GameObjectFactory
     [SerializeField] private Tower[] _laserTowers;
     [SerializeField] private Tower[] _mortarTowers;
     [SerializeField] private GameTileContent[] _iceObstacles;
-    [SerializeField] private GameTileContent _fireObstacle;
+    [SerializeField] private GameTileContent[] _lavaObstacles;
 
     public LaserTowerConfigurationProvider LaserConfig { get; } = new LaserTowerConfigurationProvider();
     public MortarTowerConfigurationProvider MortarConfig { get; } = new MortarTowerConfigurationProvider();
     public IceConfigurationProvider IceConfig { get; } = new IceConfigurationProvider();
+    public LavaConfigurationProvider LavaConfig { get; } = new LavaConfigurationProvider();
 
     private static int test;
     
@@ -44,13 +45,13 @@ public class GameTileContentFactory : GameObjectFactory
                     level = _mortarTowers.Length - 1;
                 return Get(_mortarTowers[level], level);
             case GameTileContentType.Ice:
-                level = test;
-                test++;
                 if (level >= _iceObstacles.Length)
                     level = _iceObstacles.Length - 1;
                 return Get(_iceObstacles[level], level);
             case GameTileContentType.Lava:
-                return Get(_fireObstacle, level);
+                if (level >= _lavaObstacles.Length)
+                    level = _lavaObstacles.Length - 1;
+                return Get(_lavaObstacles[level], level);
         }
 
         return null;
