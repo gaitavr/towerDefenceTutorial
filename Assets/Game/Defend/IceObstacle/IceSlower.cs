@@ -1,11 +1,11 @@
 ﻿
 public class IceSlower : IDebuff
 {
-    private IceConfigurationProvider _configuration;
-    private int _level;
+    private readonly IceConfigurationProvider _configuration;
+    private readonly int _level;
+
     private Enemy _enemy;
 
-    public void Rea
     public IceSlower(IceConfigurationProvider configuration, int level)
     {
         _configuration = configuration;

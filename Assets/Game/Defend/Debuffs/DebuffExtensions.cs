@@ -1,15 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Defend.Debuffs
+﻿namespace Defend.Debuffs
 {
     public static class DebuffExtensions
     {
-        private static Dictionary<GameTileContentType, IDebuff> _debuffs
-         = new Dictionary<GameTileContentType, IDebuff>()
-         {
-             [GameTileContentType.Ice] = new IceSlower()
-         }
-        
         public static IDebuff GetDebuff(this GameTileContentType contentType, GameTileContentFactory factory, int level)
         {
             switch (contentType)
