@@ -16,7 +16,7 @@ public class DebuffContentTile : GameTileContent
     private void OnTargetEntered(TargetPoint targetPoint)
     {
         _currentDebuff = Type.GetDebuff(OriginFactory, Level);
-        targetPoint.Enemy.DebuffWrapper.Replace(_currentDebuff);
+        targetPoint.Enemy.DebuffMediator.Replace(_currentDebuff);
     }
 
     public override void GameUpdate()

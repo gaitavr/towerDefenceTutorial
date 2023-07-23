@@ -1,12 +1,12 @@
 ﻿
-public class IceSlower : IDebuff
+public class IceDebuff : IDebuff
 {
     private readonly IceConfigurationProvider _configuration;
     private readonly int _level;
 
     private Enemy _enemy;
 
-    public IceSlower(IceConfigurationProvider configuration, int level)
+    public IceDebuff(IceConfigurationProvider configuration, int level)
     {
         _configuration = configuration;
         _level = level;

@@ -1,11 +1,11 @@
 ﻿using System;
 
-public class DebuffEnemyWrapper : IDisposable
+public class DebuffEnemyMediator
 {
     private readonly Enemy _enemy;
     private IDebuff _currentDebuff;
 
-    public DebuffEnemyWrapper(Enemy enemy)
+    public DebuffEnemyMediator(Enemy enemy)
     {
         _enemy = enemy;
     }

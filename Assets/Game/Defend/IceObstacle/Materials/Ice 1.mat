@@ -53,7 +53,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-<<<<<<<< HEAD:Assets/Game/Defend/IceObstacle/Materials/Ice 1.mat
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -66,9 +65,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-========
     m_Ints: []
->>>>>>>> master:Assets/Game/Defend/IceObstacle/Materials/Ice.mat
     m_Floats:
     - _AlphaClip: 0
     - _Blend: 0
@@ -83,6 +80,7 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _RefractStrength: 0
@@ -97,7 +95,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _IceColor: {r: 0.26178008, g: 1.3717277, b: 1.9999998, a: 1}
+    - _IceColor: {r: 0.27225125, g: 1.1010408, b: 2, a: 1}
     - _IceTiling: {r: 1, g: 1, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
