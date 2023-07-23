@@ -8,17 +8,10 @@ namespace Common
     [RequireComponent(typeof(Canvas))]
     public class AlertPopup : MonoBehaviour
     {
-        [SerializeField]
-        private TextMeshProUGUI _text;
-
-        [SerializeField]
-        private Button _okButton;
-
-        [SerializeField]
-        private Button _cancelButton;
-
-        [SerializeField]
-        private Button _closeButton;
+        [SerializeField] private TextMeshProUGUI _text;
+        [SerializeField] private Button _okButton;
+        [SerializeField] private Button _cancelButton;
+        [SerializeField] private Button _closeButton;
 
         private TaskCompletionSource<bool> _taskCompletion;
         private Canvas _canvas;

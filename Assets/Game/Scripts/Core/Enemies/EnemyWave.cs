@@ -4,10 +4,9 @@ using UnityEngine;
 [CreateAssetMenu]
 public class EnemyWave : ScriptableObject
 {
-    [SerializeField]
-    private EnemySpawnSequence[] _spawnSequences;
+    [SerializeField] private EnemySpawnSequence[] _spawnSequences;
 
-    public State Begin() => new State(this);
+    public State Begin() => new(this);
 
     [Serializable]
     public struct State

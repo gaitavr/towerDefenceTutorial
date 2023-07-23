@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
 using Core.Pause;
 using UnityEngine;
 
 public class TilesBuilder : MonoBehaviour
 {
-    [SerializeField]
-    private List<BuildButton> _buttons;
+    [SerializeField] private List<BuildButton> _buttons;
 
     private GameTileContentFactory _contentFactory;
     private Camera _camera;
@@ -19,7 +17,7 @@ public class TilesBuilder : MonoBehaviour
     private GameTileContent _pendingTile;
     private bool _isDestroyAllowed;
 
-    private PauseManager PauseManager => ProjectContext.Instance.PauseManager;
+    private PauseManager PauseManager => ProjectContext.I.PauseManager;
     private bool IsPaused => PauseManager.IsPaused;
 
     private void Awake()

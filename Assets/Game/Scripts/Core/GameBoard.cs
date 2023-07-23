@@ -1,21 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class GameBoard : MonoBehaviour
 {
-    [SerializeField]
-    private GameTile _tilePrefab;
+    [SerializeField] private GameTile _tilePrefab;
     
     private GameTile[] _tiles;
 
-    private readonly Queue<GameTile> _searchFrontier = new Queue<GameTile>();
+    private readonly Queue<GameTile> _searchFrontier = new();
 
     private GameTileContentFactory _contentFactory;
 
-    private readonly List<GameTile> _spawnPoints = new List<GameTile>();
-    private readonly List<GameTileContent> _contentToUpdate = new List<GameTileContent>();
+    private readonly List<GameTile> _spawnPoints = new();
+    private readonly List<GameTileContent> _contentToUpdate = new();
 
     private BoardData _boardData;
     private byte X => _boardData.X;
@@ -28,11 +26,12 @@ public class GameBoard : MonoBehaviour
 
         _tiles = new GameTile[X * Y];
         _contentFactory = contentFactory;
+        
         for (int i = 0, y = 0; y < Y; y++)
         {
             for (int x = 0; x < X; x++, i++)
             {
-                GameTile tile = _tiles[i] = Instantiate(_tilePrefab);
+                var tile = _tiles[i] = Instantiate(_tilePrefab);
                 tile.transform.SetParent(transform, false);
                 tile.transform.localPosition = new Vector3(x - offset.x, 0f, y - offset.y);
 
@@ -87,7 +86,7 @@ public class GameBoard : MonoBehaviour
 
         while (_searchFrontier.Count > 0)
         {
-            GameTile tile = _searchFrontier.Dequeue();
+            var tile = _searchFrontier.Dequeue();
             if (tile != null)
             {
                 if (tile.IsAlternative)
@@ -168,8 +167,7 @@ public class GameBoard : MonoBehaviour
     
     public GameTile GetTile(Ray ray)
     {
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, float.MaxValue, 1))
+        if (Physics.Raycast(ray, out var hit, float.MaxValue, 1))
         {
             var x = (int) (hit.point.x + X * 0.5f);
             var y = (int) (hit.point.z + Y * 0.5f);
@@ -201,6 +199,4 @@ public class GameBoard : MonoBehaviour
 
     public GameTileContentType[] GetAllContentTypes => _tiles.Select(t => t.Content.Type).ToArray();
     public byte[] GetAllContentLevels => _tiles.Select(t => (byte)t.Content.Level).ToArray();
-
-    public Vector3[] GetAllTilePositions => _tiles.Select(t => t.Position).ToArray();
 }

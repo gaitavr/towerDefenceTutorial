@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class GameTile : MonoBehaviour
 {
-    [SerializeField]
-    private Transform _arrow;
+    [SerializeField] private Transform _arrow;
 
     private GameTile _north, _east, _south, _west, _nextOnPath;
 
@@ -14,10 +13,10 @@ public class GameTile : MonoBehaviour
     public bool HasPath => _distance != int.MaxValue;
     public bool IsAlternative { get; set; }
 
-    private Quaternion _northRotation = Quaternion.Euler(90f, 0f, 0f);
-    private Quaternion _eastRotation = Quaternion.Euler(90f, 90f, 0f);
-    private Quaternion _southRotation = Quaternion.Euler(90f, 180f, 0f);
-    private Quaternion _westRotation = Quaternion.Euler(90f, 270f, 0f);
+    private readonly Quaternion _northRotation = Quaternion.Euler(90f, 0f, 0f);
+    private readonly Quaternion _eastRotation = Quaternion.Euler(90f, 90f, 0f);
+    private readonly Quaternion _southRotation = Quaternion.Euler(90f, 180f, 0f);
+    private readonly Quaternion _westRotation = Quaternion.Euler(90f, 270f, 0f);
 
     private GameTileContent _content;
 
@@ -71,7 +70,7 @@ public class GameTile : MonoBehaviour
 
     private GameTile GrowPathTo(GameTile neighbor, Direction direction)
     {
-        if (!HasPath || neighbor == null || neighbor.HasPath)
+        if (HasPath == false || neighbor == null || neighbor.HasPath)
         {
             return null;
         }

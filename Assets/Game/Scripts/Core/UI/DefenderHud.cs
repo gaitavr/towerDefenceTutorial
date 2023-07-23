@@ -8,14 +8,10 @@ namespace Core.UI
 {
     public class DefenderHud : MonoBehaviour
     {
-        [SerializeField]
-        private TextMeshProUGUI _wavesText;
-        [SerializeField]
-        private TextMeshProUGUI _playerHealthText;
-        [SerializeField]
-        private ToggleWithSpriteSwap _pauseToggle;
-        [SerializeField]
-        private Button _quitButton;
+        [SerializeField] private TextMeshProUGUI _wavesText;
+        [SerializeField] private TextMeshProUGUI _playerHealthText;
+        [SerializeField] private ToggleWithSpriteSwap _pauseToggle;
+        [SerializeField] private Button _quitButton;
         public event Action QuitGame;
 
         private void Awake()
@@ -45,7 +41,7 @@ namespace Core.UI
         
         private void OnPauseClicked(bool isPaused)
         {
-            ProjectContext.Instance.PauseManager.SetPaused(isPaused);
+            ProjectContext.I.PauseManager.SetPaused(isPaused);
         }
         
         private void OnDestroy()

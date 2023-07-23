@@ -5,14 +5,10 @@ using UnityEngine;
 
 public class PrepareGamePanel : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject[] _colors;
-    [SerializeField]
-    private GameObject _go;
-    [SerializeField]
-    private Vector3 _defaultScale;
-    [SerializeField]
-    private Vector3 _bigScale;
+    [SerializeField] private GameObject[] _colors;
+    [SerializeField] private GameObject _go;
+    [SerializeField] private Vector3 _defaultScale;
+    [SerializeField] private Vector3 _bigScale;
     
     public async Task<bool> Prepare(float seconds, CancellationToken cancellationToken)
     {

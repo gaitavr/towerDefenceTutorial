@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using AppInfo;
 using Assets;
 using Cysharp.Threading.Tasks;

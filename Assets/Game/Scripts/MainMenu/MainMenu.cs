@@ -24,7 +24,7 @@ namespace MainMenu
         {
             var operations = new Queue<ILoadingOperation>();
             operations.Enqueue(new QuickGameLoadingOperation());
-            ProjectContext.Instance.LoadingScreenProvider.LoadAndDestroy(operations);
+            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(operations);
         }
 
         private void OnEditorBtnClicked()

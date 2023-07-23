@@ -11,7 +11,7 @@ public class LavaDebuff : IDebuff
     private Enemy _enemy;
     private CancellationTokenSource _cancellationTokenSource;
 
-    private bool IsNotPaused => ProjectContext.Instance.PauseManager.IsPaused == false;
+    private bool IsNotPaused => ProjectContext.I.PauseManager.IsPaused == false;
     
     public LavaDebuff(LavaConfigurationProvider configuration, int level)
     {

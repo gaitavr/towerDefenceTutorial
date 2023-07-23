@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,19 +24,19 @@ public abstract class GameObjectFactory : ScriptableObject
             }
         }
 
-        T instance = Instantiate(prefab);
+        var instance = Instantiate(prefab);
         SceneManager.MoveGameObjectToScene(instance.gameObject, _scene);
         return instance;
     }
 
-    public async Task Unload()
+    public async UniTask Unload()
     {
         if (_scene.isLoaded)
         {
             var unloadOp = SceneManager.UnloadSceneAsync(_scene);
             while (unloadOp.isDone == false)
             {
-                await Task.Delay(1);
+                await UniTask.Yield();
             }
         }
     }

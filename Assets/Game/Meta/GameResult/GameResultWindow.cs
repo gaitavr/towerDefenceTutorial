@@ -7,12 +7,9 @@ namespace GameResult
     [RequireComponent(typeof(Canvas))]
     public class GameResultWindow : MonoBehaviour
     {
-        [SerializeField]
-        private GameResultIntroAnimation _introAnimation;
-        [SerializeField]
-        private Button _restartButton;
-        [SerializeField]
-        private Button _quitButton;
+        [SerializeField] private GameResultIntroAnimation _introAnimation;
+        [SerializeField] private Button _restartButton;
+        [SerializeField] private Button _quitButton;
 
         private Canvas _canvas;
 

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.UI;
@@ -8,49 +7,38 @@ using Loading;
 using UnityEngine;
 using Common;
 using Core.Pause;
+using Cysharp.Threading.Tasks;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
 public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
 {
     [SerializeField] private Vector2Int _boardSize;
-
     [SerializeField] private GameBoard _board;
-
     [SerializeField] private DefenderHud _defenderHud;
-
     [SerializeField] private TilesBuilder _tilesBuilder;
-
     [SerializeField] private GameResultWindow _gameResultWindow;
-
     [SerializeField] private PrepareGamePanel _prepareGamePanel;
-
     [SerializeField] private Camera _camera;
-
+    [Space]
     [SerializeField] private GameTileContentFactory _contentFactory;
-
     [SerializeField] private WarFactory _warFactory;
-
     [SerializeField] private EnemyFactory _enemyFactory;
-
+    [Space]
     [SerializeField] private GameScenario _scenario;
-
-    [SerializeField, Range(0, 100)]
-    private int _startingPlayerHealth = 10;
-
-    [SerializeField, Range(5f, 30f)]
-    private float _prepareTime = 15f;
+    [SerializeField, Range(0, 100)] private int _startingPlayerHealth = 10;
+    [SerializeField, Range(5f, 30f)] private float _prepareTime = 15f;
 
     private bool _scenarioInProcess;
     private GameScenario.State _activeScenario;
     private CancellationTokenSource _prepareCancellation;
     private SceneInstance _environment;
 
-    private readonly GameBehaviorCollection _enemies = new GameBehaviorCollection();
-    private readonly GameBehaviorCollection _nonEnemies = new GameBehaviorCollection();
+    private readonly GameBehaviorCollection _enemies = new();
+    private readonly GameBehaviorCollection _nonEnemies = new();
 
     private static QuickGame _instance;
 
-    private bool IsPaused => ProjectContext.Instance.PauseManager.IsPaused;
+    private bool IsPaused => ProjectContext.I.PauseManager.IsPaused;
 
     private int _playerHealth;
     private int PlayerHealth
@@ -75,7 +63,7 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
 
     public void Init(SceneInstance environment)
     {
-        ProjectContext.Instance.PauseManager.Register(this);
+        ProjectContext.I.PauseManager.Register(this);
         _environment = environment;
         _defenderHud.QuitGame += GoToMainMenu;
         var initialData = GenerateInitialData();
@@ -94,7 +82,7 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
             Levels = new byte[size]
         };
         result.Content[0] = GameTileContentType.SpawnPoint;
-        result.Content[result.Content.Length - 1] = GameTileContentType.Destination;
+        result.Content[^1] = GameTileContentType.Destination;
         return result;
     }
     
@@ -191,8 +179,8 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
     {
         var operations = new Queue<ILoadingOperation>();
         operations.Enqueue(new ClearGameOperation(this));
-        ProjectContext.Instance.AssetProvider.UnloadAdditiveScene(_environment);
-        ProjectContext.Instance.LoadingScreenProvider.LoadAndDestroy(operations);
+        ProjectContext.I.AssetProvider.UnloadAdditiveScene(_environment).Forget();
+        ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(operations).Forget();
     }
 
     void IPauseHandler.SetPaused(bool isPaused)

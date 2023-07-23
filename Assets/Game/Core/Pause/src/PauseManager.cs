@@ -6,8 +6,7 @@ namespace Core.Pause
     {
         private PauseHint _hint;
         
-        private readonly List<IPauseHandler> _handlers = 
-            new List<IPauseHandler>();
+        private readonly List<IPauseHandler> _handlers = new();
         
         public bool IsPaused { get; private set; }
 

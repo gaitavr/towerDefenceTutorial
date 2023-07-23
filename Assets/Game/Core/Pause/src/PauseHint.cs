@@ -6,19 +6,16 @@ namespace Core.Pause
 {
     public class PauseHint : MonoBehaviour
     {
-        [SerializeField]
-        private TMP_Text _hint;
-        [SerializeField]
-        private float _delay;
-        [SerializeField]
-        private float _time;
+        [SerializeField] private TMP_Text _hint;
+        [SerializeField] private float _delay;
+        [SerializeField] private float _time;
 
         private bool _inProcess;
 
         private void Awake()
         {
             _hint.alpha = 0;
-            ProjectContext.Instance.PauseManager.SetHint(this);
+            ProjectContext.I.PauseManager.SetHint(this);
         }
         
         public void TryShow()

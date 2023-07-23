@@ -48,7 +48,7 @@ namespace Login
 
             if (result == null)
             {
-                result = await ProjectContext.Instance.LoginWindowProvider.ShowAndHide();
+                result = await ProjectContext.I.LoginWindowProvider.ShowAndHide();
             }
             
             PlayerPrefs.SetString(deviceId, JsonUtility.ToJson(result));

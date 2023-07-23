@@ -12,12 +12,10 @@ public class GameTileContentFactory : GameObjectFactory
     [SerializeField] private GameTileContent[] _iceObstacles;
     [SerializeField] private GameTileContent[] _lavaObstacles;
 
-    public LaserTowerConfigurationProvider LaserConfig { get; } = new LaserTowerConfigurationProvider();
-    public MortarTowerConfigurationProvider MortarConfig { get; } = new MortarTowerConfigurationProvider();
-    public IceConfigurationProvider IceConfig { get; } = new IceConfigurationProvider();
-    public LavaConfigurationProvider LavaConfig { get; } = new LavaConfigurationProvider();
-
-    private static int test;
+    public LaserTowerConfigurationProvider LaserConfig { get; } = new();
+    public MortarTowerConfigurationProvider MortarConfig { get; } = new();
+    public IceConfigurationProvider IceConfig { get; } = new();
+    public LavaConfigurationProvider LavaConfig { get; } = new();
     
     public void Reclaim(GameTileContent content)
     {

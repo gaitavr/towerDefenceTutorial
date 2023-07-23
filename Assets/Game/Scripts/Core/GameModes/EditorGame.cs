@@ -68,7 +68,7 @@ public class EditorGame : MonoBehaviour, ICleanUp
     {
         var operations = new Queue<ILoadingOperation>();
         operations.Enqueue(new ClearGameOperation(this));
-        ProjectContext.Instance.LoadingScreenProvider.LoadAndDestroy(operations);
+        ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(operations);
     }
     
     private void OnSaveClicked()

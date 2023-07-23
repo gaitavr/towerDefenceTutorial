@@ -4,8 +4,7 @@ using UnityEngine.EventSystems;
 
 public class BuildButton : MonoBehaviour, IPointerDownHandler
 {
-    [SerializeField]
-    private GameTileContentType _type;
+    [SerializeField] private GameTileContentType _type;
 
     private Action<GameTileContentType> _listenerAction;
 

@@ -1,34 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LaserTower : Tower
 {
-    [SerializeField]
-    private Transform _turret;
-    [SerializeField] 
-    private Transform _laserBeam;
-
-    [SerializeField, ColorUsage(true, true)] 
-    private Color _laserBeamColor;
+    [SerializeField] private Transform _turret;
+    [SerializeField] private Transform _laserBeam;
+    [Space]
+    [SerializeField, ColorUsage(true, true)] private Color _laserBeamColor;
 
     private Vector3 _laserBeamScale;
     private Vector3 _laserBeamStartPosition;
     private TargetPoint _target;
     private float _damagePerSecond;
 
-    public override GameTileContentType Type => GameTileContentType.LaserTower;
-
-    private Material _tempMaterial;
-
     private void Awake()
     {
         _laserBeamScale = _laserBeam.localScale;
         _laserBeamStartPosition = _laserBeam.localPosition;
-        ManageBeamMaterial();
+        SetLaserColor();
     }
 
     public override void Initialize(GameTileContentFactory factory, int level)
@@ -37,27 +25,21 @@ public class LaserTower : Tower
         _damagePerSecond = OriginFactory.LaserConfig.GetDamagePerSecond(Level);
     }
 
-    private void ManageBeamMaterial()
+    private void SetLaserColor()
     {
         var meshRenderer = _laserBeam.GetComponent<MeshRenderer>();
-        _tempMaterial = new Material(meshRenderer.material);
-        _tempMaterial.SetColor("_EmissionColor", _laserBeamColor);
-        meshRenderer.material = _tempMaterial;
+        meshRenderer.material.SetColor("_EmissionColor", _laserBeamColor);
     }
 
     public override void GameUpdate()
     {
         if (IsTargetTracked(ref _target) || IsAcquireTarget(out _target))
-        {
-            Shoot();
-        }
+            ProcessShoot();
         else
-        {
             _laserBeam.localScale = Vector3.zero;
-        }
     }
 
-    private void Shoot()
+    private void ProcessShoot()
     {
         var point = _target.Position;
         _turret.LookAt(point);
@@ -70,10 +52,5 @@ public class LaserTower : Tower
             + 0.5f * distance * _laserBeam.forward;
 
         _target.Enemy.TakeDamage(_damagePerSecond * Time.deltaTime);
-    }
-
-    private void OnDestroy()
-    {
-        Destroy(_tempMaterial);
     }
 }

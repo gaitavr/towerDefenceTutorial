@@ -3,8 +3,7 @@
 [SelectionBase]
 public class GameTileContent : MonoBehaviour
 {
-    [SerializeField]
-    private GameTileContentType _type;
+    [SerializeField] private GameTileContentType _type;
     
     public GameTileContentType Type => _type;
 
@@ -25,5 +24,8 @@ public class GameTileContent : MonoBehaviour
         OriginFactory.Reclaim(this);
     }
 
-    public virtual void GameUpdate(){}
+    public virtual void GameUpdate()
+    {
+        
+    }
 }

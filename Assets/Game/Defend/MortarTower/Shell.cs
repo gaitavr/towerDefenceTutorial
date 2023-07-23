@@ -3,7 +3,6 @@
 public class Shell : WarEntity
 {
     private Vector3 _launchPoint, _targetPoint, _launchVelocity;
-
     private float _age;
     private float _blastRadius, _damage;
 
@@ -19,7 +18,7 @@ public class Shell : WarEntity
     public override bool GameUpdate()
     {
         _age += Time.deltaTime;
-        Vector3 p = _launchPoint + _launchVelocity * _age;
+        var p = _launchPoint + _launchVelocity * _age;
         p.y -= 0.5f * 9.81f * _age * _age;
 
         if (p.y <= 0f)
@@ -31,7 +30,7 @@ public class Shell : WarEntity
 
         transform.localPosition = p;
 
-        Vector3 d = _launchVelocity;
+        var d = _launchVelocity;
         d.y -= 9.81f * _age;
         transform.localRotation = Quaternion.LookRotation(d);
 

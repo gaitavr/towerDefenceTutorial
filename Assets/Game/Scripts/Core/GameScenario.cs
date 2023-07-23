@@ -4,10 +4,9 @@ using UnityEngine;
 [CreateAssetMenu]
 public class GameScenario : ScriptableObject
 {
-    [SerializeField]
-    private EnemyWave[] _waves;
+    [SerializeField] private EnemyWave[] _waves;
 
-    public State Begin() => new State(this);
+    public State Begin() => new(this);
 
     [Serializable]
     public struct State

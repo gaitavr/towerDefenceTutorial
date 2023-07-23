@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Rotator : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed;
-    [SerializeField]
-    private bool _isActive;
+    [SerializeField] private float _speed;
+    [SerializeField] private bool _isActive;
 
     private void Update()
     {

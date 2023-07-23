@@ -2,10 +2,8 @@
 
 public class Enemy : GameBehavior
 {
-    [SerializeField]
-    private Transform _model;
-    [SerializeField]
-    private EnemyView _view;
+    [SerializeField] private Transform _model;
+    [SerializeField] private EnemyView _view;
 
     public EnemyFactory OriginFactory { get; set; }
 

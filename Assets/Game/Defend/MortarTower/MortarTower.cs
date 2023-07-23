@@ -1,24 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MortarTower : Tower
 {
-    [SerializeField, Range(0.5f, 3f)]
-    private float _shellBlastRadius = 1f;
-
-    [SerializeField, Range(1f, 100f)]
-    private float _damage;
-
-    [SerializeField]
-    private Transform _rotator;
-    [SerializeField]
-    private Transform _spawnPoint;
-
-    public override GameTileContentType Type => GameTileContentType.MortarTower;
+    [SerializeField, Range(0.5f, 3f)] private float _shellBlastRadius = 1f;
+    [SerializeField, Range(1f, 100f)] private float _damage;
+    [Space]
+    [SerializeField] private Transform _rotator;
+    [SerializeField] private Transform _spawnPoint;
 
     private float _launchSpeed;
     private float _launchProgress;
@@ -31,8 +19,8 @@ public class MortarTower : Tower
 
     private void OnValidate()
     {
-        float x = _targetingRange + 0.251f;
-        float y = -_spawnPoint.position.y;
+        var x = _targetingRange + 0.251f;
+        var y = -_spawnPoint.position.y;
         _launchSpeed = Mathf.Sqrt(9.81f * (y + Mathf.Sqrt(x * x + y * y)));
     }
     
@@ -45,7 +33,7 @@ public class MortarTower : Tower
     public override void GameUpdate()
     {
         _launchProgress += Time.deltaTime * _shootsPerSeconds;
-        while (_launchProgress >=1f)
+        while (_launchProgress >= 1f)
         {
             if (IsAcquireTarget(out TargetPoint target))
             {
@@ -61,8 +49,8 @@ public class MortarTower : Tower
 
     private void Launch(TargetPoint target)
     {
-        Vector3 launchPoint = _spawnPoint.position;
-        Vector3 targetPoint = target.Position;
+        var launchPoint = _spawnPoint.position;
+        var targetPoint = target.Position;
         targetPoint.y = 0f;
 
         Vector3 dir;
@@ -70,20 +58,20 @@ public class MortarTower : Tower
         dir.y = 0;
         dir.z = targetPoint.z - launchPoint.z;
 
-        float x = dir.magnitude;
-        float y = -launchPoint.y;
+        var x = dir.magnitude;
+        var y = -launchPoint.y;
         dir /= x;
 
-        float g = 9.81f;
-        float s = _launchSpeed;
-        float s2 = s * s;
+        var g = 9.81f;
+        var s = _launchSpeed;
+        var s2 = s * s;
 
-        float r = s2 * s2 - g * (g * x * x + 2f * y * s2);
+        var r = s2 * s2 - g * (g * x * x + 2f * y * s2);
         r = Mathf.Max(0, r);
         
-        float tanTheta = (s2 + Mathf.Sqrt(r)) / (g * x);
-        float cosTheta = Mathf.Cos(Mathf.Atan(tanTheta));
-        float sinTheta = cosTheta * tanTheta;
+        var tanTheta = (s2 + Mathf.Sqrt(r)) / (g * x);
+        var cosTheta = Mathf.Cos(Mathf.Atan(tanTheta));
+        var sinTheta = cosTheta * tanTheta;
         
         _rotator.localRotation = Quaternion.LookRotation(dir);
 
