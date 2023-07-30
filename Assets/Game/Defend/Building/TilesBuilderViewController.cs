@@ -1,31 +1,21 @@
-using System.Collections.Generic;
 using Core.Pause;
 using UnityEngine;
 
-public class TilesBuilder : MonoBehaviour
+public class TilesBuilderViewController
 {
-    [SerializeField] private List<BuildButton> _buttons;
-
-    private GameTileContentFactory _contentFactory;
-    private Camera _camera;
-    private GameBoard _gameBoard;
-
+    private readonly GameTileContentFactory _contentFactory;
+    private readonly Camera _camera;
+    private readonly GameBoard _gameBoard;
+    private readonly bool _isDestroyAllowed;
+    
+    private GameTileContent _pendingTile;
     private bool _isEnabled;
 
     private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
-
-    private GameTileContent _pendingTile;
-    private bool _isDestroyAllowed;
-
     private PauseManager PauseManager => ProjectContext.I.PauseManager;
     private bool IsPaused => PauseManager.IsPaused;
 
-    private void Awake()
-    {
-        _buttons.ForEach(b => b.AddListener(OnBuildingSelected));
-    }
-
-    public void Initialize(GameTileContentFactory contentFactory, Camera camera, GameBoard gameBoard,
+    public TilesBuilderViewController(GameTileContentFactory contentFactory, Camera camera, GameBoard gameBoard,
         bool isDestroyAllowed)
     {
         _contentFactory = contentFactory;
@@ -34,7 +24,7 @@ public class TilesBuilder : MonoBehaviour
         _gameBoard = gameBoard;
     }
 
-    private void Update()
+    public void GameUpdate()
     {
         if (_isEnabled == false || IsPaused)
             return;
@@ -62,7 +52,7 @@ public class TilesBuilder : MonoBehaviour
             var tile = _gameBoard.GetTile(TouchRay);
             if (tile == null || _gameBoard.TryBuild(tile, _pendingTile) == false)
             {
-                Destroy(_pendingTile.gameObject);
+                Object.Destroy(_pendingTile.gameObject);
             }
 
             _pendingTile = null;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Game.Core;
 using UnityEngine;
 
 public class GameBoard : MonoBehaviour
@@ -10,7 +11,7 @@ public class GameBoard : MonoBehaviour
 
     private readonly Queue<GameTile> _searchFrontier = new();
 
-    private GameTileContentFactory _contentFactory;
+    private GameTileContentFactory ContentFactory => SceneContext.I.ContentFactory;
 
     private readonly List<GameTile> _spawnPoints = new();
     private readonly List<GameTileContent> _contentToUpdate = new();
@@ -19,13 +20,12 @@ public class GameBoard : MonoBehaviour
     private byte X => _boardData.X;
     private byte Y => _boardData.Y;
     
-    public void Initialize(BoardData boardData, GameTileContentFactory contentFactory)
+    public void Initialize(BoardData boardData)
     {
         _boardData = boardData;
         var offset = new Vector2((X - 1) * 0.5f, (Y - 1) * 0.5f);
 
         _tiles = new GameTile[X * Y];
-        _contentFactory = contentFactory;
         
         for (int i = 0, y = 0; y < Y; y++)
         {
@@ -139,7 +139,7 @@ public class GameBoard : MonoBehaviour
         tile.Content = content;
         if (FindPaths() == false)
         {
-            tile.Content = _contentFactory.Get(GameTileContentType.Empty);
+            tile.Content = ContentFactory.Get(GameTileContentType.Empty);
             return false;
         }
         
@@ -161,7 +161,7 @@ public class GameBoard : MonoBehaviour
         if(tile.Content.Type == GameTileContentType.SpawnPoint)
             _spawnPoints.Remove(tile);
         
-        tile.Content = _contentFactory.Get(GameTileContentType.Empty);
+        tile.Content = ContentFactory.Get(GameTileContentType.Empty);
         FindPaths();
     }
     
@@ -191,7 +191,7 @@ public class GameBoard : MonoBehaviour
 
         for (var i = 0; i < _boardData.Content.Length; i++)
         {
-            ForceBuild(_tiles[i], _contentFactory.Get(_boardData.Content[i]));
+            ForceBuild(_tiles[i], ContentFactory.Get(_boardData.Content[i]));
         }
 
         FindPaths();

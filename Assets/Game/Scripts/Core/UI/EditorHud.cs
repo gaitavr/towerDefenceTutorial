@@ -7,10 +7,8 @@ namespace Core.UI
 {
     public class EditorHud : MonoBehaviour
     {
-        [SerializeField]
-        private Button _saveButton;
-        [SerializeField]
-        private Button _quitButton;
+        [SerializeField] private Button _saveButton;
+        [SerializeField] private Button _quitButton;
         
         public event Action SaveClicked;
         public event Action QuitGame;
