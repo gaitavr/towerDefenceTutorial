@@ -9,6 +9,7 @@ using Common;
 using Core.Pause;
 using Cysharp.Threading.Tasks;
 using Game.Core;
+using Game.Defend.TilesBuilder;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
 public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler

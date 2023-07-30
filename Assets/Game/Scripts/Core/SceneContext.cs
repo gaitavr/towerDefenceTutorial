@@ -1,4 +1,5 @@
 ﻿using Game.Core.GamePlay;
+using Game.Defend.TilesBuilder;
 using UnityEngine;
 
 namespace Game.Core
@@ -11,15 +12,13 @@ namespace Game.Core
         [SerializeField] private Camera _mainCamera;
         [SerializeField] private GameBoard _board;
         [SerializeField] private GamePlayUI _gamePlayUI;
-        
-        public TilesBuilderViewController TilesBuilder { get; private set;}
+
+        public TilesBuilderViewController TilesBuilder { get; private set; }
         public GameTileContentFactory ContentFactory => _contentFactory;
         public WarFactory WarFactory => _warFactory;
         public EnemyFactory EnemyFactory => _enemyFactory;
-        public Camera MainCamera => _mainCamera;
         public GameBoard GameBoard => _board;
-        public GamePlayUI GamePlayUI => _gamePlayUI;
-        
+
         public static SceneContext I { get; private set; }
 
         private void Awake()
@@ -29,8 +28,8 @@ namespace Game.Core
         
         public void Initialize()
         {
-            TilesBuilder = new TilesBuilderViewController(ContentFactory, MainCamera,
-                GameBoard, true);
+            TilesBuilder = new TilesBuilderViewController(ContentFactory, _mainCamera,
+                GameBoard, _gamePlayUI);
         }
     }
 }
