@@ -15,14 +15,11 @@ namespace Common
 
         private TaskCompletionSource<bool> _taskCompletion;
         private Canvas _canvas;
-        
-        public static AlertPopup Instance { get; private set; }
 
         private void Awake()
         {
             _canvas = GetComponent<Canvas>();
             _canvas.enabled = false;
-            Instance = this;
             _okButton.onClick.AddListener(OnAccept);
             _cancelButton.onClick.AddListener(OnCancelled);
             _closeButton.onClick.AddListener(OnCancelled);

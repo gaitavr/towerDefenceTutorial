@@ -64,6 +64,11 @@ public class EditorGame : MonoBehaviour, ICleanUp
         GameBoard.Clear();
     }
     
+    private void Update()
+    {
+        TilesBuilder.GameUpdate();
+    }
+    
     private void GoToMainMenu()
     {
         var operations = new Queue<ILoadingOperation>();

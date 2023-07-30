@@ -82,7 +82,7 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
 
     private void Update()
     {
-        if (IsPaused)
+        if (IsPaused || _instance == null)
             return;
 
         if (Input.GetKeyDown(KeyCode.R))

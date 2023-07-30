@@ -21,16 +21,14 @@ MonoBehaviour:
     m_Address: LoadingScreen
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 6275178222536789658, guid: 4797c054b12c1044aac9244d949dcf9c,
-      type: 3}
-    m_TargetAsset: {fileID: 6275178222536789658, guid: 4797c054b12c1044aac9244d949dcf9c,
-      type: 3}
   - m_GUID: 31498f0eea562584c8c8c9ccfb15a1bc
     m_Address: LoginWindow
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+  - m_GUID: 549bbc7772a1b484985acb7f89186138
+    m_Address: AlertPopup
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 000faa4a04445e244a1fd374e2f74356, type: 2}
   m_SchemaSet:
