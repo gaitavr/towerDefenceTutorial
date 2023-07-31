@@ -1,4 +1,5 @@
 using System;
+using Assets;
 using Common;
 using TMPro;
 using UnityEngine;
@@ -33,8 +34,8 @@ namespace Core.UI
         private async void OnQuitButtonClicked()
         {
             OnPauseClicked(true);
-            var popupProvider = new AlertPopupProvider();
-            var popup = await popupProvider.Load();
+            var popupProvider = new LocalAssetLoader();
+            var popup = await popupProvider.Load<AlertPopup>("AlertPopup");
             var isConfirmed = await popup.AwaitForDecision("Are you sure to quit?");
             OnPauseClicked(false);
             if(isConfirmed)

@@ -8,18 +8,8 @@ public class LoadingScreenProvider : LocalAssetLoader
 {
     public async UniTask LoadAndDestroy(Queue<ILoadingOperation> loadingOperations)
     {
-        var loadingScreen = await Load();
+        var loadingScreen = await Load<LoadingScreen>("LoadingScreen");
         await loadingScreen.Load(loadingOperations);
         Unload();
-    }
-    
-    public UniTask<LoadingScreen> Load()
-    {
-        return LoadInternal<LoadingScreen>("LoadingScreen");
-    }
-
-    public void Unload()
-    {
-        UnloadInternal();
     }
 }

@@ -54,14 +54,14 @@ public class EditorGame : MonoBehaviour, ICleanUp
         Cleanup();
         _hud.QuitGame += GoToMainMenu;
         _hud.SaveClicked += OnSaveClicked;
-        TilesBuilder.Enable();
+        TilesBuilder.SetActive(true);
     }
     
     public void Cleanup()
     {
         _hud.QuitGame -= GoToMainMenu;
         _hud.SaveClicked -= OnSaveClicked;
-        TilesBuilder.Disable();
+        TilesBuilder.SetActive(false);
         GameBoard.Clear();
     }
     

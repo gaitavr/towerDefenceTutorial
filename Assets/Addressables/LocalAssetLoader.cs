@@ -9,9 +9,9 @@ namespace Assets
     {
         private GameObject _cachedObject;
         
-        protected async UniTask<T> LoadInternal<T>(string assetId)
+        public async UniTask<T> Load<T>(string assetId, Transform parent = null)
         {
-            var handle = Addressables.InstantiateAsync(assetId);
+            var handle = Addressables.InstantiateAsync(assetId, parent);
             _cachedObject = await handle.Task;
             if(_cachedObject.TryGetComponent(out T component) == false)
                 throw new NullReferenceException($"Object of type {typeof(T)} is null on " +
@@ -19,7 +19,7 @@ namespace Assets
             return component;
         }
 
-        protected void UnloadInternal()
+        public void Unload()
         {
             if(_cachedObject == null)
                 return;

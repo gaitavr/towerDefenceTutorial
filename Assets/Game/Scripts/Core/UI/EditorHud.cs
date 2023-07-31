@@ -1,4 +1,5 @@
 using System;
+using Assets;
 using Common;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,8 +22,8 @@ namespace Core.UI
         
         private async void OnQuitButtonClicked()
         {
-            var popupProvider = new AlertPopupProvider();
-            var popup = await popupProvider.Load();
+            var popupProvider = new LocalAssetLoader();
+            var popup = await popupProvider.Load<AlertPopup>("AlertPopup");
             var isConfirmed = await popup.AwaitForDecision("Are you sure to quit?");
             if(isConfirmed)
                 QuitGame?.Invoke();

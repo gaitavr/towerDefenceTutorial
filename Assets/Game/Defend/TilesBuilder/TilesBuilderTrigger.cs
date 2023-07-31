@@ -6,7 +6,7 @@ namespace Game.Defend.TilesBuilder
 {
     public class TilesBuilderTrigger : MonoBehaviour
     {
-        private void OnMouseDown()
+        private void OnMouseUp()
         {
             SceneContext.I.TilesBuilder.Show().Forget();
         }

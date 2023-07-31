@@ -1,3 +1,4 @@
+using Assets;
 using Core.Pause;
 using Cysharp.Threading.Tasks;
 using Game.Core.GamePlay;
@@ -5,20 +6,21 @@ using UnityEngine;
 
 namespace Game.Defend.TilesBuilder
 {
-    public class TilesBuilderViewController
+    public class TilesBuilderViewController : ITilesBuilder
     {
         private readonly GameTileContentFactory _contentFactory;
         private readonly Camera _camera;
         private readonly GameBoard _gameBoard;
         private readonly GamePlayUI _gamePlayUI;
 
-        private GameTileContent _pendingTile;
-        private bool _isEnabled;
+        private GameTileContent _tempTile;
         private bool _isActive;
+        private bool _isShown;
 
         private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
         private PauseManager PauseManager => ProjectContext.I.PauseManager;
         private bool IsPaused => PauseManager.IsPaused;
+        private bool CanBuild => _isActive && _isShown;
 
         public TilesBuilderViewController(GameTileContentFactory contentFactory, Camera camera, GameBoard gameBoard,
             GamePlayUI gamePlayUI)
@@ -31,45 +33,45 @@ namespace Game.Defend.TilesBuilder
 
         public async UniTask Show()
         {
-            if (_isActive)
+            if (_isShown)
                 return;
-            _isActive = true;
-            //TODO create sub views and pass them to game play UI
-
+            _isShown = true;
+            var loader = new LocalAssetLoader();
+            var tilesBuilderUI = await loader.Load<TilesBuilderUI>("TilesBuilder", _gamePlayUI.ActionsSocket);
+            foreach (var button in tilesBuilderUI.Buttons)
+            {
+                button.Initialize(this);
+            }
         }
 
         public void GameUpdate()
         {
-            if (_isEnabled == false || IsPaused || _isActive == false)
+            if (CanBuild == false || IsPaused)
                 return;
 
-            if (_pendingTile == null)
-            {
-                ProcessDestroying();
-            }
-            else
-            {
+            if (_tempTile != null)
                 ProcessBuilding();
-            }
+            
+            //TODO process upgrade and destroy
+            // if (_pendingTile == null)
+            // {
+            //     ProcessDestroying();
+            // }
         }
 
         private void ProcessBuilding()
         {
             var plane = new Plane(Vector3.up, Vector3.zero);
             if (plane.Raycast(TouchRay, out var position))
-            {
-                _pendingTile.transform.position = TouchRay.GetPoint(position);
-            }
+                _tempTile.transform.position = TouchRay.GetPoint(position);
 
-            if (IsPointerUp())
+            if (IsPointerDown())
             {
                 var tile = _gameBoard.GetTile(TouchRay);
-                if (tile == null || _gameBoard.TryBuild(tile, _pendingTile) == false)
-                {
-                    Object.Destroy(_pendingTile.gameObject);
-                }
+                if (tile == null || _gameBoard.TryBuild(tile, _tempTile) == false)
+                    Object.Destroy(_tempTile.gameObject);
 
-                _pendingTile = null;
+                _tempTile = null;
             }
         }
 
@@ -81,7 +83,7 @@ namespace Game.Defend.TilesBuilder
                 ProcessUpgrade();
                 return;
             }
-            if (IsPointerUp())
+            if (IsPointerDown())
             {
                 var tile = _gameBoard.GetTile(TouchRay);
                 if (tile != null)
@@ -93,7 +95,7 @@ namespace Game.Defend.TilesBuilder
 
         private void ProcessUpgrade()
         {
-            if (IsPointerUp())
+            if (IsPointerDown())
             {
                 var tile = _gameBoard.GetTile(TouchRay);
                 if (tile != null && _contentFactory.IsNextUpgradeAllowed(tile.Content))
@@ -105,20 +107,18 @@ namespace Game.Defend.TilesBuilder
             }
         }
 
-        private bool IsPointerUp()
+        private bool IsPointerDown()
         {
 #if UNITY_EDITOR
-            return Input.GetMouseButtonUp(0);
+            return Input.GetMouseButtonDown(0);
 #else
-        return Input.touches.Length == 0;
+            return Input.touches.Length == 1 && Input.touches[0].phase == TouchPhase.Began;
 #endif
         }
 
-        public void Enable() => _isEnabled = true;
+        public void SetActive(bool isActive) => _isActive = isActive;
 
-        public void Disable() => _isEnabled = false;
-
-        private void OnBuildingSelected(GameTileContentType type)
+        void ITilesBuilder.SelectBuilding(GameTileContentType type)
         {
             if (IsPaused)
             {
@@ -126,8 +126,18 @@ namespace Game.Defend.TilesBuilder
                 return;
             }
 
+            if(CanBuild == false)
+                return;
+            
             //TODO check money
-            _pendingTile = _contentFactory.Get(type);
+            _tempTile = _contentFactory.Get(type);
+        }
+        
+        private enum State
+        {
+            Disabled,
+            BuildingSelected,
+            
         }
     }
 }

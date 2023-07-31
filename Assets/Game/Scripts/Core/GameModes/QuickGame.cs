@@ -118,7 +118,7 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
     public async void BeginNewGame()
     {
         Cleanup();
-        TilesBuilder.Enable();
+        TilesBuilder.SetActive(true);
         PlayerHealth = _startingPlayerHealth;
         _defenderHud.QuitGame += GoToMainMenu;
         
@@ -142,7 +142,7 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
     public void Cleanup()
     {
         _defenderHud.QuitGame -= GoToMainMenu;
-        TilesBuilder.Disable();
+        TilesBuilder.SetActive(false);
         _scenarioInProcess = false;
         _prepareCancellation?.Cancel();
         _prepareCancellation?.Dispose();
