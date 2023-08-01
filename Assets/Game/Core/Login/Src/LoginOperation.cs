@@ -1,12 +1,8 @@
 using System;
-using System.Threading.Tasks;
 using AppInfo;
-using Common;
 using Cysharp.Threading.Tasks;
-using Extensions;
 using Loading;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Login
 {

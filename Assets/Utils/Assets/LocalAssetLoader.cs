@@ -2,8 +2,9 @@ using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Utils.Disposable;
 
-namespace Assets
+namespace Utils.Assets
 {
     public class LocalAssetLoader
     {
@@ -17,6 +18,12 @@ namespace Assets
                 throw new NullReferenceException($"Object of type {typeof(T)} is null on " +
                                                  "attempt to load it from addressables");
             return component;
+        }
+        
+        public async UniTask<Disposable<T>> LoadDisposable<T>(string assetId, Transform parent = null)
+        {
+            var component = await Load<T>(assetId, parent);
+            return Disposable<T>.Borrow(component, _ => Unload());
         }
 
         public void Unload()

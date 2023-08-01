@@ -1,8 +1,10 @@
-using Assets;
+using System;
 using Core.Pause;
 using Cysharp.Threading.Tasks;
 using Game.Core.GamePlay;
 using UnityEngine;
+using Utils.Assets;
+using Object = UnityEngine.Object;
 
 namespace Game.Defend.TilesBuilder
 {
@@ -16,6 +18,7 @@ namespace Game.Defend.TilesBuilder
         private GameTileContent _tempTile;
         private bool _isActive;
         private bool _isShown;
+        private IDisposable _disposableUI;
 
         private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
         private PauseManager PauseManager => ProjectContext.I.PauseManager;
@@ -36,9 +39,11 @@ namespace Game.Defend.TilesBuilder
             if (_isShown)
                 return;
             _isShown = true;
-            var loader = new LocalAssetLoader();
-            var tilesBuilderUI = await loader.Load<TilesBuilderUI>("TilesBuilder", _gamePlayUI.ActionsSocket);
-            foreach (var button in tilesBuilderUI.Buttons)
+            var assetsLoader = new LocalAssetLoader();
+            var tilesBuilderUI = await assetsLoader.LoadDisposable<TilesBuilderUI>(AssetsConstants.TilesBuilder, 
+                _gamePlayUI.ActionsSocket);
+            _disposableUI = tilesBuilderUI;
+            foreach (var button in tilesBuilderUI.Value.Buttons)
             {
                 button.Initialize(this);
             }
@@ -131,13 +136,6 @@ namespace Game.Defend.TilesBuilder
             
             //TODO check money
             _tempTile = _contentFactory.Get(type);
-        }
-        
-        private enum State
-        {
-            Disabled,
-            BuildingSelected,
-            
         }
     }
 }

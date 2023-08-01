@@ -1,9 +1,9 @@
 using System;
-using Assets;
 using Common;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Assets;
 
 namespace Core.UI
 {
@@ -34,13 +34,13 @@ namespace Core.UI
         private async void OnQuitButtonClicked()
         {
             OnPauseClicked(true);
-            var popupProvider = new LocalAssetLoader();
-            var popup = await popupProvider.Load<AlertPopup>("AlertPopup");
+            var assetLoader = new LocalAssetLoader();
+            var popup = await assetLoader.Load<AlertPopup>(AssetsConstants.AlertPopup);
             var isConfirmed = await popup.AwaitForDecision("Are you sure to quit?");
             OnPauseClicked(false);
             if(isConfirmed)
                 QuitGame?.Invoke();
-            popupProvider.Unload();
+            assetLoader.Unload();
         }
         
         private void OnPauseClicked(bool isPaused)
