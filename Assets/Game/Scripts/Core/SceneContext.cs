@@ -1,5 +1,5 @@
 ﻿using Game.Core.GamePlay;
-using Game.Defend.TilesBuilder;
+using Game.Defend.Tiles;
 using UnityEngine;
 
 namespace Game.Core
@@ -18,6 +18,7 @@ namespace Game.Core
         public WarFactory WarFactory => _warFactory;
         public EnemyFactory EnemyFactory => _enemyFactory;
         public GameBoard GameBoard => _board;
+        public GameTileRaycaster GameTileRaycaster { get; private set; }
 
         public static SceneContext I { get; private set; }
 
@@ -28,8 +29,10 @@ namespace Game.Core
         
         public void Initialize()
         {
-            TilesBuilder = new TilesBuilderViewController(ContentFactory, _mainCamera,
-                GameBoard, _gamePlayUI);
+            GameTileRaycaster = new GameTileRaycaster(_mainCamera, GameBoard);
+            var tilesViewControllerRouter = new TilesViewControllerRouter(GameTileRaycaster);
+            TilesBuilder = new TilesBuilderViewController(ContentFactory, GameTileRaycaster,
+                GameBoard, _gamePlayUI, tilesViewControllerRouter);
         }
     }
 }

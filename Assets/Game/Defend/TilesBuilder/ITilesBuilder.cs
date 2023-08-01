@@ -1,4 +1,4 @@
-﻿namespace Game.Defend.TilesBuilder
+﻿namespace Game.Defend.Tiles
 {
     public interface ITilesBuilder
     {

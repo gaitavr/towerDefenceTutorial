@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Defend.TilesBuilder
+namespace Game.Defend.Tiles
 {
     public class TilesBuilderUI : MonoBehaviour
     {

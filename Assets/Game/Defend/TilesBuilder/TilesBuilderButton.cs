@@ -1,8 +1,7 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Defend.TilesBuilder
+namespace Game.Defend.Tiles
 {
     [RequireComponent(typeof(Button))]
     public class TilesBuilderButton : MonoBehaviour

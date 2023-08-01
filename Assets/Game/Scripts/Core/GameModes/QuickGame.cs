@@ -9,7 +9,7 @@ using Common;
 using Core.Pause;
 using Cysharp.Threading.Tasks;
 using Game.Core;
-using Game.Defend.TilesBuilder;
+using Game.Defend.Tiles;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
 public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
@@ -113,6 +113,7 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
         GameBoard.GameUpdate();
         TilesBuilder.GameUpdate();
         _nonEnemies.GameUpdate();
+        SceneContext.I.GameTileRaycaster.GameUpdate();
     }
 
     public async void BeginNewGame()

@@ -3,7 +3,7 @@ using Common;
 using Core.UI;
 using Cysharp.Threading.Tasks;
 using Game.Core;
-using Game.Defend.TilesBuilder;
+using Game.Defend.Tiles;
 using Loading;
 using UnityEngine;
 
@@ -68,6 +68,7 @@ public class EditorGame : MonoBehaviour, ICleanUp
     private void Update()
     {
         TilesBuilder.GameUpdate();
+        SceneContext.I.GameTileRaycaster.GameUpdate();
     }
     
     private void GoToMainMenu()

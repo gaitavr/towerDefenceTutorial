@@ -6,35 +6,39 @@ using UnityEngine;
 using Utils.Assets;
 using Object = UnityEngine.Object;
 
-namespace Game.Defend.TilesBuilder
+namespace Game.Defend.Tiles
 {
-    public class TilesBuilderViewController : ITilesBuilder
+    public class TilesBuilderViewController : ITilesBuilder, IGameTileViewController
     {
         private readonly GameTileContentFactory _contentFactory;
-        private readonly Camera _camera;
+        private readonly GameTileRaycaster _raycaster;
         private readonly GameBoard _gameBoard;
         private readonly GamePlayUI _gamePlayUI;
+        private readonly TilesViewControllerRouter _router;
 
         private GameTileContent _tempTile;
         private bool _isActive;
         private bool _isShown;
-        private IDisposable _disposableUI;//TODO use it
+        private IDisposable _disposableUI;
 
-        private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
         private PauseManager PauseManager => ProjectContext.I.PauseManager;
         private bool IsPaused => PauseManager.IsPaused;
         private bool CanBuild => _isActive && _isShown;
 
-        public TilesBuilderViewController(GameTileContentFactory contentFactory, Camera camera, GameBoard gameBoard,
-            GamePlayUI gamePlayUI)
+        public TilesBuilderViewController(GameTileContentFactory contentFactory, GameTileRaycaster raycaster,
+            GameBoard gameBoard, GamePlayUI gamePlayUI, TilesViewControllerRouter router)
         {
             _contentFactory = contentFactory;
-            _camera = camera;
+            _raycaster = raycaster;
             _gameBoard = gameBoard;
             _gamePlayUI = gamePlayUI;
+            _router = router;
+            _router.Register(this);
         }
+        
+        GameTileContentType IGameTileViewController.HandlingType => GameTileContentType.Builder;
 
-        public async UniTask Show()
+        async UniTask IGameTileViewController.Show()
         {
             if (_isShown)
                 return;
@@ -47,6 +51,12 @@ namespace Game.Defend.TilesBuilder
             {
                 button.Initialize(this);
             }
+        }
+
+        void IGameTileViewController.Hide()
+        {
+            _disposableUI.Dispose();
+            _isShown = false;
         }
 
         public void GameUpdate()
@@ -67,12 +77,12 @@ namespace Game.Defend.TilesBuilder
         private void ProcessBuilding()
         {
             var plane = new Plane(Vector3.up, Vector3.zero);
-            if (plane.Raycast(TouchRay, out var position))
-                _tempTile.transform.position = TouchRay.GetPoint(position);
+            if (plane.Raycast(_raycaster.TouchRay, out var position))
+                _tempTile.transform.position = _raycaster.TouchRay.GetPoint(position);
 
-            if (IsPointerDown())
+            if (_raycaster.IsPointerDown())
             {
-                var tile = _gameBoard.GetTile(TouchRay);
+                var tile = _raycaster.GetTile();
                 if (tile == null || _gameBoard.TryBuild(tile, _tempTile) == false)
                     Object.Destroy(_tempTile.gameObject);
 
@@ -88,37 +98,28 @@ namespace Game.Defend.TilesBuilder
                 ProcessUpgrade();
                 return;
             }
-            if (IsPointerDown())
+            // if (IsPointerDown())
             {
-                var tile = _gameBoard.GetTile(TouchRay);
-                if (tile != null)
-                {
-                    _gameBoard.DestroyTile(tile);
-                }
+                // var tile = _gameBoard.GetTile(TouchRay);
+                // if (tile != null)
+                // {
+                //     _gameBoard.DestroyTile(tile);
+                // }
             }
         }
 
         private void ProcessUpgrade()
         {
-            if (IsPointerDown())
-            {
-                var tile = _gameBoard.GetTile(TouchRay);
-                if (tile != null && _contentFactory.IsNextUpgradeAllowed(tile.Content))
-                {
-                    var newTile = _contentFactory.Get(tile.Content.Type, tile.Content.Level + 1);
-                    _gameBoard.DestroyTile(tile);
-                    _gameBoard.TryBuild(tile, newTile);
-                }
-            }
-        }
-
-        private bool IsPointerDown()
-        {
-#if UNITY_EDITOR
-            return Input.GetMouseButtonDown(0);
-#else
-            return Input.touches.Length == 1 && Input.touches[0].phase == TouchPhase.Began;
-#endif
+            // if (IsPointerDown())
+            // {
+            //     var tile = _gameBoard.GetTile(TouchRay);
+            //     if (tile != null && _contentFactory.IsNextUpgradeAllowed(tile.Content))
+            //     {
+            //         var newTile = _contentFactory.Get(tile.Content.Type, tile.Content.Level + 1);
+            //         _gameBoard.DestroyTile(tile);
+            //         _gameBoard.TryBuild(tile, newTile);
+            //     }
+            // }
         }
 
         public void SetActive(bool isActive) => _isActive = isActive;

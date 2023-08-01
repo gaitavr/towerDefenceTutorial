@@ -17,8 +17,8 @@ public class GameBoard : MonoBehaviour
     private readonly List<GameTileContent> _contentToUpdate = new();
 
     private BoardData _boardData;
-    private byte X => _boardData.X;
-    private byte Y => _boardData.Y;
+    public byte X => _boardData.X;
+    public byte Y => _boardData.Y;
     
     public void Initialize(BoardData boardData)
     {
@@ -165,17 +165,10 @@ public class GameBoard : MonoBehaviour
         FindPaths();
     }
     
-    public GameTile GetTile(Ray ray)
+    public GameTile GetTile(int x, int y)
     {
-        if (Physics.Raycast(ray, out var hit, float.MaxValue, 1))
-        {
-            var x = (int) (hit.point.x + X * 0.5f);
-            var y = (int) (hit.point.z + Y * 0.5f);
-            if (x >= 0 && x < X && y >= 0 && y < Y)
-            {
-                return _tiles[x + y * X];
-            }
-        }
+        if (x >= 0 && x < X && y >= 0 && y < Y)
+            return _tiles[x + y * X];
         return null;
     }
 
