@@ -18,7 +18,7 @@ namespace Game.Defend.TilesBuilder
         private GameTileContent _tempTile;
         private bool _isActive;
         private bool _isShown;
-        private IDisposable _disposableUI;
+        private IDisposable _disposableUI;//TODO use it
 
         private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
         private PauseManager PauseManager => ProjectContext.I.PauseManager;

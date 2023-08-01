@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Utils.Extensions;
 
 public class Enemy : GameBehavior
 {

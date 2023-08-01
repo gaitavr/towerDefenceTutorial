@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Extensions
+namespace Utils.Extensions
 {
     public static class SceneExtensions
     {

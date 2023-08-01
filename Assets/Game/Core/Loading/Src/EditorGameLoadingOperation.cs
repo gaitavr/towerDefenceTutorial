@@ -1,8 +1,8 @@
 using System;
 using Common;
 using Cysharp.Threading.Tasks;
-using Extensions;
 using UnityEngine.SceneManagement;
+using Utils.Extensions;
 
 namespace Loading
 {
