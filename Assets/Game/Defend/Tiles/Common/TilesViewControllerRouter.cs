@@ -8,7 +8,7 @@ namespace Game.Defend.Tiles
         private readonly GameTileRaycaster _raycaster;
         private readonly List<IGameTileViewController> _viewControllers;
 
-        private IGameTileViewController _current;
+        private IGameTileViewController _controllerInProgress;
 
         public TilesViewControllerRouter(GameTileRaycaster raycaster)
         {
@@ -22,22 +22,45 @@ namespace Game.Defend.Tiles
             var viewController = _viewControllers.FirstOrDefault(v => v.HandlingType == tile.Type);
             if (viewController != null)
             {
-                if(viewController == _current)
+                if (_controllerInProgress == null)
+                {
+                    _controllerInProgress = viewController;
+                    _controllerInProgress.Show(tile);
                     return;
-                _current?.Hide();
-                _current = viewController;
-                _current.Show(tile);
+                }
+
+                if (_controllerInProgress == viewController)
+                {
+                    if(_controllerInProgress.CurrentContent == tile)
+                        return;
+                    else
+                    {
+                        _controllerInProgress.ChangeTarget(tile);
+                    }
+                }
+                
+                _controllerInProgress?.Hide();
+                _controllerInProgress = viewController;
+                _controllerInProgress.Show(tile);
             }
         }
 
         public void Register(IGameTileViewController viewController)
         {
             _viewControllers.Add(viewController);
+            viewController.Finished += OnControllerFinished;
+        }
+
+        private void OnControllerFinished(IGameTileViewController _)
+        {
+            _controllerInProgress?.Hide();
+            _controllerInProgress = null;
         }
 
         public void Unregister(IGameTileViewController viewController)
         {
             _viewControllers.Remove(viewController);
+            viewController.Finished -= OnControllerFinished;
         }
     }
 }

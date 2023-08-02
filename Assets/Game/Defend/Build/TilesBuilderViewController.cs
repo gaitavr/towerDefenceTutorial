@@ -31,8 +31,10 @@ namespace Game.Defend.Tiles
             _gamePlayUI = gamePlayUI;
             router.Register(this);
         }
-        
+
+        public event Action<IGameTileViewController> Finished;
         GameTileContentType IGameTileViewController.HandlingType => GameTileContentType.Builder;
+        public GameTileContent CurrentContent => null;
 
         async UniTask IGameTileViewController.Show(GameTileContent _)
         {
@@ -45,6 +47,8 @@ namespace Game.Defend.Tiles
                 button.Initialize(this);
             }
         }
+
+        public void ChangeTarget(GameTileContent gameTile){}
 
         void IGameTileViewController.Hide()
         {

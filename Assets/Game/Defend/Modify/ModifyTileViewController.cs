@@ -23,12 +23,14 @@ namespace Game.Defend.Tiles
             _gamePlayUI = gamePlayUI;
             router.Register(this);
         }
-        
+
+        public event Action<IGameTileViewController> Finished;
         public GameTileContentType HandlingType { get; }
+        public GameTileContent CurrentContent => _selectedTile;
 
         public async UniTask Show(GameTileContent gameTile)
         {
-            _selectedTile = gameTile;
+            ChangeTarget(gameTile);
             var assetsLoader = new LocalAssetLoader();
             var tilesModifierUI = await assetsLoader.LoadDisposable<TilesModifyUI>(AssetsConstants.TilesModifier, 
                 _gamePlayUI.ActionsSocket);
@@ -37,6 +39,11 @@ namespace Game.Defend.Tiles
             {
                 button.Initialize(this);
             }
+        }
+
+        public void ChangeTarget(GameTileContent gameTile)
+        {
+            _selectedTile = gameTile;
         }
 
         public void Hide()
@@ -75,6 +82,7 @@ namespace Game.Defend.Tiles
         private void DestroyTile()
         {
             _gameBoard.DestroyTile(_selectedTile);
+            Finished?.Invoke(this);
         }
     }
 }
