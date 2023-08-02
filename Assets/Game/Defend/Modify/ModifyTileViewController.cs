@@ -59,6 +59,7 @@ namespace Game.Defend.Tiles
                     UpgradeTile();
                     break;
                 case TileModifyActions.Merge:
+                    OnMergeClicked();
                     break;
                 case TileModifyActions.Destroy:
                     DestroyTile();
@@ -77,6 +78,11 @@ namespace Game.Defend.Tiles
                 _selectedTile = newTile;
                 _gameBoard.TryBuild(tile, newTile);
             }
+        }
+
+        private void OnMergeClicked()
+        {
+            
         }
         
         private void DestroyTile()

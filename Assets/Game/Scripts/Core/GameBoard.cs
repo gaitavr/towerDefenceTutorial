@@ -186,7 +186,7 @@ public class GameBoard : MonoBehaviour
 
         for (var i = 0; i < _boardData.Content.Length; i++)
         {
-            ForceBuild(_tiles[i], ContentFactory.Get(_boardData.Content[i]));
+            ForceBuild(_tiles[i], ContentFactory.Get(_boardData.Content[i], _boardData.Levels[i]));
         }
 
         FindPaths();

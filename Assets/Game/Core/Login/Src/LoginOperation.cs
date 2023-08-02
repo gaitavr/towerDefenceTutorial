@@ -38,7 +38,7 @@ namespace Login
             {
                 result = JsonUtility.FromJson<UserInfoContainer>(PlayerPrefs.GetString(deviceId));
             }
-            await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
+            await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
             _onProgress?.Invoke(0.6f);
             //Fake login
 

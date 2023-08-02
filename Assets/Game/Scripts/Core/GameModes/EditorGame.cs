@@ -67,8 +67,8 @@ public class EditorGame : MonoBehaviour, ICleanUp
     
     private void Update()
     {
-        TilesBuilder.GameUpdate();
         SceneContext.I.GameTileRaycaster.GameUpdate();
+        TilesBuilder.GameUpdate();
     }
     
     private void GoToMainMenu()

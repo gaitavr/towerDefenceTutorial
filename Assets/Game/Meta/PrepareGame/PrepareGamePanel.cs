@@ -23,8 +23,8 @@ public class PrepareGamePanel : MonoBehaviour
             if(i > 0)
                 _colors[i - 1].transform.localScale = _defaultScale;
             _colors[i].transform.localScale = _bigScale;
-            await UniTask.Delay(TimeSpan.FromSeconds(unitTime), cancellationToken: cancellationToken);
-
+            await UniTask.Delay(TimeSpan.FromSeconds(unitTime), cancellationToken: cancellationToken)
+                .SuppressCancellationThrow();
             if (cancellationToken.IsCancellationRequested)
             {
                 gameObject.SetActive(false);
@@ -37,7 +37,8 @@ public class PrepareGamePanel : MonoBehaviour
             c.gameObject.SetActive(false);
         }
         _go.SetActive(true);
-        await UniTask.Delay(TimeSpan.FromSeconds(unitTime), cancellationToken: cancellationToken);
+        await UniTask.Delay(TimeSpan.FromSeconds(unitTime), cancellationToken: cancellationToken)
+            .SuppressCancellationThrow();
         if (cancellationToken.IsCancellationRequested)
         {
             gameObject.SetActive(false);

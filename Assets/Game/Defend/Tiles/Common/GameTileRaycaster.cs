@@ -18,6 +18,9 @@ namespace Game.Defend.Tiles
             _gameBoard = gameBoard;
         }
         
+        /// <summary>
+        /// Raycaster should go before builder to prevent immediate processing of tile
+        /// </summary>
         public void GameUpdate()
         {
             if (IsPointerDown() == false) 
