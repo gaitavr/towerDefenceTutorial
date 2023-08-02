@@ -6,7 +6,7 @@ namespace Game.Defend.Tiles
     {
         GameTileContentType HandlingType { get; }
 
-        UniTask Show();
+        UniTask Show(GameTileContent tile);
         void Hide();
     }
 }

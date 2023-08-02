@@ -17,14 +17,16 @@ namespace Game.Defend.Tiles
             _raycaster.TileClicked += OnTileClicked;
         }
 
-        private void OnTileClicked(GameTileContentType tileType)
+        private void OnTileClicked(GameTileContent tile)
         {
-            var viewController = _viewControllers.FirstOrDefault(v => v.HandlingType == tileType);
+            var viewController = _viewControllers.FirstOrDefault(v => v.HandlingType == tile.Type);
             if (viewController != null)
             {
+                if(viewController == _current)
+                    return;
                 _current?.Hide();
                 _current = viewController;
-                _current.Show();
+                _current.Show(tile);
             }
         }
 

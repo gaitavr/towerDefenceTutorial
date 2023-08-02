@@ -33,6 +33,10 @@ MonoBehaviour:
     m_Address: TilesBuilder
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: e3efe6af20c1f31468e3fffc948e07d6
+    m_Address: TilesModifier
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 000faa4a04445e244a1fd374e2f74356, type: 2}
   m_SchemaSet:

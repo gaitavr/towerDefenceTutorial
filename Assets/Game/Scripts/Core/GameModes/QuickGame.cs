@@ -111,9 +111,9 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
         _enemies.GameUpdate();
         Physics.SyncTransforms();
         GameBoard.GameUpdate();
+        SceneContext.I.GameTileRaycaster.GameUpdate();
         TilesBuilder.GameUpdate();
         _nonEnemies.GameUpdate();
-        SceneContext.I.GameTileRaycaster.GameUpdate();
     }
 
     public async void BeginNewGame()

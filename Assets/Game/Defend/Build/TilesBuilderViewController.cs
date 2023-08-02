@@ -14,16 +14,13 @@ namespace Game.Defend.Tiles
         private readonly GameTileRaycaster _raycaster;
         private readonly GameBoard _gameBoard;
         private readonly GamePlayUI _gamePlayUI;
-        private readonly TilesViewControllerRouter _router;
 
         private GameTileContent _tempTile;
         private bool _isActive;
-        private bool _isShown;
         private IDisposable _disposableUI;
 
         private PauseManager PauseManager => ProjectContext.I.PauseManager;
         private bool IsPaused => PauseManager.IsPaused;
-        private bool CanBuild => _isActive && _isShown;
 
         public TilesBuilderViewController(GameTileContentFactory contentFactory, GameTileRaycaster raycaster,
             GameBoard gameBoard, GamePlayUI gamePlayUI, TilesViewControllerRouter router)
@@ -32,17 +29,13 @@ namespace Game.Defend.Tiles
             _raycaster = raycaster;
             _gameBoard = gameBoard;
             _gamePlayUI = gamePlayUI;
-            _router = router;
-            _router.Register(this);
+            router.Register(this);
         }
         
         GameTileContentType IGameTileViewController.HandlingType => GameTileContentType.Builder;
 
-        async UniTask IGameTileViewController.Show()
+        async UniTask IGameTileViewController.Show(GameTileContent _)
         {
-            if (_isShown)
-                return;
-            _isShown = true;
             var assetsLoader = new LocalAssetLoader();
             var tilesBuilderUI = await assetsLoader.LoadDisposable<TilesBuilderUI>(AssetsConstants.TilesBuilder, 
                 _gamePlayUI.ActionsSocket);
@@ -56,22 +49,15 @@ namespace Game.Defend.Tiles
         void IGameTileViewController.Hide()
         {
             _disposableUI.Dispose();
-            _isShown = false;
         }
 
         public void GameUpdate()
         {
-            if (CanBuild == false || IsPaused)
+            if (_isActive == false || IsPaused)
                 return;
 
             if (_tempTile != null)
                 ProcessBuilding();
-            
-            //TODO process upgrade and destroy
-            // if (_pendingTile == null)
-            // {
-            //     ProcessDestroying();
-            // }
         }
 
         private void ProcessBuilding()
@@ -90,38 +76,6 @@ namespace Game.Defend.Tiles
             }
         }
 
-        private void ProcessDestroying()
-        {
-            //TODO
-            // if (_isDestroyAllowed == false)
-            {
-                ProcessUpgrade();
-                return;
-            }
-            // if (IsPointerDown())
-            {
-                // var tile = _gameBoard.GetTile(TouchRay);
-                // if (tile != null)
-                // {
-                //     _gameBoard.DestroyTile(tile);
-                // }
-            }
-        }
-
-        private void ProcessUpgrade()
-        {
-            // if (IsPointerDown())
-            // {
-            //     var tile = _gameBoard.GetTile(TouchRay);
-            //     if (tile != null && _contentFactory.IsNextUpgradeAllowed(tile.Content))
-            //     {
-            //         var newTile = _contentFactory.Get(tile.Content.Type, tile.Content.Level + 1);
-            //         _gameBoard.DestroyTile(tile);
-            //         _gameBoard.TryBuild(tile, newTile);
-            //     }
-            // }
-        }
-
         public void SetActive(bool isActive) => _isActive = isActive;
 
         void ITilesBuilder.SelectBuilding(GameTileContentType type)
@@ -132,7 +86,7 @@ namespace Game.Defend.Tiles
                 return;
             }
 
-            if(CanBuild == false)
+            if(_isActive == false)
                 return;
             
             //TODO check money
