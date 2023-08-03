@@ -167,11 +167,26 @@ public class GameBoard : MonoBehaviour
         return tile;
     }
     
-    public GameTile GetTile(int x, int y)
+    public GameTile GetTile(Vector3 position)
     {
+        var x = (int) (position.x + X * 0.5f);
+        var y = (int) (position.z + Y * 0.5f);
         if (x >= 0 && x < X && y >= 0 && y < Y)
             return _tiles[x + y * X];
         return null;
+    }
+
+    public IEnumerable<GameTile> GetTilesAround(GameTileContent content)
+    {
+        var tile = _tiles.First(t => t.Content == content);
+        var result = new List<GameTile>(4)
+        {
+            GetTile(new Vector3(tile.Position.x, tile.Position.y, tile.Position.z + 1)),
+            GetTile(new Vector3(tile.Position.x, tile.Position.y, tile.Position.z - 1)),
+            GetTile(new Vector3(tile.Position.x - 1, tile.Position.y, tile.Position.z)),
+            GetTile(new Vector3(tile.Position.x + 1, tile.Position.y, tile.Position.z))
+        };
+        return result.Where(t => t != null);
     }
 
     public GameTile GetRandomSpawnPoint()

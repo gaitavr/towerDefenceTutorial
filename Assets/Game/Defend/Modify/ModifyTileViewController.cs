@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Game.Core.GamePlay;
 using Utils.Assets;
@@ -83,7 +84,23 @@ namespace Game.Defend.Tiles
 
         private void OnMergeClicked()
         {
+            var tilesAround = _gameBoard.GetTilesAround(_selectedTile)
+                .Where(t => t.Content.Type == _selectedTile.Type);
             
+            var currentLevel = _selectedTile.Level;
+            foreach (var t in tilesAround)
+            {
+                currentLevel++;
+                _gameBoard.DestroyTile(t.Content);
+            }
+            
+            if(_selectedTile.Level == currentLevel)
+                return;
+            
+            var newTile = _contentFactory.Get(_selectedTile.Type, currentLevel);
+            var tile = _gameBoard.DestroyTile(_selectedTile);
+            _selectedTile = newTile;
+            _gameBoard.TryBuild(tile, newTile);
         }
         
         private void DestroyTile()

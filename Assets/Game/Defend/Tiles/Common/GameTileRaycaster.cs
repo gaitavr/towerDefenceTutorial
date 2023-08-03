@@ -30,7 +30,7 @@ namespace Game.Defend.Tiles
             if(hit == null)
                 return;
                 
-            var boardTile = GetTile(hit.Value);
+            var boardTile = _gameBoard.GetTile(hit.Value.point);
             if (boardTile != null)
             {
                 TileClicked?.Invoke(boardTile.Content);
@@ -45,16 +45,7 @@ namespace Game.Defend.Tiles
         public GameTile GetTile()
         {
             var hit = Raycast();
-            return hit != null ? GetTile(hit.Value) : null;
-        }
-        
-        private GameTile GetTile(RaycastHit hit)
-        {
-            var x = (int) (hit.point.x + _gameBoard.X * 0.5f);
-            var y = (int) (hit.point.z + _gameBoard.Y * 0.5f);
-            if (x >= 0 && x < _gameBoard.X && y >= 0 && y < _gameBoard.Y)
-                return _gameBoard.GetTile(x, y);
-            return null;
+            return hit != null ? _gameBoard.GetTile(hit.Value.point) : null;
         }
 
         private RaycastHit? Raycast()
