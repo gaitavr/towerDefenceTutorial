@@ -9,6 +9,7 @@ namespace Game.Defend.Tiles
 
         GameTileContentType HandlingType { get; }
         GameTileContent CurrentContent { get; }
+        bool IsBusy { get; }
 
         UniTask Show(GameTileContent tile);
         void ChangeTarget(GameTileContent gameTile);

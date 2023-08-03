@@ -34,10 +34,12 @@ namespace Game.Defend.Tiles
 
         public event Action<IGameTileViewController> Finished;
         GameTileContentType IGameTileViewController.HandlingType => GameTileContentType.Builder;
-        public GameTileContent CurrentContent => null;
+        public GameTileContent CurrentContent { get; private set; }
+        public bool IsBusy { get; private set;}
 
-        async UniTask IGameTileViewController.Show(GameTileContent _)
+        async UniTask IGameTileViewController.Show(GameTileContent content)
         {
+            CurrentContent = content;
             var assetsLoader = new LocalAssetLoader();
             var tilesBuilderUI = await assetsLoader.LoadDisposable<TilesBuilderUI>(AssetsConstants.TilesBuilder, 
                 _gamePlayUI.ActionsSocket);
@@ -60,6 +62,7 @@ namespace Game.Defend.Tiles
             if (_isActive == false || IsPaused)
                 return;
 
+            IsBusy = _tempTile != null;
             if (_tempTile != null)
                 ProcessBuilding();
         }

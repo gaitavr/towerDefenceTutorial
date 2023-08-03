@@ -17,7 +17,7 @@ namespace Loading
                 LoadSceneMode.Single);
             while (loadOp.isDone == false)
             {
-                await UniTask.Delay(1);
+                await UniTask.Yield();
             }
             onProgress?.Invoke(0.7f);
             

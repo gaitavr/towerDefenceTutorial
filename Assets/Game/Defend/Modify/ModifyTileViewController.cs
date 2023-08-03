@@ -27,6 +27,7 @@ namespace Game.Defend.Tiles
         public event Action<IGameTileViewController> Finished;
         public GameTileContentType HandlingType { get; }
         public GameTileContent CurrentContent => _selectedTile;
+        public bool IsBusy => false;
 
         public async UniTask Show(GameTileContent gameTile)
         {
