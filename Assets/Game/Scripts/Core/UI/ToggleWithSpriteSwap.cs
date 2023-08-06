@@ -7,12 +7,9 @@ namespace Core.UI
     [RequireComponent(typeof(Button))]
     public class ToggleWithSpriteSwap : MonoBehaviour
     {
-        [SerializeField]
-        private Sprite _offSprite;
-        [SerializeField]
-        private Sprite _onSprite;
-        [SerializeField]
-        private Image _changableImage;
+        [SerializeField] private Sprite _offSprite;
+        [SerializeField] private Sprite _onSprite;
+        [SerializeField] private Image _changableImage;
         
         private Button _button;
 

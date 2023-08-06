@@ -63,7 +63,7 @@ namespace MainMenu
                 return;
             var loadingOperations = new Queue<ILoadingOperation>();
             loadingOperations.Enqueue(new EditorGameLoadingOperation(name));
-            ProjectContext.Instance.LoadingScreenProvider.LoadAndDestroy(loadingOperations);
+            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(loadingOperations);
         }
         
         private void OnElementDeleted(EditorElement element)

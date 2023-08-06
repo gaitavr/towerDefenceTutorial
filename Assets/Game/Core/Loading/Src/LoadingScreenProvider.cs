@@ -1,25 +1,14 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Assets;
 using Cysharp.Threading.Tasks;
 using Loading;
+using Utils.Assets;
 
 public class LoadingScreenProvider : LocalAssetLoader
 {
     public async UniTask LoadAndDestroy(Queue<ILoadingOperation> loadingOperations)
     {
-        var loadingScreen = await Load();
+        var loadingScreen = await Load<LoadingScreen>(AssetsConstants.LoadingScreen);
         await loadingScreen.Load(loadingOperations);
         Unload();
-    }
-    
-    public UniTask<LoadingScreen> Load()
-    {
-        return LoadInternal<LoadingScreen>("LoadingScreen");
-    }
-
-    public void Unload()
-    {
-        UnloadInternal();
     }
 }

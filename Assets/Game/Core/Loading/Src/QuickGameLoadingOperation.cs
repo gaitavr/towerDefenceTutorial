@@ -1,9 +1,8 @@
 using System;
-using System.Threading.Tasks;
 using Common;
 using Cysharp.Threading.Tasks;
-using Extensions;
 using UnityEngine.SceneManagement;
+using Utils.Extensions;
 
 namespace Loading
 {
@@ -18,13 +17,13 @@ namespace Loading
                 LoadSceneMode.Single);
             while (loadOp.isDone == false)
             {
-                await UniTask.Delay(1);
+                await UniTask.Yield();
             }
             onProgress?.Invoke(0.7f);
             
             var scene = SceneManager.GetSceneByName(Constants.Scenes.QUICK_GAME);
             var editorGame = scene.GetRoot<QuickGame>();
-            var environment = await ProjectContext.Instance.AssetProvider.LoadSceneAdditive("Sand");
+            var environment = await ProjectContext.I.AssetProvider.LoadSceneAdditive("Sand");
             onProgress?.Invoke(0.85f);
             editorGame.Init(environment);
             editorGame.BeginNewGame();

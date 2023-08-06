@@ -1,7 +1,6 @@
-using System.Threading.Tasks;
 using AppInfo;
-using Assets;
 using Cysharp.Threading.Tasks;
+using Utils.Assets;
 
 namespace Login
 {
@@ -9,20 +8,10 @@ namespace Login
     {
         public async UniTask<UserInfoContainer> ShowAndHide()
         {
-            var loginWindow = await Load();
+            var loginWindow = await Load<LoginWindow>(AssetsConstants.LoginWindow);
             var result = await loginWindow.ProcessLogin();
             Unload();
             return result;
-        }
-    
-        public UniTask<LoginWindow> Load()
-        {
-            return LoadInternal<LoginWindow>("LoginWindow");
-        }
-
-        public void Unload()
-        {
-            UnloadInternal();
         }
     }
 }

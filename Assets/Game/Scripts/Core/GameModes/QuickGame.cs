@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.UI;
@@ -8,51 +7,34 @@ using Loading;
 using UnityEngine;
 using Common;
 using Core.Pause;
+using Cysharp.Threading.Tasks;
+using Game.Core;
+using Game.Defend.Tiles;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
 public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
 {
     [SerializeField] private Vector2Int _boardSize;
-
-    [SerializeField] private GameBoard _board;
-
     [SerializeField] private DefenderHud _defenderHud;
-
-    [SerializeField] private TilesBuilder _tilesBuilder;
-
     [SerializeField] private GameResultWindow _gameResultWindow;
-
     [SerializeField] private PrepareGamePanel _prepareGamePanel;
-
-    [SerializeField] private Camera _camera;
-
-    [SerializeField] private GameTileContentFactory _contentFactory;
-
-    [SerializeField] private WarFactory _warFactory;
-
-    [SerializeField] private EnemyFactory _enemyFactory;
-
+    [Space]
     [SerializeField] private GameScenario _scenario;
-
-    [SerializeField, Range(0, 100)]
-    private int _startingPlayerHealth = 10;
-
-    [SerializeField, Range(5f, 30f)]
-    private float _prepareTime = 15f;
+    [SerializeField, Range(0, 100)] private int _startingPlayerHealth = 10;
+    [SerializeField, Range(5f, 30f)] private float _prepareTime = 15f;
 
     private bool _scenarioInProcess;
     private GameScenario.State _activeScenario;
     private CancellationTokenSource _prepareCancellation;
     private SceneInstance _environment;
-
-    private readonly GameBehaviorCollection _enemies = new GameBehaviorCollection();
-    private readonly GameBehaviorCollection _nonEnemies = new GameBehaviorCollection();
-
+    private int _playerHealth;
     private static QuickGame _instance;
 
-    private bool IsPaused => ProjectContext.Instance.PauseManager.IsPaused;
+    private readonly GameBehaviorCollection _enemies = new();
+    private readonly GameBehaviorCollection _nonEnemies = new();
 
-    private int _playerHealth;
+    private bool IsPaused => ProjectContext.I.PauseManager.IsPaused;
+    
     private int PlayerHealth
     {
         get => _playerHealth;
@@ -62,45 +44,48 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
             _defenderHud.UpdatePlayerHealth(_playerHealth, _startingPlayerHealth);
         }
     }
-    
-    public IEnumerable<GameObjectFactory> Factories => new GameObjectFactory[]{_contentFactory, 
-        _warFactory, _enemyFactory};
+
+    public IEnumerable<GameObjectFactory> Factories => new GameObjectFactory[]
+    {
+        SceneContext.I.ContentFactory, SceneContext.I.WarFactory,
+        SceneContext.I.EnemyFactory
+    };
 
     public string SceneName => Constants.Scenes.QUICK_GAME;
-    
-    private void OnEnable()
-    {
-        _instance = this;
-    }
+
+    private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
+    private GameBoard GameBoard => SceneContext.I.GameBoard;
 
     public void Init(SceneInstance environment)
     {
-        ProjectContext.Instance.PauseManager.Register(this);
+        _instance = this;
+        ProjectContext.I.PauseManager.Register(this);
+        SceneContext.I.Initialize();
         _environment = environment;
-        _defenderHud.QuitGame += GoToMainMenu;
         var initialData = GenerateInitialData();
-        _board.Initialize(initialData, _contentFactory);
-        _tilesBuilder.Initialize(_contentFactory, _camera, _board, false);
+        GameBoard.Initialize(initialData);
     }
 
     private BoardData GenerateInitialData()
     {
+        var size = _boardSize.x * _boardSize.y;
         var result = new BoardData
         {
             X = (byte) _boardSize.x,
             Y = (byte) _boardSize.y,
-            Content = new GameTileContentType[_boardSize.x * _boardSize.y]
+            Content = new GameTileContentType[size],
+            Levels = new byte[size]
         };
         result.Content[0] = GameTileContentType.SpawnPoint;
-        result.Content[result.Content.Length - 1] = GameTileContentType.Destination;
+        result.Content[^1] = GameTileContentType.Destination;
         return result;
     }
-    
+
     private void Update()
     {
-        if(IsPaused)
+        if (IsPaused || _instance == null)
             return;
-            
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             BeginNewGame();
@@ -115,6 +100,7 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
                 _scenarioInProcess = false;
                 _gameResultWindow.Show(GameResultType.Defeat, BeginNewGame, GoToMainMenu);
             }
+
             if (_activeScenario.Progress() == false && _enemies.IsEmpty)
             {
                 _scenarioInProcess = false;
@@ -124,13 +110,59 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
 
         _enemies.GameUpdate();
         Physics.SyncTransforms();
-        _board.GameUpdate();
+        GameBoard.GameUpdate();
+        SceneContext.I.GameTileRaycaster.GameUpdate();
+        TilesBuilder.GameUpdate();
         _nonEnemies.GameUpdate();
     }
 
+    public async void BeginNewGame()
+    {
+        Cleanup();
+        TilesBuilder.SetActive(true);
+        PlayerHealth = _startingPlayerHealth;
+        _defenderHud.QuitGame += GoToMainMenu;
+        
+        try
+        {
+            _prepareCancellation?.Dispose();
+            _prepareCancellation = new CancellationTokenSource();
+            var prepareResult = await _prepareGamePanel.Prepare(_prepareTime, _prepareCancellation.Token);
+            if (prepareResult)
+            {
+                _activeScenario = _scenario.Begin();
+                _scenarioInProcess = true;
+            }
+        }
+        catch (TaskCanceledException _)
+        {
+            
+        }
+    }
+
+    public void Cleanup()
+    {
+        _defenderHud.QuitGame -= GoToMainMenu;
+        TilesBuilder.SetActive(false);
+        _scenarioInProcess = false;
+        _prepareCancellation?.Cancel();
+        _prepareCancellation?.Dispose();
+        _enemies.Clear();
+        _nonEnemies.Clear();
+        GameBoard.Clear();
+    }
+
+    private void GoToMainMenu()
+    {
+        var operations = new Queue<ILoadingOperation>();
+        operations.Enqueue(new ClearGameOperation(this));
+        ProjectContext.I.AssetProvider.UnloadAdditiveScene(_environment).Forget();
+        ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(operations).Forget();
+    }
+    
     public static void SpawnEnemy(EnemyFactory factory, EnemyType enemyType)
     {
-        var spawnPoint = _instance._board.GetRandomSpawnPoint();
+        var spawnPoint = _instance.GameBoard.GetRandomSpawnPoint();
         var enemy = factory.Get(enemyType);
         enemy.SpawnOn(spawnPoint);
         _instance._enemies.Add(enemy);
@@ -138,59 +170,21 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
 
     public static Shell SpawnShell()
     {
-        var shell = _instance._warFactory.Shell;
+        var shell = SceneContext.I.WarFactory.Shell;
         _instance._nonEnemies.Add(shell);
         return shell;
     }
-
+    
     public static Explosion SpawnExplosion()
     {
-        var shell = _instance._warFactory.Explosion;
-        _instance._nonEnemies.Add(shell);
-        return shell;
+        var explosion = SceneContext.I.WarFactory.Explosion;
+        _instance._nonEnemies.Add(explosion);
+        return explosion;
     }
 
     public static void EnemyReachedDestination()
     {
         _instance.PlayerHealth--;
-    }
-    
-    public async void BeginNewGame()
-    {
-        Cleanup();
-        _tilesBuilder.Enable();
-        PlayerHealth = _startingPlayerHealth;
-
-        try
-        {
-            _prepareCancellation?.Dispose();
-            _prepareCancellation = new CancellationTokenSource();
-            if (await _prepareGamePanel.Prepare(_prepareTime, _prepareCancellation.Token))
-            {
-                _activeScenario = _scenario.Begin();
-                _scenarioInProcess = true;
-            }
-        }
-        catch (TaskCanceledException _){}
-    }
-
-    public void Cleanup()
-    {
-        _tilesBuilder.Disable();
-        _scenarioInProcess = false;
-        _prepareCancellation?.Cancel();
-        _prepareCancellation?.Dispose();
-        _enemies.Clear();
-        _nonEnemies.Clear();
-        _board.Clear();
-    }
-
-    private void GoToMainMenu()
-    {
-        var operations = new Queue<ILoadingOperation>();
-        operations.Enqueue(new ClearGameOperation(this));
-        ProjectContext.Instance.AssetProvider.UnloadAdditiveScene(_environment);
-        ProjectContext.Instance.LoadingScreenProvider.LoadAndDestroy(operations);
     }
 
     void IPauseHandler.SetPaused(bool isPaused)

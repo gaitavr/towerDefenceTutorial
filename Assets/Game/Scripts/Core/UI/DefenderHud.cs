@@ -3,19 +3,16 @@ using Common;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Assets;
 
 namespace Core.UI
 {
     public class DefenderHud : MonoBehaviour
     {
-        [SerializeField]
-        private TextMeshProUGUI _wavesText;
-        [SerializeField]
-        private TextMeshProUGUI _playerHealthText;
-        [SerializeField]
-        private ToggleWithSpriteSwap _pauseToggle;
-        [SerializeField]
-        private Button _quitButton;
+        [SerializeField] private TextMeshProUGUI _wavesText;
+        [SerializeField] private TextMeshProUGUI _playerHealthText;
+        [SerializeField] private ToggleWithSpriteSwap _pauseToggle;
+        [SerializeField] private Button _quitButton;
         public event Action QuitGame;
 
         private void Awake()
@@ -37,15 +34,18 @@ namespace Core.UI
         private async void OnQuitButtonClicked()
         {
             OnPauseClicked(true);
-            var isConfirmed = await AlertPopup.Instance.AwaitForDecision("Are you sure to quit?");
+            var assetLoader = new LocalAssetLoader();
+            var popup = await assetLoader.Load<AlertPopup>(AssetsConstants.AlertPopup);
+            var isConfirmed = await popup.AwaitForDecision("Are you sure to quit?");
             OnPauseClicked(false);
             if(isConfirmed)
                 QuitGame?.Invoke();
+            assetLoader.Unload();
         }
         
         private void OnPauseClicked(bool isPaused)
         {
-            ProjectContext.Instance.PauseManager.SetPaused(isPaused);
+            ProjectContext.I.PauseManager.SetPaused(isPaused);
         }
         
         private void OnDestroy()

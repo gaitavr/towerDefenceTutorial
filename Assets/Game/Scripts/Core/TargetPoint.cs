@@ -4,23 +4,25 @@ using UnityEngine;
 public class TargetPoint : MonoBehaviour
 {
     public Enemy Enemy { get; private set; }
+    
     private bool _isEnabled;
     public bool IsEnabled
     {
-        get { return _isEnabled; }
+        get => _isEnabled;
         set
         {
             _collider.enabled = value;
             _isEnabled = value;
         }
     }
+    
     public Vector3 Position => transform.position;
 
     public float ColliderSize { get; private set; }
 
     private const int ENEMY_LAYER_MASK = 1 << 9;
 
-    private static Collider[] _buffer = new Collider[100];
+    private static readonly Collider[] _buffer = new Collider[100];
     public static int BufferedCount { get; private set; }
 
     private SphereCollider _collider;

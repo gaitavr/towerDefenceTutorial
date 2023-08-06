@@ -9,8 +9,7 @@ namespace GameResult
     [RequireComponent(typeof(PlayableDirector))]
     public class GameResultIntroAnimation : MonoBehaviour
     {
-        [SerializeField]
-        private List<GameResultSetting> _settings;
+        [SerializeField] private List<GameResultSetting> _settings;
         
         private PlayableDirector _director;
         private TaskCompletionSource<bool> _playAwater;

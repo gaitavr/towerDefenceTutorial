@@ -4,19 +4,12 @@ using UnityEngine;
 [Serializable]
 public class EnemySpawnSequence
 {
-    [SerializeField]
-    private EnemyFactory _factory;
+    [SerializeField] private EnemyFactory _factory;
+    [SerializeField] private EnemyType _type = EnemyType.Elien;
+    [SerializeField, Range(1, 100)] private int _amount = 1;
+    [SerializeField, Range(0.1f, 10f)] private float _cooldown = 1f;
 
-    [SerializeField]
-    private EnemyType _type = EnemyType.Elien;
-
-    [SerializeField, Range(1, 100)]
-    private int _amount = 1;
-
-    [SerializeField, Range(0.1f, 10f)]
-    private float _cooldown = 1f;
-
-    public State Begin() => new State(this);
+    public State Begin() => new(this);
 
     [Serializable]
     public struct State

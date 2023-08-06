@@ -31,14 +31,14 @@ namespace Loading
             var loadOp = SceneManager.LoadSceneAsync(Constants.Scenes.MAIN_MENU, LoadSceneMode.Additive);
             while (loadOp.isDone == false)
             {
-                await UniTask.Delay(1);
+                await UniTask.Yield();
             }
             onProgress?.Invoke(0.75f);
            
             var unloadOp = SceneManager.UnloadSceneAsync(_gameCleanUp.SceneName);
             while (unloadOp.isDone == false)
             {
-                await UniTask.Delay(1);
+                await UniTask.Yield();
             }
             onProgress?.Invoke(1f);
         }

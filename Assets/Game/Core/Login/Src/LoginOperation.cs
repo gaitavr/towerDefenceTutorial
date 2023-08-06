@@ -1,12 +1,8 @@
 using System;
-using System.Threading.Tasks;
 using AppInfo;
-using Common;
 using Cysharp.Threading.Tasks;
-using Extensions;
 using Loading;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Login
 {
@@ -42,13 +38,13 @@ namespace Login
             {
                 result = JsonUtility.FromJson<UserInfoContainer>(PlayerPrefs.GetString(deviceId));
             }
-            await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
+            await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
             _onProgress?.Invoke(0.6f);
             //Fake login
 
             if (result == null)
             {
-                result = await ProjectContext.Instance.LoginWindowProvider.ShowAndHide();
+                result = await ProjectContext.I.LoginWindowProvider.ShowAndHide();
             }
             
             PlayerPrefs.SetString(deviceId, JsonUtility.ToJson(result));

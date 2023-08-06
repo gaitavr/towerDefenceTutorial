@@ -1,38 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Game.Core;
 using UnityEngine;
 
 public class GameBoard : MonoBehaviour
 {
-    [SerializeField]
-    private GameTile _tilePrefab;
+    [SerializeField] private GameTile _tilePrefab;
     
     private GameTile[] _tiles;
 
-    private readonly Queue<GameTile> _searchFrontier = new Queue<GameTile>();
+    private readonly Queue<GameTile> _searchFrontier = new();
 
-    private GameTileContentFactory _contentFactory;
+    private GameTileContentFactory ContentFactory => SceneContext.I.ContentFactory;
 
-    private readonly List<GameTile> _spawnPoints = new List<GameTile>();
-    private readonly List<GameTileContent> _contentToUpdate = new List<GameTileContent>();
+    private readonly List<GameTile> _spawnPoints = new();
+    private readonly List<GameTileContent> _contentToUpdate = new();
 
     private BoardData _boardData;
-    private byte X => _boardData.X;
-    private byte Y => _boardData.Y;
+    public byte X => _boardData.X;
+    public byte Y => _boardData.Y;
     
-    public void Initialize(BoardData boardData, GameTileContentFactory contentFactory)
+    public void Initialize(BoardData boardData)
     {
         _boardData = boardData;
         var offset = new Vector2((X - 1) * 0.5f, (Y - 1) * 0.5f);
 
         _tiles = new GameTile[X * Y];
-        _contentFactory = contentFactory;
+        
         for (int i = 0, y = 0; y < Y; y++)
         {
             for (int x = 0; x < X; x++, i++)
             {
-                GameTile tile = _tiles[i] = Instantiate(_tilePrefab);
+                var tile = _tiles[i] = Instantiate(_tilePrefab);
                 tile.transform.SetParent(transform, false);
                 tile.transform.localPosition = new Vector3(x - offset.x, 0f, y - offset.y);
 
@@ -87,7 +86,7 @@ public class GameBoard : MonoBehaviour
 
         while (_searchFrontier.Count > 0)
         {
-            GameTile tile = _searchFrontier.Dequeue();
+            var tile = _searchFrontier.Dequeue();
             if (tile != null)
             {
                 if (tile.IsAlternative)
@@ -140,7 +139,7 @@ public class GameBoard : MonoBehaviour
         tile.Content = content;
         if (FindPaths() == false)
         {
-            tile.Content = _contentFactory.Get(GameTileContentType.Empty);
+            tile.Content = ContentFactory.Get(GameTileContentType.Empty);
             return false;
         }
         
@@ -152,33 +151,42 @@ public class GameBoard : MonoBehaviour
         return true;
     }
 
-    public void DestroyTile(GameTile tile)
+    public GameTile DestroyTile(GameTileContent content)
     {
+        var tile = _tiles.First(t => t.Content == content);
         if (tile.Content.Type <= GameTileContentType.Empty)
-            return;
+            return tile;
         
         _contentToUpdate.Remove(tile.Content);
         
         if(tile.Content.Type == GameTileContentType.SpawnPoint)
             _spawnPoints.Remove(tile);
         
-        tile.Content = _contentFactory.Get(GameTileContentType.Empty);
+        tile.Content = ContentFactory.Get(GameTileContentType.Empty);
         FindPaths();
+        return tile;
     }
     
-    public GameTile GetTile(Ray ray)
+    public GameTile GetTile(Vector3 position)
     {
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, float.MaxValue, 1))
-        {
-            var x = (int) (hit.point.x + X * 0.5f);
-            var y = (int) (hit.point.z + Y * 0.5f);
-            if (x >= 0 && x < X && y >= 0 && y < Y)
-            {
-                return _tiles[x + y * X];
-            }
-        }
+        var x = (int) (position.x + X * 0.5f);
+        var y = (int) (position.z + Y * 0.5f);
+        if (x >= 0 && x < X && y >= 0 && y < Y)
+            return _tiles[x + y * X];
         return null;
+    }
+
+    public IEnumerable<GameTile> GetTilesAround(GameTileContent content)
+    {
+        var tile = _tiles.First(t => t.Content == content);
+        var result = new List<GameTile>(4)
+        {
+            GetTile(new Vector3(tile.Position.x, tile.Position.y, tile.Position.z + 1)),
+            GetTile(new Vector3(tile.Position.x, tile.Position.y, tile.Position.z - 1)),
+            GetTile(new Vector3(tile.Position.x - 1, tile.Position.y, tile.Position.z)),
+            GetTile(new Vector3(tile.Position.x + 1, tile.Position.y, tile.Position.z))
+        };
+        return result.Where(t => t != null);
     }
 
     public GameTile GetRandomSpawnPoint()
@@ -193,13 +201,12 @@ public class GameBoard : MonoBehaviour
 
         for (var i = 0; i < _boardData.Content.Length; i++)
         {
-            ForceBuild(_tiles[i], _contentFactory.Get(_boardData.Content[i]));
+            ForceBuild(_tiles[i], ContentFactory.Get(_boardData.Content[i], _boardData.Levels[i]));
         }
 
         FindPaths();
     }
 
-    public GameTileContentType[] GetAllContent => _tiles.Select(t => t.Content.Type).ToArray();
-
-    public Vector3[] GetAllTilePositions => _tiles.Select(t => t.Position).ToArray();
+    public GameTileContentType[] GetAllContentTypes => _tiles.Select(t => t.Content.Type).ToArray();
+    public byte[] GetAllContentLevels => _tiles.Select(t => (byte)t.Content.Level).ToArray();
 }

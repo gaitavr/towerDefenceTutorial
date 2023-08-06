@@ -9,12 +9,9 @@ namespace Login
 {
     public class LoginWindow : MonoBehaviour
     {
-        [SerializeField]
-        private TMP_InputField _nameField;
-        [SerializeField]
-        private Button _facebookLogin;
-        [SerializeField]
-        private Button _simpleLogin;
+        [SerializeField] private TMP_InputField _nameField;
+        [SerializeField] private Button _facebookLogin;
+        [SerializeField] private Button _simpleLogin;
 
         private TaskCompletionSource<UserInfoContainer> _loginCompletionSource;
 

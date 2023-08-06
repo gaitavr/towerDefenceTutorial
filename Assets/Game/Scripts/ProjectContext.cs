@@ -1,6 +1,7 @@
 using Core.Pause;
 using Login;
 using UnityEngine;
+using Utils.Assets;
 
 public class ProjectContext : MonoBehaviour
 {
@@ -9,11 +10,11 @@ public class ProjectContext : MonoBehaviour
     public AssetProvider AssetProvider { get; private set; }
     public PauseManager PauseManager { get; private set; }
 
-    public static ProjectContext Instance { get; private set; }
+    public static ProjectContext I { get; private set; }
 
     private void Awake()
     {
-        Instance = this;
+        I = this;
         DontDestroyOnLoad(this);
     }
 

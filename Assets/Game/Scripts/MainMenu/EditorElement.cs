@@ -7,14 +7,10 @@ namespace MainMenu
 {
     public class EditorElement : MonoBehaviour
     {
-        [SerializeField]
-        private TextMeshProUGUI _timeText;
-        [SerializeField]
-        private TextMeshProUGUI _nameText;
-        [SerializeField]
-        private Button _selectButton;
-        [SerializeField]
-        private Button _deleteButton;
+        [SerializeField] private TextMeshProUGUI _timeText;
+        [SerializeField] private TextMeshProUGUI _nameText;
+        [SerializeField] private Button _selectButton;
+        [SerializeField] private Button _deleteButton;
 
         public string FileName { get; private set; }
         
@@ -35,10 +31,10 @@ namespace MainMenu
         
         public class Data
         {
-            public string Time { get; private set; }
-            public string Name { get; private set; }
-            public Action<string> Selected { get; private set; }
-            public Action<EditorElement> Deleted { get; private set; }
+            public string Time { get; }
+            public string Name { get; }
+            public Action<string> Selected { get; }
+            public Action<EditorElement> Deleted { get; }
 
             public Data(string time, string name, Action<string> selected, Action<EditorElement> deleted)
             {

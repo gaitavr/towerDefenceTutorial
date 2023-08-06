@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
+using Utils.Extensions;
 
 public class Enemy : GameBehavior
 {
-    [SerializeField]
-    private Transform _model;
-    [SerializeField]
-    private EnemyView _view;
+    [SerializeField] private Transform _model;
+    [SerializeField] private EnemyView _view;
 
     public EnemyFactory OriginFactory { get; set; }
 
@@ -22,9 +21,9 @@ public class Enemy : GameBehavior
     private float _tempSpeedFactor;
 
     public float Scale { get; private set; }
-    public float Health { get; private set; }
+    private float Health { get; set; }
     
-    public DebuffEnemyWrapper DebuffWrapper { get; private set; }
+    public DebuffEnemyMediator DebuffMediator { get; private set; }
 
     private const float CHANGE_DIR_SPEED_MULTIPLIER = 0.8f;
 
@@ -36,7 +35,7 @@ public class Enemy : GameBehavior
         _speed = speed;
         Scale = scale;
         Health = health;
-        DebuffWrapper = new DebuffEnemyWrapper(this);
+        DebuffMediator = new DebuffEnemyMediator(this);
         _view.Init(this);
     }
 
@@ -198,5 +197,10 @@ public class Enemy : GameBehavior
         if (isPaused)
             _tempSpeedFactor = _view.SpeedFactor;
         SetSpeed(isPaused ? 0 : _tempSpeedFactor);
+    }
+
+    private void OnDestroy()
+    {
+        DebuffMediator?.Dispose();
     }
 }

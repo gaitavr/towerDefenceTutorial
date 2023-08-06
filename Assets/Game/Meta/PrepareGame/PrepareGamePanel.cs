@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class PrepareGamePanel : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject[] _colors;
-    [SerializeField]
-    private GameObject _go;
-    [SerializeField]
-    private Vector3 _defaultScale;
-    [SerializeField]
-    private Vector3 _bigScale;
+    [SerializeField] private GameObject[] _colors;
+    [SerializeField] private GameObject _go;
+    [SerializeField] private Vector3 _defaultScale;
+    [SerializeField] private Vector3 _bigScale;
     
-    public async Task<bool> Prepare(float seconds, CancellationToken cancellationToken)
+    public async UniTask<bool> Prepare(float seconds, CancellationToken cancellationToken)
     {
         Reset();
         gameObject.SetActive(true);
@@ -27,8 +23,8 @@ public class PrepareGamePanel : MonoBehaviour
             if(i > 0)
                 _colors[i - 1].transform.localScale = _defaultScale;
             _colors[i].transform.localScale = _bigScale;
-            await Task.Delay(TimeSpan.FromSeconds(unitTime), cancellationToken);
-
+            await UniTask.Delay(TimeSpan.FromSeconds(unitTime), cancellationToken: cancellationToken)
+                .SuppressCancellationThrow();
             if (cancellationToken.IsCancellationRequested)
             {
                 gameObject.SetActive(false);
@@ -41,8 +37,8 @@ public class PrepareGamePanel : MonoBehaviour
             c.gameObject.SetActive(false);
         }
         _go.SetActive(true);
-        
-        await Task.Delay(TimeSpan.FromSeconds(unitTime), cancellationToken);
+        await UniTask.Delay(TimeSpan.FromSeconds(unitTime), cancellationToken: cancellationToken)
+            .SuppressCancellationThrow();
         if (cancellationToken.IsCancellationRequested)
         {
             gameObject.SetActive(false);

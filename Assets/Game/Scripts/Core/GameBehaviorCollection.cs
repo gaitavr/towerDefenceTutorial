@@ -5,8 +5,8 @@ using UnityEngine;
 [Serializable]
 public class GameBehaviorCollection
 {
-    private List<GameBehavior> _behaviors = new List<GameBehavior>();
-    private List<Transform> _transforms = new List<Transform>();
+    private List<GameBehavior> _behaviors = new();
+    private List<Transform> _transforms = new();
 
     public bool IsEmpty => _behaviors.Count == 0;
 
@@ -18,11 +18,11 @@ public class GameBehaviorCollection
 
     public void GameUpdate()
     {
-        for (int i = 0; i < _behaviors.Count; i++)
+        for (var i = 0; i < _behaviors.Count; i++)
         {
-            if (!_behaviors[i].GameUpdate())
+            if (_behaviors[i].GameUpdate() == false)
             {
-                int lastIndex = _behaviors.Count - 1;
+                var lastIndex = _behaviors.Count - 1;
                 _behaviors[i] = _behaviors[lastIndex];
                 _behaviors.RemoveAt(lastIndex);
                 i -= 1;
@@ -32,7 +32,7 @@ public class GameBehaviorCollection
 
     public void Clear()
     {
-        for (int i = 0; i < _behaviors.Count; i++)
+        for (var i = 0; i < _behaviors.Count; i++)
         {
             _behaviors[i].Recycle();
         }
@@ -41,7 +41,7 @@ public class GameBehaviorCollection
 
     public void SetPaused(bool isPaused)
     {
-        for (int i = 0; i < _behaviors.Count; i++)
+        for (var i = 0; i < _behaviors.Count; i++)
         {
             _behaviors[i].SetPaused(isPaused);
         }

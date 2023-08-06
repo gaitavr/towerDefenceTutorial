@@ -1,38 +1,35 @@
 using System.Collections.Generic;
 using Common;
 using Core.UI;
+using Cysharp.Threading.Tasks;
+using Game.Core;
+using Game.Defend.Tiles;
 using Loading;
 using UnityEngine;
 
 public class EditorGame : MonoBehaviour, ICleanUp
 {
-    [SerializeField]
-    private Vector2Int _boardSize;
-    [SerializeField]
-    private GameBoard _board;
-    [SerializeField]
-    private TilesBuilder _tilesBuilder;
-    [SerializeField]
-    private Camera _camera;
-    [SerializeField]
-    private GameTileContentFactory _contentFactory;
-    [SerializeField]
-    private EditorHud _hud;
+    [SerializeField] private Vector2Int _boardSize;
+    [SerializeField] private EditorHud _hud;
     
-    private readonly BoardSerializer _serializer = new BoardSerializer();
-    
-    public IEnumerable<GameObjectFactory> Factories => new GameObjectFactory[]{_contentFactory};
-    public string SceneName => Constants.Scenes.EDITOR_GAME;
+    private readonly BoardSerializer _serializer = new();
     private string _fileName;
     
+    public IEnumerable<GameObjectFactory> Factories => new GameObjectFactory[]
+    {
+        SceneContext.I.ContentFactory
+    };
+    public string SceneName => Constants.Scenes.EDITOR_GAME;
+    
+    private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
+    private GameBoard GameBoard => SceneContext.I.GameBoard;
+
     public void Init(string fileName)
     {
+        SceneContext.I.Initialize();
         _fileName = fileName;
-        _hud.QuitGame += GoToMainMenu;
-        _hud.SaveClicked += OnSaveClicked;
         var initialData = GenerateInitialData();
-        _board.Initialize(initialData, _contentFactory);
-        _tilesBuilder.Initialize(_contentFactory, _camera, _board, true);
+        GameBoard.Initialize(initialData);
     }
 
     private BoardData GenerateInitialData()
@@ -47,7 +44,7 @@ public class EditorGame : MonoBehaviour, ICleanUp
                 Content = new GameTileContentType[_boardSize.x * _boardSize.y]
             };
             result.Content[0] = GameTileContentType.SpawnPoint;
-            result.Content[result.Content.Length - 1] = GameTileContentType.Destination;
+            result.Content[^1] = GameTileContentType.Destination;
         }
         return result;
     }
@@ -55,20 +52,30 @@ public class EditorGame : MonoBehaviour, ICleanUp
     public void BeginNewGame()
     {
         Cleanup();
-        _tilesBuilder.Enable();
+        _hud.QuitGame += GoToMainMenu;
+        _hud.SaveClicked += OnSaveClicked;
+        TilesBuilder.SetActive(true);
     }
     
     public void Cleanup()
     {
-        _tilesBuilder.Disable();
-        _board.Clear();
+        _hud.QuitGame -= GoToMainMenu;
+        _hud.SaveClicked -= OnSaveClicked;
+        TilesBuilder.SetActive(false);
+        GameBoard.Clear();
+    }
+    
+    private void Update()
+    {
+        SceneContext.I.GameTileRaycaster.GameUpdate();
+        TilesBuilder.GameUpdate();
     }
     
     private void GoToMainMenu()
     {
         var operations = new Queue<ILoadingOperation>();
         operations.Enqueue(new ClearGameOperation(this));
-        ProjectContext.Instance.LoadingScreenProvider.LoadAndDestroy(operations);
+        ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(operations).Forget();
     }
     
     private void OnSaveClicked()
@@ -79,7 +86,8 @@ public class EditorGame : MonoBehaviour, ICleanUp
             AccountId = 1145,
             X = (byte)_boardSize.x,
             Y = (byte)_boardSize.y,
-            Content = _board.GetAllContent
+            Content = GameBoard.GetAllContentTypes,
+            Levels = GameBoard.GetAllContentLevels
         };
         _serializer.Save(data, _fileName);
     }

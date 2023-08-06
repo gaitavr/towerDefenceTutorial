@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -11,14 +10,10 @@ namespace Loading
 {
     public class LoadingScreen : MonoBehaviour
     {
-        [SerializeField]
-        private Canvas _canvas;
-        [SerializeField]
-        private Slider _progressFill;
-        [SerializeField]
-        private TextMeshProUGUI _loadingInfo;
-        [SerializeField]
-        private float _barSpeed;
+        [SerializeField] private Canvas _canvas;
+        [SerializeField] private Slider _progressFill;
+        [SerializeField] private TextMeshProUGUI _loadingInfo;
+        [SerializeField] private float _barSpeed;
         
         private float _targetProgress;
         private bool _isProgress;
