@@ -7,6 +7,8 @@ namespace Game.Defend.Tiles
     {
         private readonly Camera _camera;
         private readonly GameBoard _gameBoard;
+
+        private bool _isMuted;
         
         public Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
 
@@ -31,7 +33,7 @@ namespace Game.Defend.Tiles
                 return;
                 
             var boardTile = _gameBoard.GetTile(hit.Value.point);
-            if (boardTile != null)
+            if (boardTile != null && _isMuted == false)
                 TileClicked?.Invoke(boardTile);
         }
         
@@ -55,6 +57,16 @@ namespace Game.Defend.Tiles
 #else
             return Input.touches.Length == 1 && Input.touches[0].phase == TouchPhase.Began;
 #endif
+        }
+
+        public void Mute()
+        {
+            _isMuted = true;
+        }
+
+        public void UnMute()
+        {
+            _isMuted = false;
         }
     }
 }

@@ -6,31 +6,16 @@ using Utils.Assets;
 
 namespace Game.Defend.Tiles
 {
-    public class ModifyTileViewController : IGameTileViewController, ITilesModifier
+    public class ModifyTileViewController : GameTileViewController, ITilesModifier
     {
-        private readonly GameTileContentFactory _contentFactory;
-        private readonly GameBoard _gameBoard;
-        private readonly GamePlayUI _gamePlayUI;
-        
-        private IDisposable _disposableUI;
-        private GameTile _selectedTile;
-
         public ModifyTileViewController(GameTileContentType handlingType, GameTileContentFactory contentFactory, 
-            GameBoard gameBoard, GamePlayUI gamePlayUI, TilesViewControllerRouter router)
+            GameBoard gameBoard, GamePlayUI gamePlayUI, TilesViewControllerRouter router) : base(contentFactory, gameBoard, gamePlayUI)
         {
             HandlingType = handlingType;
-            _contentFactory = contentFactory;
-            _gameBoard = gameBoard;
-            _gamePlayUI = gamePlayUI;
             router.Register(this);
         }
 
-        public event Action<IGameTileViewController> Finished;
-        public GameTileContentType HandlingType { get; }
-
-        public bool IsBusy => false;
-
-        public async UniTask Show(GameTile gameTile)
+        public override async UniTask Show(GameTile gameTile)
         {
             if (_selectedTile == gameTile)
                 return;
@@ -39,18 +24,15 @@ namespace Game.Defend.Tiles
 
             if (_disposableUI == null)
             {
-                var assetsLoader = new LocalAssetLoader();
-                var tilesModifierUI = await assetsLoader.LoadDisposable<TilesModifyUI>(AssetsConstants.TilesModifier,
-                    _gamePlayUI.ActionsSocket);
-                _disposableUI = tilesModifierUI;
-                foreach (var button in tilesModifierUI.Value.Buttons)
+                var subView = await LoadSubView<TilesModifyUI>(AssetsConstants.TilesModifier);
+                foreach (var button in subView.Buttons)
                 {
                     button.Initialize(this);
                 }
             }
         }
 
-        public void Hide()
+        public override void Hide()
         {
             _selectedTile = null;
             _disposableUI.Dispose();
@@ -111,7 +93,7 @@ namespace Game.Defend.Tiles
         private void DestroyTile()
         {
             _gameBoard.DestroyTile(_selectedTile);
-            Finished?.Invoke(this);
+            RaiseFinished();
         }
     }
 }
