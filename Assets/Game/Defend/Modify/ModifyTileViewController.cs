@@ -29,6 +29,8 @@ namespace Game.Defend.Tiles
         public GameTileContentType HandlingType { get; }
         public GameTile CurrentTile => _selectedTile;
 
+        public bool IsBusy => false;
+
         public async UniTask Show(GameTile gameTile)
         {
             if (_selectedTile == gameTile)
@@ -84,13 +86,13 @@ namespace Game.Defend.Tiles
 
         private void OnMergeClicked()
         {
-            var tilesAround = _gameBoard.GetTilesAround(_selectedTile.Content)
+            var tilesAround = _gameBoard.GetTilesAround(_selectedTile)
                 .Where(t => t.Content.Type == _selectedTile.Content.Type);
             
             var currentLevel = _selectedTile.Content.Level;
             foreach (var t in tilesAround)
             {
-                currentLevel += t.Content.Level;
+                currentLevel += t.Content.Level + 1;//levels start from 0
                 _gameBoard.DestroyTile(t);
             }
             

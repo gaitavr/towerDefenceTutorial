@@ -32,18 +32,15 @@ public class GameBoard : MonoBehaviour
             for (int x = 0; x < X; x++, i++)
             {
                 var tile = _tiles[i] = Instantiate(_tilePrefab);
+                tile.BoardPosition = new Vector2Int(x, y);
                 tile.transform.SetParent(transform, false);
                 tile.transform.localPosition = new Vector3(x - offset.x, 0f, y - offset.y);
 
                 if (x > 0)
-                {
                     GameTile.MakeEastWestNeighbors(tile, _tiles[i - 1]);
-                }
 
                 if (y > 0)
-                {
                     GameTile.MakeNorthSouthNeighbors(tile, _tiles[i - X]);
-                }
 
                 tile.IsAlternative = (x & 1) == 0;
                 if ((y & 1) == 0)
@@ -169,20 +166,24 @@ public class GameBoard : MonoBehaviour
     {
         var x = (int) (position.x + X * 0.5f);
         var y = (int) (position.z + Y * 0.5f);
+        return GetTile(x, y);
+    }
+
+    private GameTile GetTile(int x, int y)
+    {
         if (x >= 0 && x < X && y >= 0 && y < Y)
             return _tiles[x + y * X];
         return null;
     }
 
-    public IEnumerable<GameTile> GetTilesAround(GameTileContent content)
+    public IEnumerable<GameTile> GetTilesAround(GameTile tile)
     {
-        var tile = _tiles.First(t => t.Content == content);
         var result = new List<GameTile>(4)
         {
-            GetTile(new Vector3(tile.Position.x, tile.Position.y, tile.Position.z + 1)),
-            GetTile(new Vector3(tile.Position.x, tile.Position.y, tile.Position.z - 1)),
-            GetTile(new Vector3(tile.Position.x - 1, tile.Position.y, tile.Position.z)),
-            GetTile(new Vector3(tile.Position.x + 1, tile.Position.y, tile.Position.z))
+            GetTile(tile.BoardPosition.x, tile.BoardPosition.y + 1),
+            GetTile(tile.BoardPosition.x, tile.BoardPosition.y - 1),
+            GetTile(tile.BoardPosition.x + 1, tile.BoardPosition.y),
+            GetTile(tile.BoardPosition.x - 1, tile.BoardPosition.y),
         };
         return result.Where(t => t != null);
     }

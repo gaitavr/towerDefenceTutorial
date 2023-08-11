@@ -9,6 +9,7 @@ namespace Game.Defend.Tiles
 
         GameTileContentType HandlingType { get; }
         GameTile CurrentTile { get; }
+        bool IsBusy { get; }
 
         UniTask Show(GameTile tile);
         void Hide();

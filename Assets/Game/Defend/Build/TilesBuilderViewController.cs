@@ -36,6 +36,8 @@ namespace Game.Defend.Tiles
         GameTileContentType IGameTileViewController.HandlingType => GameTileContentType.Empty;
         public GameTile CurrentTile { get; private set; }
 
+        public bool IsBusy { get; private set; }
+
         async UniTask IGameTileViewController.Show(GameTile gameTile)
         {
             if (CurrentTile == gameTile)
@@ -68,6 +70,7 @@ namespace Game.Defend.Tiles
             if (_isActive == false || IsPaused)
                 return;
 
+            IsBusy = _tempTile != null;
             if (_tempTile != null)
                 ProcessBuilding();
         }

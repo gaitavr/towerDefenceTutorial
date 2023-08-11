@@ -37,10 +37,10 @@ namespace Game.Defend.Tiles
                     else
                         _controllerInProgress.Show(tile);
                 }
-                
-                //if(_controllerInProgress.IsBusy)
-                //    return;
-                
+
+                if (_controllerInProgress.IsBusy)
+                    return;
+
                 _controllerInProgress.Hide();
                 _controllerInProgress = viewController;
                 _controllerInProgress.Show(tile);
