@@ -151,11 +151,10 @@ public class GameBoard : MonoBehaviour
         return true;
     }
 
-    public GameTile DestroyTile(GameTileContent content)
+    public void DestroyTile(GameTile tile)
     {
-        var tile = _tiles.First(t => t.Content == content);
         if (tile.Content.Type <= GameTileContentType.Empty)
-            return tile;
+            return;
         
         _contentToUpdate.Remove(tile.Content);
         
@@ -164,7 +163,6 @@ public class GameBoard : MonoBehaviour
         
         tile.Content = ContentFactory.Get(GameTileContentType.Empty);
         FindPaths();
-        return tile;
     }
     
     public GameTile GetTile(Vector3 position)

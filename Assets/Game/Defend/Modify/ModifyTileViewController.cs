@@ -13,7 +13,7 @@ namespace Game.Defend.Tiles
         private readonly GamePlayUI _gamePlayUI;
         
         private IDisposable _disposableUI;
-        private GameTileContent _selectedTile;
+        private GameTile _selectedTile;
 
         public ModifyTileViewController(GameTileContentType handlingType, GameTileContentFactory contentFactory, 
             GameBoard gameBoard, GamePlayUI gamePlayUI, TilesViewControllerRouter router)
@@ -27,30 +27,33 @@ namespace Game.Defend.Tiles
 
         public event Action<IGameTileViewController> Finished;
         public GameTileContentType HandlingType { get; }
-        public GameTileContent CurrentContent => _selectedTile;
-        public bool IsBusy => false;
+        public GameTile CurrentTile => _selectedTile;
 
-        public async UniTask Show(GameTileContent gameTile)
+        public async UniTask Show(GameTile gameTile)
         {
-            ChangeTarget(gameTile);
-            var assetsLoader = new LocalAssetLoader();
-            var tilesModifierUI = await assetsLoader.LoadDisposable<TilesModifyUI>(AssetsConstants.TilesModifier, 
-                _gamePlayUI.ActionsSocket);
-            _disposableUI = tilesModifierUI;
-            foreach (var button in tilesModifierUI.Value.Buttons)
-            {
-                button.Initialize(this);
-            }
-        }
+            if (_selectedTile == gameTile)
+                return;
 
-        public void ChangeTarget(GameTileContent gameTile)
-        {
             _selectedTile = gameTile;
+
+            if (_disposableUI == null)
+            {
+                var assetsLoader = new LocalAssetLoader();
+                var tilesModifierUI = await assetsLoader.LoadDisposable<TilesModifyUI>(AssetsConstants.TilesModifier,
+                    _gamePlayUI.ActionsSocket);
+                _disposableUI = tilesModifierUI;
+                foreach (var button in tilesModifierUI.Value.Buttons)
+                {
+                    button.Initialize(this);
+                }
+            }
         }
 
         public void Hide()
         {
+            _selectedTile = null;
             _disposableUI.Dispose();
+            _disposableUI = null;
         }
         
         void ITilesModifier.DoWithTile(TileModifyActions actionType)
@@ -73,34 +76,35 @@ namespace Game.Defend.Tiles
 
         private void UpgradeTile()
         {
-            if (_contentFactory.IsNextUpgradeAllowed(_selectedTile))//TODO check money
+            if (_contentFactory.IsNextUpgradeAllowed(_selectedTile.Content))//TODO check money
             {
-                var newTile = _contentFactory.Get(_selectedTile.Type, _selectedTile.Level + 1);
-                var tile = _gameBoard.DestroyTile(_selectedTile);
-                _selectedTile = newTile;
-                _gameBoard.TryBuild(tile, newTile);
+                ReplaceTile(_selectedTile.Content.Level + 1);
             }
         }
 
         private void OnMergeClicked()
         {
-            var tilesAround = _gameBoard.GetTilesAround(_selectedTile)
-                .Where(t => t.Content.Type == _selectedTile.Type);
+            var tilesAround = _gameBoard.GetTilesAround(_selectedTile.Content)
+                .Where(t => t.Content.Type == _selectedTile.Content.Type);
             
-            var currentLevel = _selectedTile.Level;
+            var currentLevel = _selectedTile.Content.Level;
             foreach (var t in tilesAround)
             {
-                currentLevel++;
-                _gameBoard.DestroyTile(t.Content);
+                currentLevel += t.Content.Level;
+                _gameBoard.DestroyTile(t);
             }
             
-            if(_selectedTile.Level == currentLevel)
+            if(_selectedTile.Content.Level == currentLevel)
                 return;
-            
-            var newTile = _contentFactory.Get(_selectedTile.Type, currentLevel);
-            var tile = _gameBoard.DestroyTile(_selectedTile);
-            _selectedTile = newTile;
-            _gameBoard.TryBuild(tile, newTile);
+
+            ReplaceTile(currentLevel);
+        }
+
+        private void ReplaceTile(int level)
+        {
+            var newTile = _contentFactory.Get(_selectedTile.Content.Type, level);
+            _gameBoard.DestroyTile(_selectedTile);
+            _gameBoard.TryBuild(_selectedTile, newTile);
         }
         
         private void DestroyTile()

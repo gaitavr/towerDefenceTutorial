@@ -17,9 +17,9 @@ namespace Game.Defend.Tiles
             _raycaster.TileClicked += OnTileClicked;
         }
 
-        private void OnTileClicked(GameTileContent tile)
+        private void OnTileClicked(GameTile tile)
         {
-            var viewController = _viewControllers.FirstOrDefault(v => v.HandlingType == tile.Type);
+            var viewController = _viewControllers.FirstOrDefault(v => v.HandlingType == tile.Content.Type);
             if (viewController != null)
             {
                 if (_controllerInProgress == null)
@@ -29,20 +29,19 @@ namespace Game.Defend.Tiles
                     return;
                 }
 
+
                 if (_controllerInProgress == viewController)
                 {
-                    if(_controllerInProgress.CurrentContent == tile)
+                    if(_controllerInProgress.CurrentTile == tile || _controllerInProgress.HandlingType == GameTileContentType.Empty)
                         return;
                     else
-                    {
-                        _controllerInProgress.ChangeTarget(tile);
-                    }
+                        _controllerInProgress.Show(tile);
                 }
                 
-                if(_controllerInProgress != null && _controllerInProgress.IsBusy)
-                    return;
+                //if(_controllerInProgress.IsBusy)
+                //    return;
                 
-                _controllerInProgress?.Hide();
+                _controllerInProgress.Hide();
                 _controllerInProgress = viewController;
                 _controllerInProgress.Show(tile);
             }

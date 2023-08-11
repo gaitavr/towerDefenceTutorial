@@ -10,7 +10,7 @@ namespace Game.Defend.Tiles
         
         public Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
 
-        public event Action<GameTileContent> TileClicked;
+        public event Action<GameTile> TileClicked;
 
         public GameTileRaycaster(Camera camera, GameBoard gameBoard)
         {
@@ -32,14 +32,7 @@ namespace Game.Defend.Tiles
                 
             var boardTile = _gameBoard.GetTile(hit.Value.point);
             if (boardTile != null)
-            {
-                TileClicked?.Invoke(boardTile.Content);
-            }
-            else
-            {
-                if(hit.Value.transform.TryGetComponent<GameTileContent>(out var tileContent))
-                    TileClicked?.Invoke(tileContent);
-            }
+                TileClicked?.Invoke(boardTile);
         }
         
         public GameTile GetTile()

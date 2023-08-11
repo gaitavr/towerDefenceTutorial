@@ -33,28 +33,34 @@ namespace Game.Defend.Tiles
         }
 
         public event Action<IGameTileViewController> Finished;
-        GameTileContentType IGameTileViewController.HandlingType => GameTileContentType.Builder;
-        public GameTileContent CurrentContent { get; private set; }
-        public bool IsBusy { get; private set;}
+        GameTileContentType IGameTileViewController.HandlingType => GameTileContentType.Empty;
+        public GameTile CurrentTile { get; private set; }
 
-        async UniTask IGameTileViewController.Show(GameTileContent content)
+        async UniTask IGameTileViewController.Show(GameTile gameTile)
         {
-            CurrentContent = content;
-            var assetsLoader = new LocalAssetLoader();
-            var tilesBuilderUI = await assetsLoader.LoadDisposable<TilesBuilderUI>(AssetsConstants.TilesBuilder, 
-                _gamePlayUI.ActionsSocket);
-            _disposableUI = tilesBuilderUI;
-            foreach (var button in tilesBuilderUI.Value.Buttons)
+            if (CurrentTile == gameTile)
+                return;
+
+            CurrentTile = gameTile;
+
+            if (_disposableUI == null)
             {
-                button.Initialize(this);
+                var assetsLoader = new LocalAssetLoader();
+                var tilesBuilderUI = await assetsLoader.LoadDisposable<TilesBuilderUI>(AssetsConstants.TilesBuilder,
+                    _gamePlayUI.ActionsSocket);
+                _disposableUI = tilesBuilderUI;
+                foreach (var button in tilesBuilderUI.Value.Buttons)
+                {
+                    button.Initialize(this);
+                }
             }
         }
 
-        public void ChangeTarget(GameTileContent gameTile){}
-
         void IGameTileViewController.Hide()
         {
+            CurrentTile = null;
             _disposableUI.Dispose();
+            _disposableUI = null;
         }
 
         public void GameUpdate()
@@ -62,7 +68,6 @@ namespace Game.Defend.Tiles
             if (_isActive == false || IsPaused)
                 return;
 
-            IsBusy = _tempTile != null;
             if (_tempTile != null)
                 ProcessBuilding();
         }

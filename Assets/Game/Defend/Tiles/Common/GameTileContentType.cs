@@ -4,7 +4,6 @@ public enum GameTileContentType : byte
     Empty = 0,
     Destination = 1,
     SpawnPoint = 2,
-    Builder = 3,
     
     Ice = 10,
     Lava = 11,
