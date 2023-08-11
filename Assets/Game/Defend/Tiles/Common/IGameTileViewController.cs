@@ -8,7 +8,6 @@ namespace Game.Defend.Tiles
         event Action<IGameTileViewController> Finished;
 
         GameTileContentType HandlingType { get; }
-        GameTile CurrentTile { get; }
         bool IsBusy { get; }
 
         UniTask Show(GameTile tile);

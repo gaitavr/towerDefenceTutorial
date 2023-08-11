@@ -27,7 +27,6 @@ namespace Game.Defend.Tiles
 
         public event Action<IGameTileViewController> Finished;
         public GameTileContentType HandlingType { get; }
-        public GameTile CurrentTile => _selectedTile;
 
         public bool IsBusy => false;
 

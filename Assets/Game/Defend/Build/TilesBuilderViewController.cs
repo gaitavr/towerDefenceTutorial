@@ -15,6 +15,7 @@ namespace Game.Defend.Tiles
         private readonly GameBoard _gameBoard;
         private readonly GamePlayUI _gamePlayUI;
 
+        private GameTile _selectedTile;
         private GameTileContent _tempTile;
         private bool _isActive;
         private IDisposable _disposableUI;
@@ -34,16 +35,15 @@ namespace Game.Defend.Tiles
 
         public event Action<IGameTileViewController> Finished;
         GameTileContentType IGameTileViewController.HandlingType => GameTileContentType.Empty;
-        public GameTile CurrentTile { get; private set; }
 
         public bool IsBusy { get; private set; }
 
         async UniTask IGameTileViewController.Show(GameTile gameTile)
         {
-            if (CurrentTile == gameTile)
+            if (_selectedTile == gameTile)
                 return;
 
-            CurrentTile = gameTile;
+            _selectedTile = gameTile;
 
             if (_disposableUI == null)
             {
@@ -60,7 +60,7 @@ namespace Game.Defend.Tiles
 
         void IGameTileViewController.Hide()
         {
-            CurrentTile = null;
+            _selectedTile = null;
             _disposableUI.Dispose();
             _disposableUI = null;
         }

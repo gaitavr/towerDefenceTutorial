@@ -29,19 +29,12 @@ namespace Game.Defend.Tiles
                     return;
                 }
 
-
-                if (_controllerInProgress == viewController)
-                {
-                    if(_controllerInProgress.CurrentTile == tile || _controllerInProgress.HandlingType == GameTileContentType.Empty)
-                        return;
-                    else
-                        _controllerInProgress.Show(tile);
-                }
-
                 if (_controllerInProgress.IsBusy)
                     return;
 
-                _controllerInProgress.Hide();
+                if (_controllerInProgress != viewController)
+                    _controllerInProgress.Hide();
+
                 _controllerInProgress = viewController;
                 _controllerInProgress.Show(tile);
             }
