@@ -6,20 +6,20 @@ namespace Game.Defend.Tiles
     public class TilesViewControllerRouter
     {
         private readonly GameTileRaycaster _raycaster;
-        private readonly List<IGameTileViewController> _viewControllers;
+        private readonly List<GameTileViewController> _viewControllers;
 
-        private IGameTileViewController _controllerInProgress;
+        private GameTileViewController _controllerInProgress;
 
         public TilesViewControllerRouter(GameTileRaycaster raycaster)
         {
             _raycaster = raycaster;
-            _viewControllers = new List<IGameTileViewController>(6);
+            _viewControllers = new List<GameTileViewController>(6);
             _raycaster.TileClicked += OnTileClicked;
         }
 
-        private void OnTileClicked(GameTileContent tile)
+        private void OnTileClicked(GameTile tile)
         {
-            var viewController = _viewControllers.FirstOrDefault(v => v.HandlingType == tile.Type);
+            var viewController = _viewControllers.FirstOrDefault(v => v.HandlingType == tile.Content.Type);
             if (viewController != null)
             {
                 if (_controllerInProgress == null)
@@ -29,38 +29,27 @@ namespace Game.Defend.Tiles
                     return;
                 }
 
-                if (_controllerInProgress == viewController)
-                {
-                    if(_controllerInProgress.CurrentContent == tile)
-                        return;
-                    else
-                    {
-                        _controllerInProgress.ChangeTarget(tile);
-                    }
-                }
-                
-                if(_controllerInProgress != null && _controllerInProgress.IsBusy)
-                    return;
-                
-                _controllerInProgress?.Hide();
+                if (_controllerInProgress != viewController)
+                    _controllerInProgress.Hide();
+
                 _controllerInProgress = viewController;
                 _controllerInProgress.Show(tile);
             }
         }
 
-        public void Register(IGameTileViewController viewController)
+        public void Register(GameTileViewController viewController)
         {
             _viewControllers.Add(viewController);
             viewController.Finished += OnControllerFinished;
         }
 
-        private void OnControllerFinished(IGameTileViewController _)
+        private void OnControllerFinished(GameTileViewController _)
         {
             _controllerInProgress?.Hide();
             _controllerInProgress = null;
         }
 
-        public void Unregister(IGameTileViewController viewController)
+        public void Unregister(GameTileViewController viewController)
         {
             _viewControllers.Remove(viewController);
             viewController.Finished -= OnControllerFinished;

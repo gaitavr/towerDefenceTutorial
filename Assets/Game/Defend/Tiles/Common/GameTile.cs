@@ -23,7 +23,7 @@ public class GameTile : MonoBehaviour
 
     public Vector3 ExitPoint { get; private set; }
 
-    public Vector3 Position => transform.position;
+    public Vector2Int BoardPosition { get; set; }
 
     public Direction PathDirection { get; private set; }
 

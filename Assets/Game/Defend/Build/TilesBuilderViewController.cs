@@ -8,53 +8,46 @@ using Object = UnityEngine.Object;
 
 namespace Game.Defend.Tiles
 {
-    public class TilesBuilderViewController : ITilesBuilder, IGameTileViewController
+    public class TilesBuilderViewController : GameTileViewController, ITilesBuilder
     {
-        private readonly GameTileContentFactory _contentFactory;
         private readonly GameTileRaycaster _raycaster;
-        private readonly GameBoard _gameBoard;
-        private readonly GamePlayUI _gamePlayUI;
 
         private GameTileContent _tempTile;
         private bool _isActive;
-        private IDisposable _disposableUI;
 
         private PauseManager PauseManager => ProjectContext.I.PauseManager;
         private bool IsPaused => PauseManager.IsPaused;
 
         public TilesBuilderViewController(GameTileContentFactory contentFactory, GameTileRaycaster raycaster,
-            GameBoard gameBoard, GamePlayUI gamePlayUI, TilesViewControllerRouter router)
+            GameBoard gameBoard, GamePlayUI gamePlayUI, TilesViewControllerRouter router) : base(contentFactory, gameBoard, gamePlayUI)
         {
-            _contentFactory = contentFactory;
             _raycaster = raycaster;
-            _gameBoard = gameBoard;
-            _gamePlayUI = gamePlayUI;
+            HandlingType = GameTileContentType.Empty;
             router.Register(this);
         }
 
-        public event Action<IGameTileViewController> Finished;
-        GameTileContentType IGameTileViewController.HandlingType => GameTileContentType.Builder;
-        public GameTileContent CurrentContent { get; private set; }
-        public bool IsBusy { get; private set;}
-
-        async UniTask IGameTileViewController.Show(GameTileContent content)
+        public override async UniTask Show(GameTile gameTile)
         {
-            CurrentContent = content;
-            var assetsLoader = new LocalAssetLoader();
-            var tilesBuilderUI = await assetsLoader.LoadDisposable<TilesBuilderUI>(AssetsConstants.TilesBuilder, 
-                _gamePlayUI.ActionsSocket);
-            _disposableUI = tilesBuilderUI;
-            foreach (var button in tilesBuilderUI.Value.Buttons)
+            if (_selectedTile == gameTile)
+                return;
+
+            _selectedTile = gameTile;
+
+            if (_disposableUI == null)
             {
-                button.Initialize(this);
+                var subView = await LoadSubView<TilesBuilderUI>(AssetsConstants.TilesBuilder);
+                foreach (var button in subView.Buttons)
+                {
+                    button.Initialize(this);
+                }
             }
         }
 
-        public void ChangeTarget(GameTileContent gameTile){}
-
-        void IGameTileViewController.Hide()
+        public override void Hide()
         {
+            _selectedTile = null;
             _disposableUI.Dispose();
+            _disposableUI = null;
         }
 
         public void GameUpdate()
@@ -62,7 +55,6 @@ namespace Game.Defend.Tiles
             if (_isActive == false || IsPaused)
                 return;
 
-            IsBusy = _tempTile != null;
             if (_tempTile != null)
                 ProcessBuilding();
         }
@@ -80,6 +72,7 @@ namespace Game.Defend.Tiles
                     Object.Destroy(_tempTile.gameObject);
 
                 _tempTile = null;
+                _raycaster.UnMute();
             }
         }
 
@@ -98,6 +91,7 @@ namespace Game.Defend.Tiles
             
             //TODO check money
             _tempTile = _contentFactory.Get(type);
+            _raycaster.Mute();
         }
     }
 }
