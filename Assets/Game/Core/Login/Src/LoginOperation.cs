@@ -3,6 +3,7 @@ using AppInfo;
 using Cysharp.Threading.Tasks;
 using Loading;
 using UnityEngine;
+using Utils;
 
 namespace Login
 {

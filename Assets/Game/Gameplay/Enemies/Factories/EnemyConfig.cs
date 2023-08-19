@@ -1,4 +1,5 @@
 using System;
+using Utils;
 
 [Serializable] 
 public class EnemyConfig

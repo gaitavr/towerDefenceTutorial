@@ -5,7 +5,7 @@ using Core.UI;
 using GameResult;
 using Loading;
 using UnityEngine;
-using Common;
+using Utils;
 using Core.Pause;
 using Cysharp.Threading.Tasks;
 using Game.Core;

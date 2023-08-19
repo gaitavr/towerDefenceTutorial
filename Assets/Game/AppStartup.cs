@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using AppInfo;
+using Cysharp.Threading.Tasks;
 using Loading;
 using Login;
 using UnityEngine;
@@ -19,6 +20,6 @@ public class AppStartup : MonoBehaviour
         loadingOperations.Enqueue(new ConfigOperation(appInfoContainer));
         loadingOperations.Enqueue(new MenuLoadingOperation());
 
-        LoadingProvider.LoadAndDestroy(loadingOperations);
+        LoadingProvider.LoadAndDestroy(loadingOperations).Forget();
     }
 }
