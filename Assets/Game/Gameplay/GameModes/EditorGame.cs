@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using Utils;
 using Core.UI;
 using Cysharp.Threading.Tasks;
 using Game.Core;
 using Game.Defend.Tiles;
 using Loading;
 using UnityEngine;
+using Utils.Serialization;
 
 public class EditorGame : MonoBehaviour, ICleanUp
 {
@@ -19,7 +19,7 @@ public class EditorGame : MonoBehaviour, ICleanUp
     {
         SceneContext.I.ContentFactory
     };
-    public string SceneName => Constants.Scenes.EDITOR_GAME;
+    public string SceneName => Utils.Constants.Scenes.EDITOR_GAME;
     
     private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
     private GameBoard GameBoard => SceneContext.I.GameBoard;
@@ -82,7 +82,7 @@ public class EditorGame : MonoBehaviour, ICleanUp
     {
         var data = new BoardData()
         {
-            Version = Serialization.VERSION,
+            Version = Constants.VERSION,
             AccountId = 1145,
             X = (byte)_boardSize.x,
             Y = (byte)_boardSize.y,

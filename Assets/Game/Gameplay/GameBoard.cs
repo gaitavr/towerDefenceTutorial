@@ -2,6 +2,7 @@
 using System.Linq;
 using Game.Core;
 using UnityEngine;
+using Utils.Serialization;
 
 public class GameBoard : MonoBehaviour
 {

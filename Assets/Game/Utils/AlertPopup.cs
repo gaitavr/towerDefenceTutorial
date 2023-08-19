@@ -1,9 +1,9 @@
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Common
+namespace Utils
 {
     [RequireComponent(typeof(Canvas))]
     public class AlertPopup : MonoBehaviour
@@ -13,7 +13,7 @@ namespace Common
         [SerializeField] private Button _cancelButton;
         [SerializeField] private Button _closeButton;
 
-        private TaskCompletionSource<bool> _taskCompletion;
+        private UniTaskCompletionSource<bool> _taskCompletion;
         private Canvas _canvas;
 
         private void Awake()
@@ -25,11 +25,11 @@ namespace Common
             _closeButton.onClick.AddListener(OnCancelled);
         }
 
-        public async Task<bool> AwaitForDecision(string text)
+        public async UniTask<bool> AwaitForDecision(string text)
         {
             _text.text = text;
             _canvas.enabled = true;
-            _taskCompletion = new TaskCompletionSource<bool>();
+            _taskCompletion = new UniTaskCompletionSource<bool>();
             var result = await _taskCompletion.Task;
             _canvas.enabled = false;
             return result;
@@ -37,12 +37,12 @@ namespace Common
         
         private void OnAccept()
         {
-            _taskCompletion.SetResult(true);
+            _taskCompletion.TrySetResult(true);
         }
 
         private void OnCancelled()
         {
-            _taskCompletion.SetResult(false);
+            _taskCompletion.TrySetResult(false);
         }
     }
 }

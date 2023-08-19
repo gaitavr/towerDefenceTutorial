@@ -11,6 +11,7 @@ using Cysharp.Threading.Tasks;
 using Game.Core;
 using Game.Defend.Tiles;
 using UnityEngine.ResourceManagement.ResourceProviders;
+using Utils.Serialization;
 
 public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
 {
@@ -51,7 +52,7 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
         SceneContext.I.EnemyFactory
     };
 
-    public string SceneName => Constants.Scenes.QUICK_GAME;
+    public string SceneName => Utils.Constants.Scenes.QUICK_GAME;
 
     private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
     private GameBoard GameBoard => SceneContext.I.GameBoard;
