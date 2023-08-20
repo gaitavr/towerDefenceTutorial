@@ -4,9 +4,9 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using Utils.Extensions;
 
-namespace Loading
+namespace Core.Loading
 {
-    public class EditorGameLoadingOperation : ILoadingOperation
+    public sealed class EditorGameLoadingOperation : ILoadingOperation
     {
         public string Description => "Game loading...";
 

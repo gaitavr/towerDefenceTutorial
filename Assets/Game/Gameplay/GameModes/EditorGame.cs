@@ -3,9 +3,9 @@ using Core.UI;
 using Cysharp.Threading.Tasks;
 using Game.Core;
 using Game.Defend.Tiles;
-using Loading;
 using UnityEngine;
 using Utils.Serialization;
+using Core.Loading;
 
 public class EditorGame : MonoBehaviour, ICleanUp
 {

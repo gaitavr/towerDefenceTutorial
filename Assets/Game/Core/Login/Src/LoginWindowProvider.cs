@@ -1,12 +1,12 @@
-using AppInfo;
+using Core;
 using Cysharp.Threading.Tasks;
 using Utils.Assets;
 
 namespace Login
 {
-    public class LoginWindowProvider : LocalAssetLoader
+    public sealed class LoginWindowProvider : LocalAssetLoader
     {
-        public async UniTask<UserInfoContainer> ShowAndHide()
+        public async UniTask<UserAccountState> ShowAndHide()
         {
             var loginWindow = await Load<LoginWindow>(AssetsConstants.LoginWindow);
             var result = await loginWindow.ProcessLogin();

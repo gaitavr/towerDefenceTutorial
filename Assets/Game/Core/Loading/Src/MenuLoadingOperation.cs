@@ -3,9 +3,9 @@ using Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
-namespace Loading
+namespace Core.Loading
 {
-    public class MenuLoadingOperation : ILoadingOperation
+    public sealed class MenuLoadingOperation : ILoadingOperation
     {
         public string Description => "Main menu loading...";
         

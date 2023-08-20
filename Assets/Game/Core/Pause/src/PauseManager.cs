@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Core.Pause
 {
-    public class PauseManager : IPauseHandler
+    public sealed class PauseManager : IPauseHandler
     {
         private PauseHint _hint;
         

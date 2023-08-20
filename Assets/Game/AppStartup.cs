@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using AppInfo;
+using Core;
 using Cysharp.Threading.Tasks;
-using Loading;
-using Login;
+using Core.Loading;
 using UnityEngine;
 
 public class AppStartup : MonoBehaviour
@@ -13,11 +12,11 @@ public class AppStartup : MonoBehaviour
     {
         ProjectContext.I.Initialize();
         
-        var appInfoContainer = new AppInfoContainer();
+        var userContainer = new UserContainer();
         var loadingOperations = new Queue<ILoadingOperation>();
         loadingOperations.Enqueue(ProjectContext.I.AssetProvider);
-        loadingOperations.Enqueue(new LoginOperation(appInfoContainer));
-        loadingOperations.Enqueue(new ConfigOperation(appInfoContainer));
+        loadingOperations.Enqueue(new LoginOperation(userContainer));
+        loadingOperations.Enqueue(new ConfigOperation(userContainer));
         loadingOperations.Enqueue(new MenuLoadingOperation());
 
         LoadingProvider.LoadAndDestroy(loadingOperations).Forget();

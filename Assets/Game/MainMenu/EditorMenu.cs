@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using Utils.Serialization;
-using Loading;
+using Core.Loading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
 
 namespace MainMenu
 {
@@ -62,7 +63,7 @@ namespace MainMenu
                 return;
             var loadingOperations = new Queue<ILoadingOperation>();
             loadingOperations.Enqueue(new EditorGameLoadingOperation(name));
-            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(loadingOperations);
+            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(loadingOperations).Forget();
         }
         
         private void OnElementDeleted(EditorElement element)

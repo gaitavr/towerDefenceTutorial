@@ -1,43 +1,41 @@
 using System;
-using AppInfo;
 using Cysharp.Threading.Tasks;
-using Loading;
 using UnityEngine;
 using Utils;
 
-namespace Login
+namespace Core.Loading
 {
-    public class LoginOperation : ILoadingOperation
+    public sealed class LoginOperation : ILoadingOperation
     {
         public string Description => "Login to server...";
 
-        private readonly AppInfoContainer _appInfoContainer;
+        private readonly UserContainer _userContainer;
 
         private Action<float> _onProgress;
         
-        public LoginOperation(AppInfoContainer appInfoContainer)
+        public LoginOperation(UserContainer userContainer)
         {
-            _appInfoContainer = appInfoContainer;
+            _userContainer = userContainer;
         }
         
         public async UniTask Load(Action<float> onProgress)
         {
             _onProgress = onProgress;
             _onProgress?.Invoke(0.3f);
-            
-            _appInfoContainer.UserInfo = await GetUserInfo(DeviceInfoProvider.GetDeviceId());
+
+            _userContainer.State = await GetAccountState(DeviceInfoProvider.GetDeviceId());
            
             _onProgress?.Invoke(1f);
         }
 
-        private async UniTask<UserInfoContainer> GetUserInfo(string deviceId)
+        private async UniTask<UserAccountState> GetAccountState(string deviceId)
         {
-            UserInfoContainer result = null;
+            UserAccountState result = null;
             
             //Fake login
             if (PlayerPrefs.HasKey(deviceId))
             {
-                result = JsonUtility.FromJson<UserInfoContainer>(PlayerPrefs.GetString(deviceId));
+                result = JsonUtility.FromJson<UserAccountState>(PlayerPrefs.GetString(deviceId));
             }
             await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
             _onProgress?.Invoke(0.6f);

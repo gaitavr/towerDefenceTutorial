@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.UI;
 using GameResult;
-using Loading;
+using Core.Loading;
 using UnityEngine;
 using Utils;
 using Core.Pause;

@@ -1,6 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
-using Loading;
+using Core.Loading;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;

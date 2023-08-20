@@ -1,6 +1,6 @@
-namespace AppInfo
+namespace Core
 {
-    public class UserInfoContainer
+    public sealed class UserAccountState
     {
         public string Id { get; set; }
         public string FacebookId { get; set; }
