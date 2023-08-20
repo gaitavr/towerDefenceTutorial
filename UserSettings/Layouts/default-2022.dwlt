@@ -94,8 +94,8 @@ MonoBehaviour:
     y: 0
     width: 310
     height: 947
-  m_MinSize: {x: 276, y: 71}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
@@ -418,14 +418,15 @@ MonoBehaviour:
   m_LastFolders:
   - Assets/Game/Scenes
   m_LastFoldersGridSize: 16
-  m_LastProjectPath: C:\Users\gaitavr\Desktop\Projects\TowerDefence
+  m_LastProjectPath: "C:\\Users\\maksy\\OneDrive\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439
+    \u0441\u0442\u043E\u043B\\Projects\\TowerDefence"
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 826a0000
-    m_LastClickedID: 27266
-    m_ExpandedIDs: 00000000ce680000d0680000d2680000d4680000d6680000d8680000da680000dc680000de680000e0680000e2680000e4680000e668000000ca9a3b
+    m_SelectedIDs: 4c430000
+    m_LastClickedID: 17228
+    m_ExpandedIDs: 00000000c44000001441000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -453,7 +454,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ce680000d0680000d2680000d4680000d6680000d8680000da680000dc680000de680000e0680000e2680000e4680000e6680000
+    m_ExpandedIDs: 
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -480,7 +481,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000d4640000d2640000d476000000000000e8760000b6780000b27800004c77000092670000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -597,7 +598,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 0afbffff
+      m_ExpandedIDs: 9edbfdff8eddfdff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -991,9 +992,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -2.0827866, y: -0.26558137, z: -4.173111}
+    m_Target: {x: -16.250854, y: -16.885574, z: -9.366461}
     speed: 2
-    m_Value: {x: -2.0827866, y: -0.26558137, z: -4.173111}
+    m_Value: {x: -16.250854, y: -16.885574, z: -9.366461}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1039,13 +1040,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.46014628, y: -0.080506474, z: 0.041944284, w: -0.88319075}
+    m_Target: {x: -0.2446654, y: 0.72390455, z: -0.31446755, w: -0.5632179}
     speed: 2
-    m_Value: {x: -0.46014607, y: -0.08050644, z: 0.041944265, w: -0.88319033}
+    m_Value: {x: -0.24466541, y: 0.7239046, z: -0.31446758, w: -0.5632179}
   m_Size:
-    m_Target: 0.75
+    m_Target: 15.071334
     speed: 2
-    m_Value: 0.75
+    m_Value: 15.071334
   m_Ortho:
     m_Target: 0
     speed: 2

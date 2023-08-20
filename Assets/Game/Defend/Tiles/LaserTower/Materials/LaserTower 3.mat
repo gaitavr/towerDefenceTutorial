@@ -237,7 +237,9 @@ Material:
     - Vector1_84D6889A: 1
     - Vector1_E111C4D0: 0
     - _AlphaClip: 0
+    - _AlphaToMask: 0
     - _Blend: 0
+    - _BlendModePreserveSpecular: 1
     - _Brightness: 1.31
     - _BumpScale: 1
     - _ClearCoatMask: 0
@@ -251,6 +253,7 @@ Material:
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
     - _Flickering: 0
     - _Flickeringintensity: 1
@@ -274,6 +277,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
     - _Surface: 0
     - _ToggleSwitch0: 0
     - _UVSec: 0
@@ -289,7 +293,7 @@ Material:
     - Color_D5189F39: {r: 0.6901961, g: 0.49901488, b: 0.33333334, a: 1}
     - _3: {r: 0.6981132, g: 0.5566645, b: 0.4511392, a: 0}
     - _BaseColor: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
-    - _Color: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
+    - _Color: {r: 0.38679245, g: 0.38679245, b: 0.38679245, a: 1}
     - _Color0: {r: 7.7653, g: 0.7419075, b: 0, a: 0}
     - _EmissionColor: {r: 16.096075, g: 1.2907232, b: 1.2907232, a: 1}
     - _Emissivecolor: {r: 2.1185474, g: 0.03327561, b: 0, a: 0}
