@@ -5,7 +5,6 @@ using Core.UI;
 using GameResult;
 using Core.Loading;
 using UnityEngine;
-using Utils;
 using Core.Pause;
 using Cysharp.Threading.Tasks;
 using Game.Core;
@@ -13,7 +12,7 @@ using Game.Defend.Tiles;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using Utils.Serialization;
 
-public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
+public class QuickGameMode : MonoBehaviour, ICleanUp, IPauseHandler
 {
     [SerializeField] private Vector2Int _boardSize;
     [SerializeField] private DefenderHud _defenderHud;
@@ -29,7 +28,7 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
     private CancellationTokenSource _prepareCancellation;
     private SceneInstance _environment;
     private int _playerHealth;
-    private static QuickGame _instance;
+    private static QuickGameMode _instance;
 
     private readonly GameBehaviorCollection _enemies = new();
     private readonly GameBehaviorCollection _nonEnemies = new();
@@ -52,7 +51,7 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
         SceneContext.I.EnemyFactory
     };
 
-    public string SceneName => Utils.Constants.Scenes.QUICK_GAME;
+    public string SceneName => Utils.Constants.Scenes.QUICK_GAME_MODE;
 
     private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
     private GameBoard GameBoard => SceneContext.I.GameBoard;
@@ -63,23 +62,8 @@ public class QuickGame : MonoBehaviour, ICleanUp, IPauseHandler
         ProjectContext.I.PauseManager.Register(this);
         SceneContext.I.Initialize();
         _environment = environment;
-        var initialData = GenerateInitialData();
+        var initialData = BoardData.GetEmpty(_boardSize);
         GameBoard.Initialize(initialData);
-    }
-
-    private BoardData GenerateInitialData()
-    {
-        var size = _boardSize.x * _boardSize.y;
-        var result = new BoardData
-        {
-            X = (byte) _boardSize.x,
-            Y = (byte) _boardSize.y,
-            Content = new GameTileContentType[size],
-            Levels = new byte[size]
-        };
-        result.Content[0] = GameTileContentType.SpawnPoint;
-        result.Content[^1] = GameTileContentType.Destination;
-        return result;
     }
 
     private void Update()

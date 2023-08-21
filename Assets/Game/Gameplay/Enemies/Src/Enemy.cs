@@ -88,7 +88,7 @@ public class Enemy : GameBehavior
         {
             if (_tileTo == null)
             {
-                QuickGame.EnemyReachedDestination();
+                QuickGameMode.EnemyReachedDestination();
                 Recycle();
                 return false;
             }

@@ -75,7 +75,7 @@ public class MortarTower : Tower
         
         _rotator.localRotation = Quaternion.LookRotation(dir);
 
-        QuickGame.SpawnShell().Initialize(launchPoint, targetPoint, 
+        QuickGameMode.SpawnShell().Initialize(launchPoint, targetPoint, 
             new Vector3(s * cosTheta * dir.x, s * sinTheta, s * cosTheta * dir.z), _shellBlastRadius, _damage);
     }
 

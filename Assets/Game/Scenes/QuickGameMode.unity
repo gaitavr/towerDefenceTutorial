@@ -1715,7 +1715,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1521759508}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42b34179399b41b45ab98cae71b27bff, type: 3}
+  m_Script: {fileID: 11500000, guid: 1c6de03df12349f4d8bd301aee10b8ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _boardSize: {x: 15, y: 10}
@@ -1723,8 +1723,8 @@ MonoBehaviour:
   _gameResultWindow: {fileID: 1729267268586526427}
   _prepareGamePanel: {fileID: 784321312}
   _scenario: {fileID: 11400000, guid: c64b1bd3289e2334eb98cec56e6ad09b, type: 2}
-  _startingPlayerHealth: 100
-  _prepareTime: 5
+  _startingPlayerHealth: 10
+  _prepareTime: 15
 --- !u!4 &1521759510
 Transform:
   m_ObjectHideFlags: 0

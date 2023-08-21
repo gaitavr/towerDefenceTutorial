@@ -6,13 +6,13 @@ using Utils.Extensions;
 
 namespace Core.Loading
 {
-    public sealed class EditorGameLoadingOperation : ILoadingOperation
+    public sealed class EditorModeLoadingOperation : ILoadingOperation
     {
         public string Description => "Game loading...";
 
         private readonly string _fileName;
 
-        public EditorGameLoadingOperation(string fileName)
+        public EditorModeLoadingOperation(string fileName)
         {
             _fileName = fileName;
         }
@@ -20,16 +20,16 @@ namespace Core.Loading
         public async UniTask Load(Action<float> onProgress)
         {
             onProgress?.Invoke(0.3f);
-            var loadOp = SceneManager.LoadSceneAsync(Constants.Scenes.EDITOR_GAME, 
+            var loadOp = SceneManager.LoadSceneAsync(Constants.Scenes.EDITOR_MODE, 
                 LoadSceneMode.Single);
             while (loadOp.isDone == false)
             {
                 await UniTask.Delay(1);
             }
             
-            var scene = SceneManager.GetSceneByName(Constants.Scenes.EDITOR_GAME);
-            var editorGame = scene.GetRoot<EditorGame>();
-            editorGame.Init(_fileName);
+            var scene = SceneManager.GetSceneByName(Constants.Scenes.EDITOR_MODE);
+            var editorGame = scene.GetRoot<BoardEditorMode>();
+            editorGame.Init(new UnityEngine.Vector2Int(10, 15));
             onProgress?.Invoke(0.9f);
             
             editorGame.BeginNewGame();

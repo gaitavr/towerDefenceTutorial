@@ -6,52 +6,40 @@ using Game.Defend.Tiles;
 using UnityEngine;
 using Utils.Serialization;
 using Core.Loading;
+using Core;
 
-public class EditorGame : MonoBehaviour, ICleanUp
+//TODO undo + pattern command
+public class BoardEditorMode : MonoBehaviour, ICleanUp
 {
-    [SerializeField] private Vector2Int _boardSize;
     [SerializeField] private EditorHud _hud;
-    
-    private readonly BoardSerializer _serializer = new();
-    private string _fileName;
-    
+
+    private Vector2Int _boardSize;
+
+    private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
+    private GameBoard GameBoard => SceneContext.I.GameBoard;
+    private UserAccountState UserState => ProjectContext.I.UserContainer.State;
+
     public IEnumerable<GameObjectFactory> Factories => new GameObjectFactory[]
     {
         SceneContext.I.ContentFactory
     };
-    public string SceneName => Utils.Constants.Scenes.EDITOR_GAME;
-    
-    private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
-    private GameBoard GameBoard => SceneContext.I.GameBoard;
+    public string SceneName => Utils.Constants.Scenes.EDITOR_MODE;
 
-    public void Init(string fileName)
+    public void Init(Vector2Int boardSize, string boardName = null)
     {
+        _boardSize = boardSize;
         SceneContext.I.Initialize();
-        _fileName = fileName;
-        var initialData = GenerateInitialData();
-        GameBoard.Initialize(initialData);
-    }
 
-    private BoardData GenerateInitialData()
-    {
-        var result = _serializer.Load(_fileName);
-        if (result == null)
-        {
-            result = new BoardData
-            {
-                X = (byte) _boardSize.x,
-                Y = (byte) _boardSize.y,
-                Content = new GameTileContentType[_boardSize.x * _boardSize.y]
-            };
-            result.Content[0] = GameTileContentType.SpawnPoint;
-            result.Content[^1] = GameTileContentType.Destination;
-        }
-        return result;
+        BoardData initialData = null;
+        if (boardName != null)
+            initialData = UserState.TryGetBoard(boardName);
+
+        initialData ??= BoardData.GetEmpty(boardSize);
+        GameBoard.Initialize(initialData);
     }
     
     public void BeginNewGame()
     {
-        Cleanup();
         _hud.QuitGame += GoToMainMenu;
         _hud.SaveClicked += OnSaveClicked;
         TilesBuilder.SetActive(true);
@@ -83,12 +71,12 @@ public class EditorGame : MonoBehaviour, ICleanUp
         var data = new BoardData()
         {
             Version = Constants.VERSION,
-            AccountId = 1145,
+            AccountId = UserState.Id,
             X = (byte)_boardSize.x,
             Y = (byte)_boardSize.y,
             Content = GameBoard.GetAllContentTypes,
             Levels = GameBoard.GetAllContentLevels
         };
-        _serializer.Save(data, _fileName);
+        //_serializer.Save(data, _fileName);
     }
 }

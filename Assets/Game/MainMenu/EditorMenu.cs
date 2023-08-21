@@ -62,7 +62,7 @@ namespace MainMenu
             if(string.IsNullOrEmpty(name))
                 return;
             var loadingOperations = new Queue<ILoadingOperation>();
-            loadingOperations.Enqueue(new EditorGameLoadingOperation(name));
+            loadingOperations.Enqueue(new EditorModeLoadingOperation(name));
             ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(loadingOperations).Forget();
         }
         

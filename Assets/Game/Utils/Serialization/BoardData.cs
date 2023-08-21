@@ -1,4 +1,6 @@
 using System;
+using System.Drawing;
+using UnityEngine;
 
 namespace Utils.Serialization
 {
@@ -59,6 +61,21 @@ namespace Utils.Serialization
                 result.Content[i] = (GameTileContentType)content[i];
             }
 
+            return result;
+        }
+
+        public static BoardData GetEmpty(Vector2Int boardSize)
+        {
+            var size = boardSize.x * boardSize.y;
+            var result = new BoardData
+            {
+                X = (byte)boardSize.x,
+                Y = (byte)boardSize.y,
+                Content = new GameTileContentType[size],
+                Levels = new byte[size]
+            };
+            result.Content[0] = GameTileContentType.SpawnPoint;
+            result.Content[^1] = GameTileContentType.Destination;
             return result;
         }
     }
