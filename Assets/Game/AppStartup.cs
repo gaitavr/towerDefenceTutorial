@@ -12,11 +12,10 @@ public class AppStartup : MonoBehaviour
     {
         ProjectContext.I.Initialize();
         
-        var userContainer = new UserContainer();
         var loadingOperations = new Queue<ILoadingOperation>();
         loadingOperations.Enqueue(ProjectContext.I.AssetProvider);
-        loadingOperations.Enqueue(new LoginOperation(userContainer));
-        loadingOperations.Enqueue(new ConfigOperation(userContainer));
+        loadingOperations.Enqueue(new LoginOperation());
+        loadingOperations.Enqueue(new ConfigOperation());
         loadingOperations.Enqueue(new MenuLoadingOperation());
 
         LoadingProvider.LoadAndDestroy(loadingOperations).Forget();

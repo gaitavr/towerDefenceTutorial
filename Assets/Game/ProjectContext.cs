@@ -3,11 +3,12 @@ using Login;
 using UnityEngine;
 using Utils.Assets;
 using Core.Loading;
+using Core;
 
 public class ProjectContext : MonoBehaviour
 {
+    public UserContainer UserContainer { get; private set; }
     public LoadingScreenProvider LoadingScreenProvider { get; private set; }
-    public LoginWindowProvider LoginWindowProvider { get; private set; }
     public AssetProvider AssetProvider { get; private set; }
     public PauseManager PauseManager { get; private set; }
 
@@ -21,8 +22,8 @@ public class ProjectContext : MonoBehaviour
 
     public void Initialize()
     {
+        UserContainer = new UserContainer();
         LoadingScreenProvider = new LoadingScreenProvider();
-        LoginWindowProvider = new LoginWindowProvider();
         AssetProvider = new AssetProvider();
         PauseManager = new PauseManager();
     }

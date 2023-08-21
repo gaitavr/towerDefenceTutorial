@@ -32,10 +32,8 @@ namespace Login
         {
             if(_nameField.text.Length < NAME_MIN_LENGTH)
                 return;
-            _loginCompletionSource.TrySetResult(new UserAccountState()
-            {
-                Name = _nameField.text
-            });
+            var initialState = UserAccountState.GetInitial(_nameField.text);
+            _loginCompletionSource.TrySetResult(initialState);
         }
 
         private void OnFacebookLoginClicked()

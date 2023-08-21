@@ -6,13 +6,7 @@ namespace Core.Loading
 {
     public sealed class ConfigOperation : ILoadingOperation
     {
-
         public string Description => "Configuration loading...";
-        
-        public ConfigOperation(UserContainer userContainer)
-        {
-            
-        }
         
         public async UniTask Load(Action<float> onProgress)
         {

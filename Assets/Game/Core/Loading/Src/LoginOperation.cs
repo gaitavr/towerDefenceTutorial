@@ -1,7 +1,9 @@
 using System;
 using Cysharp.Threading.Tasks;
+using Login;
 using UnityEngine;
 using Utils;
+using Utils.Assets;
 
 namespace Core.Loading
 {
@@ -9,21 +11,14 @@ namespace Core.Loading
     {
         public string Description => "Login to server...";
 
-        private readonly UserContainer _userContainer;
-
         private Action<float> _onProgress;
-        
-        public LoginOperation(UserContainer userContainer)
-        {
-            _userContainer = userContainer;
-        }
         
         public async UniTask Load(Action<float> onProgress)
         {
             _onProgress = onProgress;
             _onProgress?.Invoke(0.3f);
 
-            _userContainer.State = await GetAccountState(DeviceInfoProvider.GetDeviceId());
+            ProjectContext.I.UserContainer.State = await GetAccountState(DeviceInfoProvider.GetDeviceId());
            
             _onProgress?.Invoke(1f);
         }
@@ -34,18 +29,20 @@ namespace Core.Loading
             
             //Fake login
             if (PlayerPrefs.HasKey(deviceId))
-            {
                 result = JsonUtility.FromJson<UserAccountState>(PlayerPrefs.GetString(deviceId));
-            }
+
             await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
             _onProgress?.Invoke(0.6f);
             //Fake login
 
             if (result == null)
             {
-                result = await ProjectContext.I.LoginWindowProvider.ShowAndHide();
+                var assetsLoader = new LocalAssetLoader();
+                var loginWindow = await assetsLoader.Load<LoginWindow>(AssetsConstants.LoginWindow);
+                result = await loginWindow.ProcessLogin();
+                assetsLoader.Unload();
             }
-            
+
             PlayerPrefs.SetString(deviceId, JsonUtility.ToJson(result));
             
             return result;

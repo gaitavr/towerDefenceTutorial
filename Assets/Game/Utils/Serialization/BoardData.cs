@@ -41,9 +41,7 @@ namespace Utils.Serialization
 
             offset += ByteConverter.ReturnFromStream(data, offset, out int version);
             if (version != Constants.VERSION)
-            {
                 return null;
-            }
 
             var result = new BoardData();
 
