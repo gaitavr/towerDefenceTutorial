@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Core.Pause
 {
-    public class PauseHint : MonoBehaviour
+    public sealed class PauseHint : MonoBehaviour
     {
         [SerializeField] private TMP_Text _hint;
         [SerializeField] private float _delay;

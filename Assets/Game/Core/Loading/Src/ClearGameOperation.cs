@@ -1,12 +1,11 @@
 using System;
-using System.Threading.Tasks;
-using Common;
+using Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
-namespace Loading
+namespace Core.Loading
 {
-    public class ClearGameOperation : ILoadingOperation
+    public sealed class ClearGameOperation : ILoadingOperation
     {
         public string Description => "Clearing...";
 

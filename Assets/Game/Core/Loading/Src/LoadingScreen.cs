@@ -6,9 +6,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Loading
+namespace Core.Loading
 {
-    public class LoadingScreen : MonoBehaviour
+    public sealed class LoadingScreen : MonoBehaviour
     {
         [SerializeField] private Canvas _canvas;
         [SerializeField] private Slider _progressFill;

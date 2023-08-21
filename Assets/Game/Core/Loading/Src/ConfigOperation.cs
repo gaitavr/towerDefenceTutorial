@@ -1,19 +1,12 @@
 using System;
-using System.Threading.Tasks;
-using AppInfo;
+using Core;
 using Cysharp.Threading.Tasks;
-using Random = UnityEngine.Random;
 
-namespace Loading
+namespace Core.Loading
 {
-    public class ConfigOperation : ILoadingOperation
+    public sealed class ConfigOperation : ILoadingOperation
     {
         public string Description => "Configuration loading...";
-        
-        public ConfigOperation(AppInfoContainer appInfoContainer)
-        {
-            
-        }
         
         public async UniTask Load(Action<float> onProgress)
         {
