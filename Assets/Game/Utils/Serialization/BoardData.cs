@@ -1,14 +1,12 @@
-using System;
-using System.Drawing;
+using System.Text;
 using UnityEngine;
 
 namespace Utils.Serialization
 {
-    [Serializable]
-    public class BoardData
+    public class BoardData : ISerializable
     {
         public int Version;
-        public int AccountId;
+        public string Name;
         public byte X;
         public byte Y;
         public GameTileContentType[] Content;
@@ -16,14 +14,17 @@ namespace Utils.Serialization
 
         public byte[] Serialize()
         {
-            var result = new byte[sizeof(int) + sizeof(int) + sizeof(byte) * 2 +
+            var nameBytes = Encoding.UTF8.GetBytes(Name);
+            var result = new byte[sizeof(int) + sizeof(byte) + nameBytes.Length + sizeof(byte) * 2 +
                                   sizeof(byte) * Content.Length + sizeof(byte) * Levels.Length];
 
             var offset = 0;
             offset += ByteConverter.AddToStream(Version, result, offset);
-            offset += ByteConverter.AddToStream(AccountId, result, offset);
+            offset += ByteConverter.AddToStream((byte)nameBytes.Length, result, offset);
+            offset += ByteConverter.AddToStream(nameBytes, result, offset);
             offset += ByteConverter.AddToStream(X, result, offset);
             offset += ByteConverter.AddToStream(Y, result, offset);
+
             foreach (var c in Content)
             {
                 offset += ByteConverter.AddToStream((byte)c, result, offset);
@@ -37,42 +38,40 @@ namespace Utils.Serialization
             return result;
         }
 
-        public static BoardData Deserialize(byte[] data)
+        public void Deserialize(byte[] data)
         {
             var offset = 0;
 
-            offset += ByteConverter.ReturnFromStream(data, offset, out int version);
-            if (version != Constants.VERSION)
-                return null;
+            offset += ByteConverter.ReturnFromStream(data, offset, out Version);
 
-            var result = new BoardData();
+            offset += ByteConverter.ReturnFromStream(data, offset, out byte nameSize);
+            offset += ByteConverter.ReturnFromStream(data, offset, nameSize, out var nameBytes);
+            Name = Encoding.UTF8.GetString(nameBytes);
+            offset += ByteConverter.ReturnFromStream(data, offset, out X);
+            offset += ByteConverter.ReturnFromStream(data, offset, out Y);
 
-            offset += ByteConverter.ReturnFromStream(data, offset, out result.AccountId);
-            offset += ByteConverter.ReturnFromStream(data, offset, out result.X);
-            offset += ByteConverter.ReturnFromStream(data, offset, out result.Y);
-
-            int size = result.X * result.Y;
+            int size = X * Y;
             offset += ByteConverter.ReturnFromStream(data, offset, size, out byte[] content);
-            offset += ByteConverter.ReturnFromStream(data, offset, size, out result.Levels);
+            offset += ByteConverter.ReturnFromStream(data, offset, size, out Levels);
 
-            result.Content = new GameTileContentType[content.Length];
+            Content = new GameTileContentType[content.Length];
             for (var i = 0; i < content.Length; i++)
             {
-                result.Content[i] = (GameTileContentType)content[i];
+                Content[i] = (GameTileContentType)content[i];
             }
-
-            return result;
         }
 
-        public static BoardData GetEmpty(Vector2Int boardSize)
+        public static BoardData GetInitial(Vector2Int boardSize)
         {
             var size = boardSize.x * boardSize.y;
             var result = new BoardData
             {
+                Version = 1,
+                Name = $"test{size}",
                 X = (byte)boardSize.x,
                 Y = (byte)boardSize.y,
                 Content = new GameTileContentType[size],
-                Levels = new byte[size]
+                Levels = new byte[size],
             };
             result.Content[0] = GameTileContentType.SpawnPoint;
             result.Content[^1] = GameTileContentType.Destination;

@@ -1,21 +1,18 @@
 using Utils;
 using UnityEditor;
 using UnityEngine;
+using System.IO;
 
 namespace Editor
 {
     public class HelperMenu
     {
-        [MenuItem("Tools/Progress/Clear login")]
-        public static void ClearLoginPrefs()
+        [MenuItem("Tools/Progress/Clear Account Data")]
+        public static void ClearAccountData()
         {
-            PlayerPrefs.DeleteKey(DeviceInfoProvider.GetDeviceId());
-        }
-        
-        [MenuItem("Tools/Progress/Clear prefs")]
-        public static void ClearPrefs()
-        {
-            PlayerPrefs.DeleteAll();
+            var path = $"{Application.persistentDataPath}/userAccountState.def";
+            if (File.Exists(path))
+                File.Delete(path);
         }
         
         [MenuItem("Tools/Assets/Clear Asset Bundle Cache")]

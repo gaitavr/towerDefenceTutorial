@@ -4,6 +4,7 @@ using Login;
 using UnityEngine;
 using Utils;
 using Utils.Assets;
+using System.IO;
 
 namespace Core.Loading
 {
@@ -25,26 +26,31 @@ namespace Core.Loading
 
         private async UniTask<UserAccountState> GetAccountState(string deviceId)
         {
-            UserAccountState result = null;
-            
+            var result = new UserAccountState();
+
             //Fake login
-            if (PlayerPrefs.HasKey(deviceId))
-                result = JsonUtility.FromJson<UserAccountState>(PlayerPrefs.GetString(deviceId));
+            var path = $"{Application.persistentDataPath}/userAccountState.def";
+            if (File.Exists(path))
+            {
+                var readBytes = File.ReadAllBytes(path);
+                result.Deserialize(readBytes);
+            }
 
             await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
             _onProgress?.Invoke(0.6f);
             //Fake login
 
-            if (result == null)
+            if (result.IsValid() == false)
             {
                 var assetsLoader = new LocalAssetLoader();
                 var loginWindow = await assetsLoader.Load<LoginWindow>(AssetsConstants.LoginWindow);
                 result = await loginWindow.ProcessLogin();
                 assetsLoader.Unload();
+
+                var writeBytes = result.Serialize();
+                File.WriteAllBytes(path, writeBytes);
             }
 
-            PlayerPrefs.SetString(deviceId, JsonUtility.ToJson(result));
-            
             return result;
         }
     }

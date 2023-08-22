@@ -1,17 +1,82 @@
 using System.Collections.Generic;
 using Utils.Serialization;
 using System;
+using System.Linq;
 
 namespace Core
 {
-    [Serializable]
-    public sealed class UserAccountState
+    public sealed class UserAccountState : ISerializable
     {
+        public int Version;
         public int Id;
 
         public UserSocialState Social;
         public UserCurrenciesState Currencies;
-        public Dictionary<string, BoardData> Boards { get; private set; }
+        public List<BoardData> Boards;
+
+        public byte[] Serialize()
+        {
+            var boards = new List<byte>(100);
+
+            if (Boards != null)
+            {
+                boards.Add((byte)Boards.Count);
+                foreach (var board in Boards)
+                {
+                    var serializedBoard = board.Serialize();
+                    boards.AddRange(ByteConverter.Serialize(serializedBoard.Length));
+                    boards.AddRange(serializedBoard);
+                }
+            }
+
+            var socialBytes = Social.Serialize();
+            var currenciesBytes = Currencies.Serialize();
+            var result = new byte[sizeof(int) * 2 + sizeof(int) + socialBytes.Length + sizeof(int) + currenciesBytes.Length
+                + sizeof(byte) + boards.Count];
+
+            var offset = 0;
+            offset += ByteConverter.AddToStream(Version, result, offset);
+            offset += ByteConverter.AddToStream(Id, result, offset);
+
+            offset += ByteConverter.AddToStream(socialBytes.Length, result, offset);
+            offset += ByteConverter.AddToStream(socialBytes, result, offset);
+
+            offset += ByteConverter.AddToStream(currenciesBytes.Length, result, offset);
+            offset += ByteConverter.AddToStream(currenciesBytes, result, offset);
+
+            offset += ByteConverter.AddToStream(boards.ToArray(), result, offset);
+
+            return result;
+        }
+
+        public void Deserialize(byte[] data)
+        {
+            var offset = 0;
+
+            offset += ByteConverter.ReturnFromStream(data, offset, out Version);
+            offset += ByteConverter.ReturnFromStream(data, offset, out Id);
+
+            Social = new UserSocialState();
+            offset += ByteConverter.ReturnFromStream(data, offset, out int socialSize);
+            offset += ByteConverter.ReturnFromStream(data, offset, socialSize, out var socialBytes);
+            Social.Deserialize(socialBytes);
+
+            Currencies = new UserCurrenciesState();
+            offset += ByteConverter.ReturnFromStream(data, offset, out int currenciesSize);
+            offset += ByteConverter.ReturnFromStream(data, offset, currenciesSize, out var currenciesBytes);
+            Currencies.Deserialize(currenciesBytes);
+            
+            offset += ByteConverter.ReturnFromStream(data, offset, out byte boardsCount);
+            Boards = new List<BoardData>(boardsCount);
+            for (int i = 0; i < boardsCount; i++)
+            {
+                offset += ByteConverter.ReturnFromStream(data, offset, out int boardSize);
+                offset += ByteConverter.ReturnFromStream(data, offset, boardSize, out var boardBytes);
+                var board = new BoardData();
+                board.Deserialize(boardBytes);
+                Boards.Add(board);
+            }
+        }
 
         public static UserAccountState GetInitial(string name)
         {
@@ -21,6 +86,7 @@ namespace Core
                 Id = rnd.Next(1, int.MaxValue),
                 Social = new UserSocialState()
                 {
+                    FacebookId = "",
                     Name = name,
                     AvatarPath = "guest/avatar1.png",
                 },
@@ -29,33 +95,38 @@ namespace Core
                     Crystals = 10000,
                     Gas = 0
                 },
+                Boards = new List<BoardData>()
+                {
+                    BoardData.GetInitial(new UnityEngine.Vector2Int(20, 25) ),
+                    BoardData.GetInitial(new UnityEngine.Vector2Int(25, 15) )
+                }
             };
         }
 
         public BoardData TryGetBoard(string boardName)
         {
-            Boards ??= new Dictionary<string, BoardData>();
-            return Boards.ContainsKey(boardName) ? Boards[boardName] : null;
+            return Boards.FirstOrDefault(b => b.Name == boardName);
         }
 
         public bool TryAddBoard(string boardName, BoardData board)
         {
-            Boards ??= new Dictionary<string, BoardData>();
-            if (Boards.ContainsKey(boardName))
+            if (Boards.Any(b => b.Name == boardName))
                 return false;
 
-            Boards.Add(boardName, board);
+            Boards.Add(board);
             return true;
         }
 
         public bool TryDeleteBoard(string boardName)
         {
-            Boards ??= new Dictionary<string, BoardData>();
-            if (Boards.ContainsKey(boardName))
+            var boardToDelete = TryGetBoard(boardName);
+            if (boardToDelete == null)
                 return false;
 
-            Boards.Remove(boardName);
+            Boards.Remove(boardToDelete);
             return true;
         }
+
+        public bool IsValid() => Id > 0;
     }
 }

@@ -62,7 +62,7 @@ public class QuickGameMode : MonoBehaviour, ICleanUp, IPauseHandler
         ProjectContext.I.PauseManager.Register(this);
         SceneContext.I.Initialize();
         _environment = environment;
-        var initialData = BoardData.GetEmpty(_boardSize);
+        var initialData = BoardData.GetInitial(_boardSize);
         GameBoard.Initialize(initialData);
     }
 

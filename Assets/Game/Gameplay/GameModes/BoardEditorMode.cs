@@ -34,7 +34,7 @@ public class BoardEditorMode : MonoBehaviour, ICleanUp
         if (boardName != null)
             initialData = UserState.TryGetBoard(boardName);
 
-        initialData ??= BoardData.GetEmpty(boardSize);
+        initialData ??= BoardData.GetInitial(boardSize);
         GameBoard.Initialize(initialData);
     }
     
@@ -70,8 +70,8 @@ public class BoardEditorMode : MonoBehaviour, ICleanUp
     {
         var data = new BoardData()
         {
-            Version = Constants.VERSION,
-            AccountId = UserState.Id,
+            Version = 1,
+            Name = "test",
             X = (byte)_boardSize.x,
             Y = (byte)_boardSize.y,
             Content = GameBoard.GetAllContentTypes,

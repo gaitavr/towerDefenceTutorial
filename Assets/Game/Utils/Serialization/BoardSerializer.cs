@@ -40,12 +40,12 @@ namespace Utils.Serialization
 #endif
         }
 
-        public BoardData Load(string fileName)
-        {
-            var savePath = $"{Application.persistentDataPath}/{Constants.DEFEND_PATH}/{fileName}{Constants.DEFEND_EXTENSION}";
-            if (File.Exists(savePath) == false)
-                return null;
-            return BoardData.Deserialize(File.ReadAllBytes(savePath));
-        }
+        //public BoardData Load(string fileName)
+        //{
+        //    var savePath = $"{Application.persistentDataPath}/{Constants.DEFEND_PATH}/{fileName}{Constants.DEFEND_EXTENSION}";
+        //    if (File.Exists(savePath) == false)
+        //        return null;
+        //    return BoardData.Deserialize(File.ReadAllBytes(savePath));
+        //}
     }
 }
