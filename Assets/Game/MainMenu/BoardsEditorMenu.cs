@@ -7,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using Core;
 using Utils.Serialization;
 using Utils;
+using System;
 
 namespace MainMenu
 {
@@ -77,23 +78,51 @@ namespace MainMenu
 
         public void Select(BoardsEditorMenuItem item) => LoadBoard(item.Context);
 
-        public void Delete(BoardsEditorMenuItem item)
+        public async void Delete(BoardsEditorMenuItem item)
         {
-            //TODO confirm
-            UserState.TryDeleteBoard(item.Context.Name);
-            //TODO save 
-            _items.Remove(item);
-            Destroy(item.gameObject);
+            try
+            {
+                var alertPopup = await AlertPopup.Load();
+                var isConfirmed = await alertPopup.Value.AwaitForDecision("Are you sure to delete this board?");
+                alertPopup.Dispose();
+                if (isConfirmed == false)
+                    return;
+
+                UserState.TryDeleteBoard(item.Context.Name);
+                var saveResult = await ProjectContext.I.UserStateCommunicator.SaveUserState(UserState);
+                if (saveResult)
+                {
+                    _items.Remove(item);
+                    Destroy(item.gameObject);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Delete board exception: {e.Message}");
+            }
         }
 
-        public void Rename(BoardsEditorMenuItem item, string newName)
+        public async void Rename(BoardsEditorMenuItem item, string newName)
         {
-            //TODO confirm
-            var board = UserState.TryGetBoard(item.Context.Name);
-            if (board == null)
-                return;
-            board.Name = newName;
-            //TODO save 
+            try
+            {
+                var alertPopup = await AlertPopup.Load();
+                var isConfirmed = await alertPopup.Value.AwaitForDecision("Are you sure to rename this board?");
+                alertPopup.Dispose();
+                if (isConfirmed == false)
+                    return;
+
+                var board = UserState.TryGetBoard(item.Context.Name);
+                if (board == null)
+                    return;
+                board.Name = newName;
+
+                var saveResult = await ProjectContext.I.UserStateCommunicator.SaveUserState(UserState);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Delete board exception: {e.Message}");
+            }
         }
     }
 }

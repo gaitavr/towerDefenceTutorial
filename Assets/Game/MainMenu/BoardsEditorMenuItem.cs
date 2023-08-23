@@ -36,7 +36,7 @@ namespace MainMenu
             });
             _renameButton.onClick.AddListener(() =>
             {
-                _controller.Rename(this, _nameField.name);
+                _controller.Rename(this, _nameField.text);
             });
             _nameField.onValueChanged.AddListener(OnNameChanged);
             OnNameChanged(Context.Name);

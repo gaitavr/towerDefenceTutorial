@@ -7,9 +7,7 @@ using UnityEngine;
 using Utils.Serialization;
 using Core.Loading;
 using Core;
-using System;
 using Utils;
-using System.IO;
 
 //TODO undo + pattern command
 public class BoardEditorMode : MonoBehaviour, ICleanUp
@@ -72,9 +70,6 @@ public class BoardEditorMode : MonoBehaviour, ICleanUp
 
         UserState.AddOrReplaceBoard(_boardData);
 
-        //TODO implement ICommunicator to save this
-        var writeBytes = UserState.Serialize();
-        var path = $"{Application.persistentDataPath}/userAccountState.def";
-        File.WriteAllBytes(path, writeBytes);
+        ProjectContext.I.UserStateCommunicator.SaveUserState(UserState);
     }
 }
