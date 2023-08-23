@@ -1,33 +1,36 @@
 ﻿using Defend.Debuffs;
 using UnityEngine;
 
-public class DebuffContentTile : GameTileContent
+namespace GamePlay
 {
-    [SerializeField] 
-    private TargetPointTrigger _trigger;
-
-    private IDebuff _currentDebuff;
-
-    private void Awake()
+    public class DebuffContentTile : GameTileContent
     {
-        _trigger.Entered += OnTargetEntered;
-    }
+        [SerializeField]
+        private TargetPointTrigger _trigger;
 
-    private void OnTargetEntered(TargetPoint targetPoint)
-    {
-        _currentDebuff = Type.GetDebuff(OriginFactory, Level);
-        targetPoint.Enemy.DebuffMediator.Replace(_currentDebuff);
-    }
+        private IDebuff _currentDebuff;
 
-    public override void GameUpdate()
-    {
-        base.GameUpdate();
-        _trigger.UpdateSelf();
-    }
+        private void Awake()
+        {
+            _trigger.Entered += OnTargetEntered;
+        }
 
-    private void OnDestroy()
-    {
-        _trigger.Entered -= OnTargetEntered;
-        _currentDebuff?.Remove();
+        private void OnTargetEntered(TargetPoint targetPoint)
+        {
+            _currentDebuff = Type.GetDebuff(OriginFactory, Level);
+            targetPoint.Enemy.DebuffMediator.Replace(_currentDebuff);
+        }
+
+        public override void GameUpdate()
+        {
+            base.GameUpdate();
+            _trigger.UpdateSelf();
+        }
+
+        private void OnDestroy()
+        {
+            _trigger.Entered -= OnTargetEntered;
+            _currentDebuff?.Remove();
+        }
     }
 }

@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using Utils.Extensions;
 using Utils.Serialization;
+using GamePlay;
 
 namespace Core.Loading
 {

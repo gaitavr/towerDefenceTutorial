@@ -1,14 +1,17 @@
 ﻿
 
-public class ElienView : EnemyView
+namespace GamePlay
 {
-    public void OnDieAnimationFinished()
+    public class ElienView : EnemyView
     {
-        _enemy.Recycle();
-    }
+        public void OnDieAnimationFinished()
+        {
+            _enemy.Recycle();
+        }
 
-    public void OnStepAnimation()
-    {
-        //TODO play sound
+        public void OnStepAnimation()
+        {
+            //TODO play sound
+        }
     }
 }

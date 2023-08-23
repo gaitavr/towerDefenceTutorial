@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Cysharp.Threading.Tasks;
-using Game.Core.GamePlay;
+using GamePlay;
 using Utils.Assets;
 
 namespace Game.Defend.Tiles

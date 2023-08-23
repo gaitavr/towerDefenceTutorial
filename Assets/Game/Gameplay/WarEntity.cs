@@ -1,11 +1,14 @@
 ﻿
 
-public abstract class WarEntity : GameBehavior
+namespace GamePlay
 {
-    public WarFactory OriginFactory { get; set; }
-
-    public override void Recycle()
+    public abstract class WarEntity : GameBehavior
     {
-        OriginFactory.Reclaim(this);
+        public WarFactory OriginFactory { get; set; }
+
+        public override void Recycle()
+        {
+            OriginFactory.Reclaim(this);
+        }
     }
 }

@@ -1,40 +1,43 @@
 ﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu]
-public class EnemyWave : ScriptableObject
+namespace GamePlay
 {
-    [SerializeField] private EnemySpawnSequence[] _spawnSequences;
-
-    public State Begin() => new(this);
-
-    [Serializable]
-    public struct State
+    [CreateAssetMenu]
+    public class EnemyWave : ScriptableObject
     {
-        private EnemyWave _wave;
-        private int _index;
-        private EnemySpawnSequence.State _sequence;
+        [SerializeField] private EnemySpawnSequence[] _spawnSequences;
 
-        public State(EnemyWave wave)
-        {
-            _wave = wave;
-            _index = 0;
-            _sequence = wave._spawnSequences[0].Begin();
-        }
+        public State Begin() => new(this);
 
-        public float Progress(float deltaTime)
+        [Serializable]
+        public struct State
         {
-            deltaTime = _sequence.Progress(deltaTime);
-            while (deltaTime >= 0f)
+            private EnemyWave _wave;
+            private int _index;
+            private EnemySpawnSequence.State _sequence;
+
+            public State(EnemyWave wave)
             {
-                if (++_index >= _wave._spawnSequences.Length)
-                {
-                    return deltaTime;
-                }
-                _sequence = _wave._spawnSequences[_index].Begin();
-                deltaTime = _sequence.Progress(deltaTime);
+                _wave = wave;
+                _index = 0;
+                _sequence = wave._spawnSequences[0].Begin();
             }
-            return -1f;
+
+            public float Progress(float deltaTime)
+            {
+                deltaTime = _sequence.Progress(deltaTime);
+                while (deltaTime >= 0f)
+                {
+                    if (++_index >= _wave._spawnSequences.Length)
+                    {
+                        return deltaTime;
+                    }
+                    _sequence = _wave._spawnSequences[_index].Begin();
+                    deltaTime = _sequence.Progress(deltaTime);
+                }
+                return -1f;
+            }
         }
     }
 }

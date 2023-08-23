@@ -1,8 +1,8 @@
-﻿using Game.Core.GamePlay;
+﻿using GamePlay;
 using Game.Defend.Tiles;
 using UnityEngine;
 
-namespace Game.Core
+namespace Core
 {
     public class SceneContext : MonoBehaviour
     {

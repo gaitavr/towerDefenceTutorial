@@ -1,23 +1,26 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Year Enemy Factory", menuName = "Factories/Enemy/NewYear")]
-public class NewYearEnemyFactory : EnemyFactory
+namespace GamePlay
 {
-    [SerializeField] private EnemyConfig _snowGolem, _santa, _snowChomper;
-
-    protected override EnemyConfig GetConfig(EnemyType type)
+    [CreateAssetMenu(fileName = "New Year Enemy Factory", menuName = "Factories/Enemy/NewYear")]
+    public class NewYearEnemyFactory : EnemyFactory
     {
-        switch (type)
+        [SerializeField] private EnemyConfig _snowGolem, _santa, _snowChomper;
+
+        protected override EnemyConfig GetConfig(EnemyType type)
         {
-            case EnemyType.Golem:
-                return _snowGolem;
-            case EnemyType.Elien:
-            case EnemyType.Chomper:
-                return _snowChomper;
-            case EnemyType.Grenadier:
-                return _santa;
+            switch (type)
+            {
+                case EnemyType.Golem:
+                    return _snowGolem;
+                case EnemyType.Elien:
+                case EnemyType.Chomper:
+                    return _snowChomper;
+                case EnemyType.Grenadier:
+                    return _santa;
+            }
+            Debug.LogError($"No config for: {type}");
+            return _santa;
         }
-        Debug.LogError($"No config for: {type}");
-        return _santa;
     }
 }

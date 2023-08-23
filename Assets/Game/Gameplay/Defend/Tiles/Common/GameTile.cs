@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GamePlay;
+using UnityEngine;
 using Utils.Extensions;
 
 public class GameTile : MonoBehaviour

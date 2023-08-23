@@ -1,14 +1,16 @@
 ﻿
-
-public class ChomperView : EnemyView
+namespace GamePlay
 {
-    public void OnDieAnimationFinished()
+    public class ChomperView : EnemyView
     {
-        _enemy.Recycle();
-    }
+        public void OnDieAnimationFinished()
+        {
+            _enemy.Recycle();
+        }
 
-    public void OnStepAnimation()
-    {
-        //TODO play sound
+        public void OnStepAnimation()
+        {
+            //TODO play sound
+        }
     }
 }

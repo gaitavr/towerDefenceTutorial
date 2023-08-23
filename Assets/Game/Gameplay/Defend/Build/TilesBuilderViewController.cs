@@ -1,7 +1,7 @@
 using System;
 using Core.Pause;
 using Cysharp.Threading.Tasks;
-using Game.Core.GamePlay;
+using GamePlay;
 using UnityEngine;
 using Utils.Assets;
 using Object = UnityEngine.Object;

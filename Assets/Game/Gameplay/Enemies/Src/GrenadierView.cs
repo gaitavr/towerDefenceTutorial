@@ -1,14 +1,17 @@
 ﻿
 
-public class GrenadierView : EnemyView
+namespace GamePlay
 {
-    public void OnDieAnimationFinished()
+    public class GrenadierView : EnemyView
     {
-        _enemy.Recycle();
-    }
+        public void OnDieAnimationFinished()
+        {
+            _enemy.Recycle();
+        }
 
-    public void OnStepAnimation()
-    {
-        //TODO play sound
+        public void OnStepAnimation()
+        {
+            //TODO play sound
+        }
     }
 }

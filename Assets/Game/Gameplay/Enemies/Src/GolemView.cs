@@ -1,8 +1,11 @@
 ﻿
-public class GolemView : EnemyView
+namespace GamePlay
 {
-    public void OnDieAnimationFinished()
+    public class GolemView : EnemyView
     {
-        _enemy.Recycle();
+        public void OnDieAnimationFinished()
+        {
+            _enemy.Recycle();
+        }
     }
 }

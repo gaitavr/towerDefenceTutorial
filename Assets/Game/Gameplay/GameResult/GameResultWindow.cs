@@ -19,6 +19,7 @@ namespace GameResult
         private void Awake()
         {
             _canvas = GetComponent<Canvas>();
+            _canvas.worldCamera = ProjectContext.I.UICamera;
             _canvas.enabled = false;
             _restartButton.onClick.AddListener(OnRestartClicked);
             _quitButton.onClick.AddListener(OnQuitClicked);

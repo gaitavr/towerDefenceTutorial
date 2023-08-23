@@ -3,20 +3,22 @@ using Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.Assets;
 
 namespace Core.UI
 {
     public class DefenderHud : MonoBehaviour
     {
+        [SerializeField] private Canvas _canvas;
         [SerializeField] private TextMeshProUGUI _wavesText;
         [SerializeField] private TextMeshProUGUI _playerHealthText;
         [SerializeField] private ToggleWithSpriteSwap _pauseToggle;
         [SerializeField] private Button _quitButton;
+
         public event Action QuitGame;
 
         private void Awake()
         {
+            _canvas.worldCamera = ProjectContext.I.UICamera;
             _pauseToggle.ValueChanged += OnPauseClicked;
             _quitButton.onClick.AddListener(OnQuitButtonClicked);
         }
