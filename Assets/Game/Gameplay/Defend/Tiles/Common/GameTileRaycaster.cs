@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -51,15 +50,6 @@ namespace Game.Defend.Tiles
             if (Physics.Raycast(TouchRay, out var hit, float.MaxValue) && isOverUI == false)
                 return hit;
             return null;
-        }
-
-        private bool IsPointerOverUIObject()
-        {
-            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
-            eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-            return results.Count > 0;
         }
 
         public bool IsPointerDown()

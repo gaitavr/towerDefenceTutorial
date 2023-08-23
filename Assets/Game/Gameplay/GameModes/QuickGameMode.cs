@@ -49,8 +49,8 @@ namespace GamePlay
 
         public IEnumerable<GameObjectFactory> Factories => new GameObjectFactory[]
         {
-        SceneContext.I.ContentFactory, SceneContext.I.WarFactory,
-        SceneContext.I.EnemyFactory
+            SceneContext.I.ContentFactory, SceneContext.I.WarFactory,
+            SceneContext.I.EnemyFactory
         };
 
         public string SceneName => Utils.Constants.Scenes.QUICK_GAME_MODE;

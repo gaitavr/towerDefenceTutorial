@@ -18,6 +18,9 @@ namespace Core.Loading
                 await UniTask.Delay(TimeSpan.FromSeconds(loadTime/steps));
                 onProgress?.Invoke(i / loadTime);
             }
+
+            ProjectContext.I.UserContainer.Configuration = new AppConfiguration();
+
             onProgress?.Invoke(1f);
         }
     }

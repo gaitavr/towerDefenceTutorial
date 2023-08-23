@@ -93,7 +93,7 @@ namespace Core
                 Currencies = new UserCurrenciesState()
                 {
                     Crystals = 10000,
-                    Gas = 0
+                    Gas = 125
                 },
                 Boards = new List<BoardData>()
             };

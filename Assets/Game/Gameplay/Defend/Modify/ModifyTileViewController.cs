@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Core;
 using Cysharp.Threading.Tasks;
 using GamePlay;
 using Utils.Assets;
@@ -54,14 +55,20 @@ namespace Game.Defend.Tiles
                     break;
                 default: 
                     throw new ArgumentOutOfRangeException($"No handle for action type: {actionType}");
+
             }
         }
 
         private void UpgradeTile()
         {
-            if (_contentFactory.IsNextUpgradeAllowed(_selectedTile.Content))//TODO check money
+            var level = _selectedTile.Content.Level + 1;
+            var isUpgradeAllowed = _contentFactory.IsNextUpgradeAllowed(_selectedTile.Content);
+            isUpgradeAllowed &= UserContainer.IsUpgradeAllowed(_selectedTile.Content.Type, level);
+            if (isUpgradeAllowed)
             {
-                ReplaceTile(_selectedTile.Content.Level + 1);
+                UserContainer.SpendAfterUpgrade(_selectedTile.Content.Type, level);
+                Communicator.SaveUserState(UserContainer.State);
+                ReplaceTile(level);
             }
         }
 

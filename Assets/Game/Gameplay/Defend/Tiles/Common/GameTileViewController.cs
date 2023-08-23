@@ -1,4 +1,6 @@
 ﻿using System;
+using Core;
+using Core.Communication;
 using Cysharp.Threading.Tasks;
 using GamePlay;
 using Utils.Assets;
@@ -23,6 +25,9 @@ namespace Game.Defend.Tiles
         }
 
         public event Action<GameTileViewController> Finished;
+
+        protected UserContainer UserContainer => ProjectContext.I.UserContainer;
+        protected IUserStateCommunicator Communicator => ProjectContext.I.UserStateCommunicator;
 
         public GameTileContentType HandlingType { get; protected set; }
 

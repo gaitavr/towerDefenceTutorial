@@ -34,7 +34,7 @@ namespace Core.Loading
             editorGame.Init(_boardContext);
             onProgress?.Invoke(0.9f);
             
-            editorGame.BeginNewGame();
+            editorGame.StartProcessing();
             onProgress?.Invoke(1.0f);
         }
     }

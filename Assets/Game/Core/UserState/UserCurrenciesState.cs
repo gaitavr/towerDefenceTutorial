@@ -3,15 +3,33 @@ using Utils.Serialization;
 
 namespace Core
 {
-    public sealed class UserCurrenciesState : ISerializable
+    public sealed class UserCurrenciesState : ISerializable, IUserCurrenciesStateReadonly
     {
         public int Version;
-        public ulong Crystals;
-        public ulong Gas;
+        public int Crystals;
+        public int Gas;
+
+        public event Action Changed;
+
+        int IUserCurrenciesStateReadonly.Crystals => Crystals;
+
+        int IUserCurrenciesStateReadonly.Gas => Gas;
+
+        public void ChangeCrystals(int delta)
+        {
+            Crystals += delta;
+            Changed?.Invoke();
+        }
+
+        public void ChangeGas(int delta)
+        {
+            Gas += delta;
+            Changed?.Invoke();
+        }
 
         public byte[] Serialize()
         {
-            var result = new byte[sizeof(int) + sizeof(ulong) + sizeof(ulong)];
+            var result = new byte[sizeof(int) + sizeof(int) + sizeof(int)];
 
             var offset = 0;
             offset += ByteConverter.AddToStream(Version, result, offset);

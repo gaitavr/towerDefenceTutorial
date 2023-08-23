@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Core.Pause;
 using Cysharp.Threading.Tasks;
 using GamePlay;
@@ -88,8 +89,14 @@ namespace Game.Defend.Tiles
 
             if(_isActive == false)
                 return;
-            
-            //TODO check money
+
+            var isBuildAllowed = UserContainer.IsBuildAllowed(type);
+            if (isBuildAllowed == false)
+                return;
+
+            UserContainer.SpendAfterBuild(type);
+            Communicator.SaveUserState(UserContainer.State);
+
             _tempTile = _contentFactory.Get(type);
             _raycaster.Mute();
         }

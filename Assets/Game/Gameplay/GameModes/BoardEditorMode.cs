@@ -22,7 +22,7 @@ namespace GamePlay
 
         public IEnumerable<GameObjectFactory> Factories => new GameObjectFactory[]
         {
-        SceneContext.I.ContentFactory
+            SceneContext.I.ContentFactory
         };
         public string SceneName => Constants.Scenes.EDITOR_MODE;
 
@@ -35,10 +35,11 @@ namespace GamePlay
             GameBoard.Initialize(_boardData);
         }
 
-        public void BeginNewGame()
+        public void StartProcessing()
         {
             _hud.QuitGame += GoToMainMenu;
             _hud.SaveClicked += OnSaveClicked;
+            _hud.UndoAction += OnUndoClicked;
             TilesBuilder.SetActive(true);
         }
 
@@ -46,6 +47,7 @@ namespace GamePlay
         {
             _hud.QuitGame -= GoToMainMenu;
             _hud.SaveClicked -= OnSaveClicked;
+            _hud.UndoAction -= OnUndoClicked;
             TilesBuilder.SetActive(false);
             GameBoard.Clear();
         }
@@ -71,6 +73,11 @@ namespace GamePlay
             UserState.AddOrReplaceBoard(_boardData);
 
             ProjectContext.I.UserStateCommunicator.SaveUserState(UserState);
+        }
+
+        private void OnUndoClicked()
+        {
+
         }
     }
 }
