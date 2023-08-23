@@ -8,12 +8,14 @@ namespace MainMenu
 {
     public sealed class MainMenu : MonoBehaviour
     {
+        [SerializeField] private Canvas _canvas;
         [SerializeField] private Button _quickGameBtn;
         [SerializeField] private Button _editBoardBtn;
         [SerializeField] private BoardsEditorMenu _editorMenu;
         
         private void Start()
         {
+            _canvas.worldCamera = ProjectContext.I.UICamera;
             _quickGameBtn.onClick.AddListener(OnQuickGameBtnClicked);
             _editBoardBtn.onClick.AddListener(OnEditorBtnClicked);
         }

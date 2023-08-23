@@ -2,12 +2,12 @@ using System;
 using Utils;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.Assets;
 
 namespace Core.UI
 {
     public class EditorHud : MonoBehaviour
     {
+        [SerializeField] private Canvas _canvas;
         [SerializeField] private Button _saveButton;
         [SerializeField] private Button _quitButton;
         
@@ -16,6 +16,7 @@ namespace Core.UI
         
         private void Awake()
         {
+            _canvas.worldCamera = ProjectContext.I.UICamera;
             _saveButton.onClick.AddListener(OnSaveButtonClicked);
             _quitButton.onClick.AddListener(OnQuitButtonClicked);
         }

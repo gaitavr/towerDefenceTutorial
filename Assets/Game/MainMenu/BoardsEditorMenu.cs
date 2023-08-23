@@ -34,6 +34,7 @@ namespace MainMenu
 
         public void Show()
         {
+            _canvas.worldCamera = ProjectContext.I.UICamera;
             foreach (var board in UserState.Boards)
             {
                 var item = Instantiate(_itemPrefab, _contentParent);
