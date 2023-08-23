@@ -3,18 +3,19 @@ using Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using Utils.Extensions;
+using Utils.Serialization;
 
 namespace Core.Loading
 {
     public sealed class EditorModeLoadingOperation : ILoadingOperation
     {
-        public string Description => "Game loading...";
+        public string Description => "Board editor loading...";
 
-        private readonly string _fileName;
+        private readonly BoardContext _boardContext;
 
-        public EditorModeLoadingOperation(string fileName)
+        public EditorModeLoadingOperation(BoardContext boardContext)
         {
-            _fileName = fileName;
+            _boardContext = boardContext;
         }
         
         public async UniTask Load(Action<float> onProgress)
@@ -29,7 +30,7 @@ namespace Core.Loading
             
             var scene = SceneManager.GetSceneByName(Constants.Scenes.EDITOR_MODE);
             var editorGame = scene.GetRoot<BoardEditorMode>();
-            editorGame.Init(new UnityEngine.Vector2Int(10, 15));
+            editorGame.Init(_boardContext);
             onProgress?.Invoke(0.9f);
             
             editorGame.BeginNewGame();

@@ -96,10 +96,6 @@ namespace Core
                     Gas = 0
                 },
                 Boards = new List<BoardData>()
-                {
-                    BoardData.GetInitial(new UnityEngine.Vector2Int(20, 25) ),
-                    BoardData.GetInitial(new UnityEngine.Vector2Int(25, 15) )
-                }
             };
         }
 
@@ -108,13 +104,13 @@ namespace Core
             return Boards.FirstOrDefault(b => b.Name == boardName);
         }
 
-        public bool TryAddBoard(string boardName, BoardData board)
+        public void AddOrReplaceBoard(BoardData board)
         {
-            if (Boards.Any(b => b.Name == boardName))
-                return false;
-
-            Boards.Add(board);
-            return true;
+            var index = Boards.IndexOf(board);
+            if (index == -1)
+                Boards.Add(board);
+            else
+                Boards[index] = board;
         }
 
         public bool TryDeleteBoard(string boardName)

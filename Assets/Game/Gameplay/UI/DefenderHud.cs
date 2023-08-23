@@ -34,13 +34,12 @@ namespace Core.UI
         private async void OnQuitButtonClicked()
         {
             OnPauseClicked(true);
-            var assetLoader = new LocalAssetLoader();
-            var popup = await assetLoader.Load<AlertPopup>(AssetsConstants.AlertPopup);
-            var isConfirmed = await popup.AwaitForDecision("Are you sure to quit?");
+            var popup = await AlertPopup.Load();
+            var isConfirmed = await popup.Value.AwaitForDecision("Are you sure to quit?");
             OnPauseClicked(false);
             if(isConfirmed)
                 QuitGame?.Invoke();
-            assetLoader.Unload();
+            popup.Dispose();
         }
         
         private void OnPauseClicked(bool isPaused)

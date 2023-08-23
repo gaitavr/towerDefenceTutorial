@@ -2,6 +2,8 @@ using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Assets;
+using Utils.Disposable;
 
 namespace Utils
 {
@@ -33,6 +35,12 @@ namespace Utils
             var result = await _taskCompletion.Task;
             _canvas.enabled = false;
             return result;
+        }
+
+        public static UniTask<Disposable<AlertPopup>> Load()
+        {
+            var assetLoader = new LocalAssetLoader();
+            return assetLoader.LoadDisposable<AlertPopup>(AssetsConstants.AlertPopup);
         }
         
         private void OnAccept()

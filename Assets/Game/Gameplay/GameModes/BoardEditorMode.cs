@@ -7,13 +7,16 @@ using UnityEngine;
 using Utils.Serialization;
 using Core.Loading;
 using Core;
+using System;
+using Utils;
+using System.IO;
 
 //TODO undo + pattern command
 public class BoardEditorMode : MonoBehaviour, ICleanUp
 {
     [SerializeField] private EditorHud _hud;
 
-    private Vector2Int _boardSize;
+    private BoardData _boardData;
 
     private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
     private GameBoard GameBoard => SceneContext.I.GameBoard;
@@ -23,19 +26,15 @@ public class BoardEditorMode : MonoBehaviour, ICleanUp
     {
         SceneContext.I.ContentFactory
     };
-    public string SceneName => Utils.Constants.Scenes.EDITOR_MODE;
+    public string SceneName => Constants.Scenes.EDITOR_MODE;
 
-    public void Init(Vector2Int boardSize, string boardName = null)
+    public void Init(BoardContext boardContext)
     {
-        _boardSize = boardSize;
         SceneContext.I.Initialize();
 
-        BoardData initialData = null;
-        if (boardName != null)
-            initialData = UserState.TryGetBoard(boardName);
-
-        initialData ??= BoardData.GetInitial(boardSize);
-        GameBoard.Initialize(initialData);
+        _boardData = UserState.TryGetBoard(boardContext.Name);
+        _boardData ??= BoardData.GetInitial(boardContext.Size);
+        GameBoard.Initialize(_boardData);
     }
     
     public void BeginNewGame()
@@ -68,15 +67,14 @@ public class BoardEditorMode : MonoBehaviour, ICleanUp
     
     private void OnSaveClicked()
     {
-        var data = new BoardData()
-        {
-            Version = 1,
-            Name = "test",
-            X = (byte)_boardSize.x,
-            Y = (byte)_boardSize.y,
-            Content = GameBoard.GetAllContentTypes,
-            Levels = GameBoard.GetAllContentLevels
-        };
-        //_serializer.Save(data, _fileName);
+        _boardData.Content = GameBoard.GetAllContentTypes;
+        _boardData.Levels = GameBoard.GetAllContentLevels;
+
+        UserState.AddOrReplaceBoard(_boardData);
+
+        //TODO implement ICommunicator to save this
+        var writeBytes = UserState.Serialize();
+        var path = $"{Application.persistentDataPath}/userAccountState.def";
+        File.WriteAllBytes(path, writeBytes);
     }
 }

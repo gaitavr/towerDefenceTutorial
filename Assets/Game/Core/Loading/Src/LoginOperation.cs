@@ -19,12 +19,12 @@ namespace Core.Loading
             _onProgress = onProgress;
             _onProgress?.Invoke(0.3f);
 
-            ProjectContext.I.UserContainer.State = await GetAccountState(DeviceInfoProvider.GetDeviceId());
+            ProjectContext.I.UserContainer.State = await GetAccountState();
            
             _onProgress?.Invoke(1f);
         }
 
-        private async UniTask<UserAccountState> GetAccountState(string deviceId)
+        private async UniTask<UserAccountState> GetAccountState()
         {
             var result = new UserAccountState();
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Utils.Serialization
 {
-    public class BoardData : ISerializable
+    public sealed class BoardData : ISerializable
     {
         public int Version;
         public string Name;
