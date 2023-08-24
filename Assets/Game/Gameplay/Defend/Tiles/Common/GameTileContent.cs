@@ -21,6 +21,11 @@ namespace GamePlay
             Level = level;
         }
 
+        public void ChangeType(GameTileContentType type)
+        {
+            _type = type;
+        }
+
         public void Recycle()
         {
             OriginFactory.Reclaim(this);

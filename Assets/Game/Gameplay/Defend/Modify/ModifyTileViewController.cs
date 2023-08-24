@@ -101,9 +101,9 @@ namespace Game.Defend.Tiles
         
         private void DestroyTile()
         {
+            BoardActionRecorder?.Record(new DestroyTileRecord(this, _selectedTile));
             _gameBoard.DestroyTile(_selectedTile);
             RaiseFinished();
-            //BoardActionRecorder?.Record(new DestroyTileRecord(this, level));
         }
     }
 }
