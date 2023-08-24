@@ -77,9 +77,10 @@ namespace Game.Defend.Tiles
         {
             var tilesAround = _gameBoard.GetTilesAround(_selectedTile)
                 .Where(t => t.Content.Type == _selectedTile.Content.Type);
-            var tilesInfoCached = tilesAround.Select(t => t.GetInfo()).ToList();
 
             var currentLevel = _selectedTile.Content.Level;
+            var record = new MergeTileRecord(this, currentLevel, tilesAround);
+
             foreach (var t in tilesAround)
             {
                 currentLevel += t.Content.Level + 1;//levels start from 0
@@ -89,7 +90,7 @@ namespace Game.Defend.Tiles
             if(_selectedTile.Content.Level == currentLevel)
                 return;
 
-            BoardActionRecorder?.Record(new MergeTileRecord(this, _selectedTile, tilesInfoCached));
+            BoardActionRecorder?.Record(record);
             ReplaceTile(currentLevel);
         }
 
