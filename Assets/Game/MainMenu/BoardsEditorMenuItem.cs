@@ -1,7 +1,7 @@
+using Gameplay;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.Serialization;
 
 namespace MainMenu
 {

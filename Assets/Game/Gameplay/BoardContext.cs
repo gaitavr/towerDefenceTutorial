@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using Utils.Serialization;
 
-namespace Utils.Serialization
+namespace Gameplay
 {
     public sealed class BoardContext
     {

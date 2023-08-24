@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using Core;
-using Utils.Serialization;
 using Utils;
 using System;
+using Gameplay;
 
 namespace MainMenu
 {
