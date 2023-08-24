@@ -1,10 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Login;
-using UnityEngine;
-using Utils;
 using Utils.Assets;
-using System.IO;
 
 namespace Core.Loading
 {
@@ -26,19 +23,9 @@ namespace Core.Loading
 
         private async UniTask<UserAccountState> GetAccountState()
         {
-            var result = new UserAccountState();
-
-            //Fake login
-            var path = $"{Application.persistentDataPath}/userAccountState.def";
-            if (File.Exists(path))
-            {
-                var readBytes = File.ReadAllBytes(path);
-                result.Deserialize(readBytes);
-            }
-
-            await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+            var userStateCommunicator = ProjectContext.I.UserStateCommunicator;
+            var result = await userStateCommunicator.GetUserState();
             _onProgress?.Invoke(0.6f);
-            //Fake login
 
             if (result.IsValid() == false)
             {
@@ -47,8 +34,7 @@ namespace Core.Loading
                 result = await loginWindow.ProcessLogin();
                 assetsLoader.Unload();
 
-                var writeBytes = result.Serialize();
-                File.WriteAllBytes(path, writeBytes);
+                await userStateCommunicator.SaveUserState(result);
             }
 
             return result;

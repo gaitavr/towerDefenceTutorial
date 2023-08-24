@@ -5,5 +5,6 @@ namespace Core.Communication
     public interface IUserStateCommunicator
     {
         UniTask<bool> SaveUserState(UserAccountState state);
+        UniTask<UserAccountState> GetUserState();
     }
 }
