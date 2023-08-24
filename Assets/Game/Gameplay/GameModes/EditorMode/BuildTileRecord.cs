@@ -3,11 +3,11 @@ using Core;
 
 namespace GamePlay.Modes
 {
-    public sealed class BuildTileCommand : BaseTileCommand
+    public sealed class BuildTileRecord : BaseBoardActionRecord
     {
         private readonly GameTile _tile;
 
-        public BuildTileCommand(GameTile tile)
+        public BuildTileRecord(GameTile tile)
         {
             _tile = tile;
         }
@@ -16,6 +16,7 @@ namespace GamePlay.Modes
         {
             UserContainer.RefundAfterBuild(_tile.Content.Type);
             GameBoard.DestroyTile(_tile);
+            ViewControllerRouter.OnTileClicked(_tile);
         }
     }
 }

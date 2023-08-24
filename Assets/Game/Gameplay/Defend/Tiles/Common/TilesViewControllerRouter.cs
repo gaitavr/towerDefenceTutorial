@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Game.Defend.Tiles
 {
-    public class TilesViewControllerRouter
+    public sealed class TilesViewControllerRouter
     {
         private readonly GameTileRaycaster _raycaster;
         private readonly List<GameTileViewController> _viewControllers;
@@ -17,7 +17,7 @@ namespace Game.Defend.Tiles
             _raycaster.TileClicked += OnTileClicked;
         }
 
-        private void OnTileClicked(GameTile tile)
+        public void OnTileClicked(GameTile tile)
         {
             var viewController = _viewControllers.FirstOrDefault(v => v.HandlingType == tile.Content.Type);
             if (viewController != null)

@@ -2,6 +2,7 @@ using Utils;
 using UnityEditor;
 using UnityEngine;
 using System.IO;
+using Core;
 
 namespace Editor
 {
@@ -21,6 +22,22 @@ namespace Editor
         public static void ShowUserStateFile()
         {
             EditorUtility.RevealInFinder(UserStatePath);
+        }
+
+        [MenuItem("Tools/Progress/Add Currencies")]
+        public static void AddCurrencies()
+        {
+            var path = UserStatePath;
+            if (File.Exists(path))
+            {
+                var bytes = File.ReadAllBytes(path);
+                var state = new UserAccountState();
+                state.Deserialize(bytes);
+                state.Currencies.ChangeCrystals(100000);
+                state.Currencies.ChangeGas(1000);
+                bytes = state.Serialize();
+                File.WriteAllBytes(path, bytes);
+            }
         }
         
         [MenuItem("Tools/Assets/Clear Asset Bundle Cache")]

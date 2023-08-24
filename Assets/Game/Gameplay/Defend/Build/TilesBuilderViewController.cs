@@ -1,8 +1,8 @@
-using System;
 using Core;
 using Core.Pause;
 using Cysharp.Threading.Tasks;
 using GamePlay;
+using GamePlay.Modes;
 using UnityEngine;
 using Utils.Assets;
 using Object = UnityEngine.Object;
@@ -18,8 +18,6 @@ namespace Game.Defend.Tiles
 
         private PauseManager PauseManager => ProjectContext.I.PauseManager;
         private bool IsPaused => PauseManager.IsPaused;
-
-        public event Action<GameTile> TileBuilt;
 
         public TilesBuilderViewController(GameTileContentFactory contentFactory, GameTileRaycaster raycaster,
             GameBoard gameBoard, GamePlayUI gamePlayUI, TilesViewControllerRouter router) : base(contentFactory, gameBoard, gamePlayUI)
@@ -74,7 +72,7 @@ namespace Game.Defend.Tiles
                 if (tile != null && _gameBoard.TryBuild(tile, _tempTile))
                 {
                     UserContainer.SpendAfterBuild(_tempTile.Type);
-                    TileBuilt?.Invoke(tile);
+                    BoardActionRecorder?.Record(new BuildTileRecord(tile));
                 }
                 else
                 {

@@ -10,12 +10,12 @@ using Utils;
 
 namespace GamePlay.Modes
 {
-    public sealed class BoardEditorMode : MonoBehaviour, IGameModeCleaner
+    public sealed class BoardEditorMode : MonoBehaviour, IGameModeCleaner, IBoardActionRecorder
     {
         [SerializeField] private EditorHud _hud;
 
         private BoardData _boardData;
-        private Stack<BuildTileCommand> _commandsHistory;
+        private Stack<BaseBoardActionRecord> _commandsHistory;
 
         private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
         private GameBoard GameBoard => SceneContext.I.GameBoard;
@@ -29,7 +29,7 @@ namespace GamePlay.Modes
 
         public void Init(BoardContext boardContext)
         {
-            _commandsHistory = new Stack<BuildTileCommand>();
+            _commandsHistory = new Stack<BaseBoardActionRecord>();
             SceneContext.I.Initialize();
 
             _boardData = UserState.TryGetBoard(boardContext.Name);
@@ -39,10 +39,13 @@ namespace GamePlay.Modes
 
         public void StartProcessing()
         {
+            foreach (var controller in SceneContext.I.TileViewControllers)
+            {
+                controller.BoardActionRecorder = this;
+            }
             _hud.QuitGame += GoToMainMenu;
             _hud.SaveClicked += OnSaveClicked;
             _hud.UndoAction += OnUndoClicked;
-            TilesBuilder.TileBuilt += OnTileBuilt;
             TilesBuilder.SetActive(true);
         }
 
@@ -51,7 +54,6 @@ namespace GamePlay.Modes
             _hud.QuitGame -= GoToMainMenu;
             _hud.SaveClicked -= OnSaveClicked;
             _hud.UndoAction -= OnUndoClicked;
-            TilesBuilder.TileBuilt -= OnTileBuilt;
             TilesBuilder.SetActive(false);
             GameBoard.Clear();
         }
@@ -79,11 +81,6 @@ namespace GamePlay.Modes
             ProjectContext.I.UserStateCommunicator.SaveUserState(UserState);
         }
 
-        private void OnTileBuilt(GameTile tile)
-        {
-            _commandsHistory.Push(new BuildTileCommand(tile));
-        }
-
         private void OnUndoClicked()
         {
             if (_commandsHistory.Count > 0)
@@ -91,6 +88,11 @@ namespace GamePlay.Modes
                 var command = _commandsHistory.Pop();
                 command.Undo();
             }
+        }
+
+        public void Record(BaseBoardActionRecord command)
+        {
+            _commandsHistory.Push(command);
         }
     }
 }

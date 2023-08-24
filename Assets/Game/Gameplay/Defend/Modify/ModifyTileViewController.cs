@@ -3,6 +3,7 @@ using System.Linq;
 using Core;
 using Cysharp.Threading.Tasks;
 using GamePlay;
+using GamePlay.Modes;
 using Utils.Assets;
 
 namespace Game.Defend.Tiles
@@ -68,6 +69,7 @@ namespace Game.Defend.Tiles
             {
                 UserContainer.SpendAfterUpgrade(_selectedTile.Content.Type, level);
                 ReplaceTile(level);
+                BoardActionRecorder?.Record(new UpgradeTileRecord(this, _selectedTile));
             }
         }
 
@@ -87,6 +89,7 @@ namespace Game.Defend.Tiles
                 return;
 
             ReplaceTile(currentLevel);
+            //BoardActionRecorder?.Record(new UpgradeTileRecord(this, level));
         }
 
         public void ReplaceTile(int level)
@@ -100,6 +103,7 @@ namespace Game.Defend.Tiles
         {
             _gameBoard.DestroyTile(_selectedTile);
             RaiseFinished();
+            //BoardActionRecorder?.Record(new DestroyTileRecord(this, level));
         }
     }
 }

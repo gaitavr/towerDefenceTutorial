@@ -2,7 +2,7 @@
 
 namespace GamePlay.Modes
 {
-    public sealed class DestroyTileCommand : BaseTileCommand
+    public sealed class DestroyTileRecord : BaseBoardActionRecord
     {
         public override void Undo()
         {

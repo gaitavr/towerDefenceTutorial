@@ -3,19 +3,22 @@ using Game.Defend.Tiles;
 
 namespace GamePlay.Modes
 {
-    public sealed class UpgradeTileCommand : BaseTileCommand
+    public sealed class UpgradeTileRecord : BaseBoardActionRecord
     {
         private readonly ModifyTileViewController _viewController;
+        private readonly GameTile _selectedTile;
         private readonly int _level;
 
-        public UpgradeTileCommand(ModifyTileViewController viewController, int level)
+        public UpgradeTileRecord(ModifyTileViewController viewController, GameTile selectedTile)
         {
             _viewController = viewController;
-            _level = level;
+            _selectedTile = selectedTile;
+            _level = selectedTile.Content.Level;
         }
 
         public override void Undo()
         {
+            ViewControllerRouter.OnTileClicked(_selectedTile);
             UserContainer.RefundAfterUpgrade(_viewController.HandlingType, _level);
             _viewController.ReplaceTile(_level - 1);
         }
