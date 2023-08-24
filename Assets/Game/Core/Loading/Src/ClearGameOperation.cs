@@ -2,6 +2,7 @@ using System;
 using Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
+using GamePlay.Modes;
 
 namespace Core.Loading
 {
@@ -9,9 +10,9 @@ namespace Core.Loading
     {
         public string Description => "Clearing...";
 
-        private readonly ICleanUp _gameCleanUp;
+        private readonly IGameModeCleaner _gameCleanUp;
 
-        public ClearGameOperation(ICleanUp gameCleanUp)
+        public ClearGameOperation(IGameModeCleaner gameCleanUp)
         {
             _gameCleanUp = gameCleanUp;
         }

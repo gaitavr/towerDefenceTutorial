@@ -67,7 +67,6 @@ namespace Game.Defend.Tiles
             if (isUpgradeAllowed)
             {
                 UserContainer.SpendAfterUpgrade(_selectedTile.Content.Type, level);
-                Communicator.SaveUserState(UserContainer.State);
                 ReplaceTile(level);
             }
         }
@@ -90,7 +89,7 @@ namespace Game.Defend.Tiles
             ReplaceTile(currentLevel);
         }
 
-        private void ReplaceTile(int level)
+        public void ReplaceTile(int level)
         {
             var newTile = _contentFactory.Get(_selectedTile.Content.Type, level);
             _gameBoard.DestroyTile(_selectedTile);

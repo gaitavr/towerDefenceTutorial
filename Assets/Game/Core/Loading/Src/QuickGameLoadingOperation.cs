@@ -3,7 +3,7 @@ using Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using Utils.Extensions;
-using GamePlay;
+using GamePlay.Modes;
 
 namespace Core.Loading
 {

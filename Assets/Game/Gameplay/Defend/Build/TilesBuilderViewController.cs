@@ -19,6 +19,8 @@ namespace Game.Defend.Tiles
         private PauseManager PauseManager => ProjectContext.I.PauseManager;
         private bool IsPaused => PauseManager.IsPaused;
 
+        public event Action<GameTile> TileBuilt;
+
         public TilesBuilderViewController(GameTileContentFactory contentFactory, GameTileRaycaster raycaster,
             GameBoard gameBoard, GamePlayUI gamePlayUI, TilesViewControllerRouter router) : base(contentFactory, gameBoard, gamePlayUI)
         {
@@ -69,9 +71,15 @@ namespace Game.Defend.Tiles
             if (_raycaster.IsPointerDown())
             {
                 var tile = _raycaster.GetTile();
-                if (tile == null || _gameBoard.TryBuild(tile, _tempTile) == false)
+                if (tile != null && _gameBoard.TryBuild(tile, _tempTile))
+                {
+                    UserContainer.SpendAfterBuild(_tempTile.Type);
+                    TileBuilt?.Invoke(tile);
+                }
+                else
+                {
                     Object.Destroy(_tempTile.gameObject);
-
+                }
                 _tempTile = null;
                 _raycaster.UnMute();
             }
@@ -93,10 +101,7 @@ namespace Game.Defend.Tiles
             var isBuildAllowed = UserContainer.IsBuildAllowed(type);
             if (isBuildAllowed == false)
                 return;
-
-            UserContainer.SpendAfterBuild(type);
-            Communicator.SaveUserState(UserContainer.State);
-
+         
             _tempTile = _contentFactory.Get(type);
             _raycaster.Mute();
         }

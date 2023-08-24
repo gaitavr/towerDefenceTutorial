@@ -12,9 +12,9 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 using Utils.Serialization;
 using Core;
 
-namespace GamePlay
+namespace GamePlay.Modes
 {
-    public class QuickGameMode : MonoBehaviour, ICleanUp, IPauseHandler
+    public sealed class QuickGameMode : MonoBehaviour, IGameModeCleaner, IPauseHandler
     {
         [SerializeField] private Vector2Int _boardSize;
         [SerializeField] private DefenderHud _defenderHud;

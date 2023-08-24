@@ -19,14 +19,38 @@ namespace Core
 
         public void SpendAfterBuild(GameTileContentType tileContentType)
         {
+            ChangeAfterBuild(tileContentType, false);
+        }
+
+        public void RefundAfterBuild(GameTileContentType tileContentType)
+        {
+            ChangeAfterBuild(tileContentType, true);
+        }
+
+        private void ChangeAfterBuild(GameTileContentType tileContentType, bool isPositive)
+        {
             var buildCost = Configuration.GetBuildCost(tileContentType);
-            State.Currencies.ChangeCrystals(-buildCost);
+            if (isPositive == false)
+                buildCost *= -1;
+            State.Currencies.ChangeCrystals(buildCost);
         }
 
         public void SpendAfterUpgrade(GameTileContentType tileContentType, int level)
         {
+            ChangeAfterUpgrade(tileContentType, level, false);
+        }
+
+        public void RefundAfterUpgrade(GameTileContentType tileContentType, int level)
+        {
+            ChangeAfterUpgrade(tileContentType, level, true);
+        }
+
+        private void ChangeAfterUpgrade(GameTileContentType tileContentType, int level, bool isPositive)
+        {
             var upgradeCost = Configuration.GetUpgradeCost(tileContentType, level);
-            State.Currencies.ChangeGas(-upgradeCost);
+            if (isPositive == false)
+                upgradeCost *= -1;
+            State.Currencies.ChangeGas(upgradeCost);
         }
     }
 }

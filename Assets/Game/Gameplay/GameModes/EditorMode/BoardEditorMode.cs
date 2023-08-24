@@ -8,13 +8,14 @@ using Core.Loading;
 using Core;
 using Utils;
 
-namespace GamePlay
+namespace GamePlay.Modes
 {
-    public class BoardEditorMode : MonoBehaviour, ICleanUp
+    public sealed class BoardEditorMode : MonoBehaviour, IGameModeCleaner
     {
         [SerializeField] private EditorHud _hud;
 
         private BoardData _boardData;
+        private Stack<BuildTileCommand> _commandsHistory;
 
         private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
         private GameBoard GameBoard => SceneContext.I.GameBoard;
@@ -28,6 +29,7 @@ namespace GamePlay
 
         public void Init(BoardContext boardContext)
         {
+            _commandsHistory = new Stack<BuildTileCommand>();
             SceneContext.I.Initialize();
 
             _boardData = UserState.TryGetBoard(boardContext.Name);
@@ -40,6 +42,7 @@ namespace GamePlay
             _hud.QuitGame += GoToMainMenu;
             _hud.SaveClicked += OnSaveClicked;
             _hud.UndoAction += OnUndoClicked;
+            TilesBuilder.TileBuilt += OnTileBuilt;
             TilesBuilder.SetActive(true);
         }
 
@@ -48,6 +51,7 @@ namespace GamePlay
             _hud.QuitGame -= GoToMainMenu;
             _hud.SaveClicked -= OnSaveClicked;
             _hud.UndoAction -= OnUndoClicked;
+            TilesBuilder.TileBuilt -= OnTileBuilt;
             TilesBuilder.SetActive(false);
             GameBoard.Clear();
         }
@@ -75,9 +79,18 @@ namespace GamePlay
             ProjectContext.I.UserStateCommunicator.SaveUserState(UserState);
         }
 
+        private void OnTileBuilt(GameTile tile)
+        {
+            _commandsHistory.Push(new BuildTileCommand(tile));
+        }
+
         private void OnUndoClicked()
         {
-
+            if (_commandsHistory.Count > 0)
+            {
+                var command = _commandsHistory.Pop();
+                command.Undo();
+            }
         }
     }
 }
