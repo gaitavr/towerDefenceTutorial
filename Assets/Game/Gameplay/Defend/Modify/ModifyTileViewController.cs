@@ -77,7 +77,8 @@ namespace Game.Defend.Tiles
         {
             var tilesAround = _gameBoard.GetTilesAround(_selectedTile)
                 .Where(t => t.Content.Type == _selectedTile.Content.Type);
-            
+            var tilesInfoCached = tilesAround.Select(t => t.GetInfo()).ToList();
+
             var currentLevel = _selectedTile.Content.Level;
             foreach (var t in tilesAround)
             {
@@ -88,17 +89,22 @@ namespace Game.Defend.Tiles
             if(_selectedTile.Content.Level == currentLevel)
                 return;
 
+            BoardActionRecorder?.Record(new MergeTileRecord(this, _selectedTile, tilesInfoCached));
             ReplaceTile(currentLevel);
-            //BoardActionRecorder?.Record(new UpgradeTileRecord(this, level));
         }
 
         public void ReplaceTile(int level)
         {
-            var newTile = _contentFactory.Get(_selectedTile.Content.Type, level);
-            _gameBoard.DestroyTile(_selectedTile);
-            _gameBoard.TryBuild(_selectedTile, newTile);
+            ReplaceTile(_selectedTile, level);
         }
-        
+
+        public void ReplaceTile(GameTile tile, int level)
+        {
+            var newTile = _contentFactory.Get(tile.Content.Type, level);
+            _gameBoard.DestroyTile(tile);
+            _gameBoard.TryBuild(tile, newTile);
+        }
+
         private void DestroyTile()
         {
             BoardActionRecorder?.Record(new DestroyTileRecord(this, _selectedTile));

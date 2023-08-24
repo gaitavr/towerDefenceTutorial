@@ -99,5 +99,22 @@ public class GameTile : MonoBehaviour
             _nextOnPath == _south ? _southRotation :
             _westRotation;
     }
+
+    public ContentInfo GetInfo()
+    {
+        return new ContentInfo()
+        {
+            Type = Content.Type,
+            Level = Content.Level,
+            Tile = this
+        };
+    }
+
+    public struct ContentInfo
+    {
+        public GameTileContentType Type;
+        public int Level;
+        public GameTile Tile;
+    }
 }
 
