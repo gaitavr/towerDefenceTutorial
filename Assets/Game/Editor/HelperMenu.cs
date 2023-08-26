@@ -1,21 +1,43 @@
 using Utils;
 using UnityEditor;
 using UnityEngine;
+using System.IO;
+using Core;
 
 namespace Editor
 {
     public class HelperMenu
     {
-        [MenuItem("Tools/Progress/Clear login")]
-        public static void ClearLoginPrefs()
+        private static string UserStatePath => $"{Application.persistentDataPath}/userAccountState.def";
+
+        [MenuItem("Tools/Progress/Clear Account Data")]
+        public static void ClearAccountData()
         {
-            PlayerPrefs.DeleteKey(DeviceInfoProvider.GetDeviceId());
+            var path = UserStatePath;
+            if (File.Exists(path))
+                File.Delete(path);
         }
-        
-        [MenuItem("Tools/Progress/Clear prefs")]
-        public static void ClearPrefs()
+
+        [MenuItem("Tools/Progress/Show user state file")]
+        public static void ShowUserStateFile()
         {
-            PlayerPrefs.DeleteAll();
+            EditorUtility.RevealInFinder(UserStatePath);
+        }
+
+        [MenuItem("Tools/Progress/Add Currencies")]
+        public static void AddCurrencies()
+        {
+            var path = UserStatePath;
+            if (File.Exists(path))
+            {
+                var bytes = File.ReadAllBytes(path);
+                var state = new UserAccountState();
+                state.Deserialize(bytes);
+                state.Currencies.ChangeCrystals(100000);
+                state.Currencies.ChangeGas(1000);
+                bytes = state.Serialize();
+                File.WriteAllBytes(path, bytes);
+            }
         }
         
         [MenuItem("Tools/Assets/Clear Asset Bundle Cache")]

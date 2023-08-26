@@ -1,21 +1,21 @@
 using System.Collections.Generic;
 using Core.Loading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace MainMenu
 {
-    public class MainMenu : MonoBehaviour
+    public sealed class MainMenu : MonoBehaviour
     {
-        [SerializeField]
-        private Button _quickGameBtn;
-        [SerializeField]
-        private Button _editBoardBtn;
-        [SerializeField]
-        private EditorMenu _editorMenu;
+        [SerializeField] private Canvas _canvas;
+        [SerializeField] private Button _quickGameBtn;
+        [SerializeField] private Button _editBoardBtn;
+        [SerializeField] private BoardsEditorMenu _editorMenu;
         
         private void Start()
         {
+            _canvas.worldCamera = ProjectContext.I.UICamera;
             _quickGameBtn.onClick.AddListener(OnQuickGameBtnClicked);
             _editBoardBtn.onClick.AddListener(OnEditorBtnClicked);
         }
@@ -24,7 +24,7 @@ namespace MainMenu
         {
             var operations = new Queue<ILoadingOperation>();
             operations.Enqueue(new QuickGameLoadingOperation());
-            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(operations);
+            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(operations).Forget();
         }
 
         private void OnEditorBtnClicked()

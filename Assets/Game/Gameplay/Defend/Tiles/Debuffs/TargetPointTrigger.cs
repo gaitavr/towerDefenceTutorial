@@ -1,17 +1,20 @@
 using System;
 using UnityEngine;
 
-public class TargetPointTrigger : MonoBehaviour
+namespace GamePlay
 {
-    public event Action<TargetPoint> Entered;
-
-    public void UpdateSelf()
+    public class TargetPointTrigger : MonoBehaviour
     {
-        if (TargetPoint.FillBufferInBox(transform.position, Vector3.one * 0.5f))
+        public event Action<TargetPoint> Entered;
+
+        public void UpdateSelf()
         {
-            foreach (var targetPoint in TargetPoint.TargetPoints())
+            if (TargetPoint.FillBufferInBox(transform.position, Vector3.one * 0.5f))
             {
-                Entered?.Invoke(targetPoint);
+                foreach (var targetPoint in TargetPoint.TargetPoints())
+                {
+                    Entered?.Invoke(targetPoint);
+                }
             }
         }
     }

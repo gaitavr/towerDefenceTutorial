@@ -1,5 +1,9 @@
-﻿public interface IDebuff
+﻿
+namespace GamePlay
 {
-     void Assign(Enemy enemy);
-     void Remove();
+    public interface IDebuff
+    {
+        void Assign(Enemy enemy);
+        void Remove();
+    }
 }

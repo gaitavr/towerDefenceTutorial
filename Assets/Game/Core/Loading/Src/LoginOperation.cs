@@ -1,8 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Login;
-using UnityEngine;
-using Utils;
 using Utils.Assets;
 
 namespace Core.Loading
@@ -18,33 +16,27 @@ namespace Core.Loading
             _onProgress = onProgress;
             _onProgress?.Invoke(0.3f);
 
-            ProjectContext.I.UserContainer.State = await GetAccountState(DeviceInfoProvider.GetDeviceId());
+            ProjectContext.I.UserContainer.State = await GetAccountState();
            
             _onProgress?.Invoke(1f);
         }
 
-        private async UniTask<UserAccountState> GetAccountState(string deviceId)
+        private async UniTask<UserAccountState> GetAccountState()
         {
-            UserAccountState result = null;
-            
-            //Fake login
-            if (PlayerPrefs.HasKey(deviceId))
-                result = JsonUtility.FromJson<UserAccountState>(PlayerPrefs.GetString(deviceId));
-
-            await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+            var userStateCommunicator = ProjectContext.I.UserStateCommunicator;
+            var result = await userStateCommunicator.GetUserState();
             _onProgress?.Invoke(0.6f);
-            //Fake login
 
-            if (result == null)
+            if (result.IsValid() == false)
             {
                 var assetsLoader = new LocalAssetLoader();
                 var loginWindow = await assetsLoader.Load<LoginWindow>(AssetsConstants.LoginWindow);
                 result = await loginWindow.ProcessLogin();
                 assetsLoader.Unload();
+
+                await userStateCommunicator.SaveUserState(result);
             }
 
-            PlayerPrefs.SetString(deviceId, JsonUtility.ToJson(result));
-            
             return result;
         }
     }

@@ -1,8 +1,9 @@
-﻿using Game.Core.GamePlay;
+﻿using GamePlay;
 using Game.Defend.Tiles;
 using UnityEngine;
+using System.Collections.Generic;
 
-namespace Game.Core
+namespace Core
 {
     public class SceneContext : MonoBehaviour
     {
@@ -13,12 +14,17 @@ namespace Game.Core
         [SerializeField] private GameBoard _board;
         [SerializeField] private GamePlayUI _gamePlayUI;
 
+        private readonly List<GameTileViewController> _tileViewControllers =
+            new List<GameTileViewController>();
+
         public TilesBuilderViewController TilesBuilder { get; private set; }
         public GameTileContentFactory ContentFactory => _contentFactory;
         public WarFactory WarFactory => _warFactory;
         public EnemyFactory EnemyFactory => _enemyFactory;
         public GameBoard GameBoard => _board;
         public GameTileRaycaster GameTileRaycaster { get; private set; }
+        public TilesViewControllerRouter TilesViewControllerRouter { get; private set; }
+        public IEnumerable<GameTileViewController> TileViewControllers => _tileViewControllers;
 
         public static SceneContext I { get; private set; }
 
@@ -30,24 +36,31 @@ namespace Game.Core
         public void Initialize()
         {
             GameTileRaycaster = new GameTileRaycaster(_mainCamera, GameBoard);
-            var tilesViewControllerRouter = new TilesViewControllerRouter(GameTileRaycaster);
+            TilesViewControllerRouter = new TilesViewControllerRouter(GameTileRaycaster);
             TilesBuilder = new TilesBuilderViewController(ContentFactory, GameTileRaycaster,
-                GameBoard, _gamePlayUI, tilesViewControllerRouter);
-
-            new ModifyTileViewController(GameTileContentType.Wall, ContentFactory,
-                GameBoard, _gamePlayUI, tilesViewControllerRouter);
-            new ModifyTileViewController(GameTileContentType.LaserTower, ContentFactory,
-                GameBoard, _gamePlayUI, tilesViewControllerRouter);
-            new ModifyTileViewController(GameTileContentType.MortarTower, ContentFactory,
-                GameBoard, _gamePlayUI, tilesViewControllerRouter);
-            new ModifyTileViewController(GameTileContentType.Ice, ContentFactory,
-                GameBoard, _gamePlayUI, tilesViewControllerRouter);
-            new ModifyTileViewController(GameTileContentType.Lava, ContentFactory,
-                GameBoard, _gamePlayUI, tilesViewControllerRouter);
-            new ModifyTileViewController(GameTileContentType.Destination, ContentFactory,
-                GameBoard, _gamePlayUI, tilesViewControllerRouter);
-            new ModifyTileViewController(GameTileContentType.SpawnPoint, ContentFactory,
-                GameBoard, _gamePlayUI, tilesViewControllerRouter);
+                GameBoard, _gamePlayUI, TilesViewControllerRouter);
+            _tileViewControllers.Add(TilesBuilder);
+            var wallVC = new ModifyTileViewController(GameTileContentType.Wall, ContentFactory,
+                GameBoard, _gamePlayUI, TilesViewControllerRouter);
+            _tileViewControllers.Add(wallVC);
+            var laserVC = new ModifyTileViewController(GameTileContentType.LaserTower, ContentFactory,
+                GameBoard, _gamePlayUI, TilesViewControllerRouter);
+            _tileViewControllers.Add(laserVC);
+            var mortarVC = new ModifyTileViewController(GameTileContentType.MortarTower, ContentFactory,
+                GameBoard, _gamePlayUI, TilesViewControllerRouter);
+            _tileViewControllers.Add(mortarVC);
+            var iceVC = new ModifyTileViewController(GameTileContentType.Ice, ContentFactory,
+                GameBoard, _gamePlayUI, TilesViewControllerRouter);
+            _tileViewControllers.Add(iceVC);
+            var lavaVC = new ModifyTileViewController(GameTileContentType.Lava, ContentFactory,
+                GameBoard, _gamePlayUI, TilesViewControllerRouter);
+            _tileViewControllers.Add(lavaVC);
+            var destinationVC = new ModifyTileViewController(GameTileContentType.Destination, ContentFactory,
+                GameBoard, _gamePlayUI, TilesViewControllerRouter);
+            _tileViewControllers.Add(destinationVC);
+            var spawnPointVC = new ModifyTileViewController(GameTileContentType.SpawnPoint, ContentFactory,
+                GameBoard, _gamePlayUI, TilesViewControllerRouter);
+            _tileViewControllers.Add(spawnPointVC);
         }
     }
 }

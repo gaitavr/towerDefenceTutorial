@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Game.Defend.Tiles
 {
@@ -45,11 +46,12 @@ namespace Game.Defend.Tiles
 
         private RaycastHit? Raycast()
         {
-            if (Physics.Raycast(TouchRay, out var hit, float.MaxValue, 1))
+            var isOverUI = EventSystem.current.IsPointerOverGameObject();
+            if (Physics.Raycast(TouchRay, out var hit, float.MaxValue) && isOverUI == false)
                 return hit;
             return null;
         }
-        
+
         public bool IsPointerDown()
         {
 #if UNITY_EDITOR

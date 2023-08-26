@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Core;
 using Cysharp.Threading.Tasks;
-using Game.Core.GamePlay;
+using GamePlay;
+using GamePlay.Modes;
 using Utils.Assets;
 
 namespace Game.Defend.Tiles
@@ -54,14 +56,20 @@ namespace Game.Defend.Tiles
                     break;
                 default: 
                     throw new ArgumentOutOfRangeException($"No handle for action type: {actionType}");
+
             }
         }
 
         private void UpgradeTile()
         {
-            if (_contentFactory.IsNextUpgradeAllowed(_selectedTile.Content))//TODO check money
+            var level = _selectedTile.Content.Level + 1;
+            var isUpgradeAllowed = _contentFactory.IsNextUpgradeAllowed(_selectedTile.Content);
+            isUpgradeAllowed &= UserContainer.IsUpgradeAllowed(_selectedTile.Content.Type, level);
+            if (isUpgradeAllowed)
             {
-                ReplaceTile(_selectedTile.Content.Level + 1);
+                UserContainer.SpendAfterUpgrade(_selectedTile.Content.Type, level);
+                ReplaceTile(level);
+                BoardActionRecorder?.Record(new UpgradeTileRecord(this, _selectedTile));
             }
         }
 
@@ -69,8 +77,10 @@ namespace Game.Defend.Tiles
         {
             var tilesAround = _gameBoard.GetTilesAround(_selectedTile)
                 .Where(t => t.Content.Type == _selectedTile.Content.Type);
-            
+
             var currentLevel = _selectedTile.Content.Level;
+            var record = new MergeTileRecord(this, currentLevel, tilesAround);
+
             foreach (var t in tilesAround)
             {
                 currentLevel += t.Content.Level + 1;//levels start from 0
@@ -80,18 +90,25 @@ namespace Game.Defend.Tiles
             if(_selectedTile.Content.Level == currentLevel)
                 return;
 
+            BoardActionRecorder?.Record(record);
             ReplaceTile(currentLevel);
         }
 
-        private void ReplaceTile(int level)
+        public void ReplaceTile(int level)
         {
-            var newTile = _contentFactory.Get(_selectedTile.Content.Type, level);
-            _gameBoard.DestroyTile(_selectedTile);
-            _gameBoard.TryBuild(_selectedTile, newTile);
+            ReplaceTile(_selectedTile, level);
         }
-        
+
+        public void ReplaceTile(GameTile tile, int level)
+        {
+            var newTile = _contentFactory.Get(tile.Content.Type, level);
+            _gameBoard.DestroyTile(tile);
+            _gameBoard.TryBuild(tile, newTile);
+        }
+
         private void DestroyTile()
         {
+            BoardActionRecorder?.Record(new DestroyTileRecord(this, _selectedTile));
             _gameBoard.DestroyTile(_selectedTile);
             RaiseFinished();
         }

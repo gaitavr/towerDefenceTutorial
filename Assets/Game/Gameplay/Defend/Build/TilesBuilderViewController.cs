@@ -1,7 +1,8 @@
-using System;
+using Core;
 using Core.Pause;
 using Cysharp.Threading.Tasks;
-using Game.Core.GamePlay;
+using GamePlay;
+using GamePlay.Modes;
 using UnityEngine;
 using Utils.Assets;
 using Object = UnityEngine.Object;
@@ -68,9 +69,15 @@ namespace Game.Defend.Tiles
             if (_raycaster.IsPointerDown())
             {
                 var tile = _raycaster.GetTile();
-                if (tile == null || _gameBoard.TryBuild(tile, _tempTile) == false)
+                if (tile != null && _gameBoard.TryBuild(tile, _tempTile))
+                {
+                    UserContainer.SpendAfterBuild(_tempTile.Type);
+                    BoardActionRecorder?.Record(new BuildTileRecord(tile));
+                }
+                else
+                {
                     Object.Destroy(_tempTile.gameObject);
-
+                }
                 _tempTile = null;
                 _raycaster.UnMute();
             }
@@ -88,8 +95,11 @@ namespace Game.Defend.Tiles
 
             if(_isActive == false)
                 return;
-            
-            //TODO check money
+
+            var isBuildAllowed = UserContainer.IsBuildAllowed(type);
+            if (isBuildAllowed == false)
+                return;
+         
             _tempTile = _contentFactory.Get(type);
             _raycaster.Mute();
         }

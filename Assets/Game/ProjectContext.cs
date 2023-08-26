@@ -1,16 +1,20 @@
 using Core.Pause;
-using Login;
 using UnityEngine;
 using Utils.Assets;
 using Core.Loading;
 using Core;
+using Core.Communication;
 
-public class ProjectContext : MonoBehaviour
+public sealed class ProjectContext : MonoBehaviour
 {
+    [SerializeField] private Camera _uiCamera;
+
     public UserContainer UserContainer { get; private set; }
+    public IUserStateCommunicator UserStateCommunicator { get; private set; }
     public LoadingScreenProvider LoadingScreenProvider { get; private set; }
     public AssetProvider AssetProvider { get; private set; }
     public PauseManager PauseManager { get; private set; }
+    public Camera UICamera => _uiCamera;
 
     public static ProjectContext I { get; private set; }
 
@@ -23,6 +27,7 @@ public class ProjectContext : MonoBehaviour
     public void Initialize()
     {
         UserContainer = new UserContainer();
+        UserStateCommunicator = new LocalUserStateCommunicator();
         LoadingScreenProvider = new LoadingScreenProvider();
         AssetProvider = new AssetProvider();
         PauseManager = new PauseManager();

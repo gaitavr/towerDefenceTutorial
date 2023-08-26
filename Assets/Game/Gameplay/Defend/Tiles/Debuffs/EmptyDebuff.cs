@@ -1,12 +1,15 @@
-﻿public class EmptyDebuff : IDebuff
+﻿namespace GamePlay
 {
-    public void Assign(Enemy enemy)
+    public class EmptyDebuff : IDebuff
     {
-        
-    }
+        public void Assign(Enemy enemy)
+        {
 
-    public void Remove()
-    {
-        
+        }
+
+        public void Remove()
+        {
+
+        }
     }
 }

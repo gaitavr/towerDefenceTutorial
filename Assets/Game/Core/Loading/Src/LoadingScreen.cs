@@ -16,10 +16,10 @@ namespace Core.Loading
         [SerializeField] private float _barSpeed;
         
         private float _targetProgress;
-        private bool _isProgress;
         
         public async UniTask Load(Queue<ILoadingOperation> loadingOperations)
         {
+            _canvas.worldCamera = ProjectContext.I.UICamera;
             _canvas.enabled = true;
             StartCoroutine(UpdateProgressBar());
             
@@ -50,7 +50,7 @@ namespace Core.Loading
         {
             while (_progressFill.value < _targetProgress)
             {
-                await UniTask.Delay(1);
+                await UniTask.Yield();
             }
             await UniTask.Delay(TimeSpan.FromSeconds(0.15f));
         }

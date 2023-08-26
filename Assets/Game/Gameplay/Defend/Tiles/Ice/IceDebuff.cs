@@ -1,26 +1,29 @@
 ﻿
-public class IceDebuff : IDebuff
+namespace GamePlay
 {
-    private readonly IceConfigurationProvider _configuration;
-    private readonly int _level;
-
-    private Enemy _enemy;
-
-    public IceDebuff(IceConfigurationProvider configuration, int level)
+    public class IceDebuff : IDebuff
     {
-        _configuration = configuration;
-        _level = level;
-    }
-    
-    public void Assign(Enemy enemy)
-    {
-        _enemy = enemy;
-        var slow = _configuration.GetSlow(_level);
-        enemy.SetSpeed(slow);
-    }
+        private readonly IceConfigurationProvider _configuration;
+        private readonly int _level;
 
-    public void Remove()
-    {
-        _enemy.SetSpeed(1f);
+        private Enemy _enemy;
+
+        public IceDebuff(IceConfigurationProvider configuration, int level)
+        {
+            _configuration = configuration;
+            _level = level;
+        }
+
+        public void Assign(Enemy enemy)
+        {
+            _enemy = enemy;
+            var slow = _configuration.GetSlow(_level);
+            enemy.SetSpeed(slow);
+        }
+
+        public void Remove()
+        {
+            _enemy.SetSpeed(1f);
+        }
     }
 }

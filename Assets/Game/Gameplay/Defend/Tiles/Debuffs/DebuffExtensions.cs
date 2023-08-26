@@ -1,4 +1,6 @@
-﻿namespace Defend.Debuffs
+﻿using GamePlay;
+
+namespace Defend.Debuffs
 {
     public static class DebuffExtensions
     {

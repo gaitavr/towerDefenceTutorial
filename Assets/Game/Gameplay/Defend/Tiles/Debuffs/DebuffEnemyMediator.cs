@@ -1,24 +1,27 @@
 ﻿using System;
 
-public class DebuffEnemyMediator
+namespace GamePlay
 {
-    private readonly Enemy _enemy;
-    private IDebuff _currentDebuff;
-
-    public DebuffEnemyMediator(Enemy enemy)
+    public class DebuffEnemyMediator
     {
-        _enemy = enemy;
-    }
+        private readonly Enemy _enemy;
+        private IDebuff _currentDebuff;
 
-    public void Replace(IDebuff debuff)
-    {
-        _currentDebuff?.Remove();
-        _currentDebuff = debuff;
-        _currentDebuff.Assign(_enemy);
-    }
+        public DebuffEnemyMediator(Enemy enemy)
+        {
+            _enemy = enemy;
+        }
 
-    public void Dispose()
-    {
-        _currentDebuff?.Remove();
+        public void Replace(IDebuff debuff)
+        {
+            _currentDebuff?.Remove();
+            _currentDebuff = debuff;
+            _currentDebuff.Assign(_enemy);
+        }
+
+        public void Dispose()
+        {
+            _currentDebuff?.Remove();
+        }
     }
 }
