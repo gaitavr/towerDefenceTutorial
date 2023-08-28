@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3021318691352023376}
-  - component: {fileID: 7303828051020432445}
+  - component: {fileID: 5779247972004482767}
   m_Layer: 10
-  m_Name: IceTile0
+  m_Name: Ice2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7303828051020432445
+--- !u!114 &5779247972004482767
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,7 +108,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: de8d48b95cb10ba4f9043ef165d57c5c, type: 2}
+  - {fileID: 2100000, guid: 126dedbe286836e40b6658248f298c1e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
