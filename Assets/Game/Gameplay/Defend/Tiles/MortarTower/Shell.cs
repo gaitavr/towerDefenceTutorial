@@ -1,7 +1,7 @@
 ﻿using GamePlay.Modes;
 using UnityEngine;
 
-namespace GamePlay
+namespace GamePlay.Defend
 {
     public class Shell : WarEntity
     {

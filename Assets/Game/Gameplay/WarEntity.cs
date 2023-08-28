@@ -1,6 +1,6 @@
 ﻿
 
-namespace GamePlay
+namespace GamePlay.Defend
 {
     public abstract class WarEntity : GameBehavior
     {

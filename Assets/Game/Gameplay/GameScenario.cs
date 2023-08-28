@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace GamePlay
+namespace GamePlay.Attack
 {
     [CreateAssetMenu]
     public class GameScenario : ScriptableObject

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GamePlay
+namespace GamePlay.Defend
 {
     public class Explosion : WarEntity
     {

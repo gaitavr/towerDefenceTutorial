@@ -1,6 +1,7 @@
-﻿using System;
+﻿using GamePlay.Attack;
+using System;
 
-namespace GamePlay
+namespace GamePlay.Defend
 {
     public class DebuffEnemyMediator
     {

@@ -1,6 +1,4 @@
-﻿
-
-using Game.Defend.Tiles;
+﻿using GamePlay.Defend;
 
 namespace GamePlay.Modes
 {

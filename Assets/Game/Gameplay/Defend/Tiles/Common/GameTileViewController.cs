@@ -2,11 +2,10 @@
 using Core;
 using Core.Communication;
 using Cysharp.Threading.Tasks;
-using GamePlay;
 using GamePlay.Modes;
 using Utils.Assets;
 
-namespace Game.Defend.Tiles
+namespace GamePlay.Defend
 {
     public abstract class GameTileViewController
     {

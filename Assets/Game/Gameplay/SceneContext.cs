@@ -1,7 +1,8 @@
 ﻿using GamePlay;
-using Game.Defend.Tiles;
 using UnityEngine;
 using System.Collections.Generic;
+using GamePlay.Defend;
+using GamePlay.Attack;
 
 namespace Core
 {

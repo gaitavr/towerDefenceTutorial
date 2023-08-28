@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GamePlay
+namespace GamePlay.Defend
 {
     [CreateAssetMenu]
     public class GameTileContentFactory : GameObjectFactory
