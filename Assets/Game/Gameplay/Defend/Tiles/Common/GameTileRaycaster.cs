@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Game.Defend.Tiles
+namespace GamePlay.Defend
 {
     public class GameTileRaycaster
     {

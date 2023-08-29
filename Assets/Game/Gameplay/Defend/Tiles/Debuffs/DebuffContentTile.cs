@@ -1,7 +1,6 @@
-﻿using Defend.Debuffs;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace GamePlay
+namespace GamePlay.Defend
 {
     public class DebuffContentTile : GameTileContent
     {

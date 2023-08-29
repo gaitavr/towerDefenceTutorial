@@ -1,6 +1,6 @@
-﻿using GamePlay;
+﻿
 
-namespace Defend.Debuffs
+namespace GamePlay.Defend
 {
     public static class DebuffExtensions
     {

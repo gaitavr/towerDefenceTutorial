@@ -1,4 +1,6 @@
-﻿namespace GamePlay
+﻿using GamePlay.Attack;
+
+namespace GamePlay.Defend
 {
     public class EmptyDebuff : IDebuff
     {

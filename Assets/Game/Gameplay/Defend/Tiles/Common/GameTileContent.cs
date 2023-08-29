@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GamePlay
+namespace GamePlay.Defend
 {
     [SelectionBase]
     public class GameTileContent : MonoBehaviour

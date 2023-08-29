@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace GamePlay
+namespace GamePlay.Defend
 {
     public class TargetPointTrigger : MonoBehaviour
     {

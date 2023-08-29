@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using GamePlay.Attack;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace GamePlay
+namespace GamePlay.Defend
 {
     public class TargetPoint : MonoBehaviour
     {
