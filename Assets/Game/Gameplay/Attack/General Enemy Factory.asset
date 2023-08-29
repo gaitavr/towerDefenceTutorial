@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: General Enemy Factory
   m_EditorClassIdentifier: 
   _chomper:
-    Prefab: {fileID: 5567957360134411496, guid: 63d7a0a58ce313848b523d370ff28f61,
+    Prefab: {fileID: 5567957360134411496, guid: 8ffbfe6cca3faa7448a13566559609ac,
       type: 3}
     Scale:
       _min: 0.73417723
