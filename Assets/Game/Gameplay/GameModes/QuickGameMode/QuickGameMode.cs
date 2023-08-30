@@ -65,7 +65,7 @@ namespace GamePlay.Modes
             ProjectContext.I.PauseManager.Register(this);
             SceneContext.I.Initialize();
             _environment = environment;
-            var initialData = BoardData.GetInitial(_boardSize);
+            var initialData = UserBoardState.GetInitial(_boardSize);
             GameBoard.Initialize(initialData);
         }
 

@@ -12,7 +12,7 @@ namespace Core
 
         public UserSocialState Social;
         public UserCurrenciesState Currencies;
-        public List<BoardData> Boards;
+        public List<UserBoardState> Boards;
 
         public byte[] Serialize()
         {
@@ -67,12 +67,12 @@ namespace Core
             Currencies.Deserialize(currenciesBytes);
             
             offset += ByteConverter.ReturnFromStream(data, offset, out byte boardsCount);
-            Boards = new List<BoardData>(boardsCount);
+            Boards = new List<UserBoardState>(boardsCount);
             for (int i = 0; i < boardsCount; i++)
             {
                 offset += ByteConverter.ReturnFromStream(data, offset, out int boardSize);
                 offset += ByteConverter.ReturnFromStream(data, offset, boardSize, out var boardBytes);
-                var board = new BoardData();
+                var board = new UserBoardState();
                 board.Deserialize(boardBytes);
                 Boards.Add(board);
             }
@@ -95,16 +95,16 @@ namespace Core
                     Crystals = 10000,
                     Gas = 125
                 },
-                Boards = new List<BoardData>()
+                Boards = new List<UserBoardState>()
             };
         }
 
-        public BoardData TryGetBoard(string boardName)
+        public UserBoardState TryGetBoard(string boardName)
         {
             return Boards.FirstOrDefault(b => b.Name == boardName);
         }
 
-        public void AddOrReplaceBoard(BoardData board)
+        public void AddOrReplaceBoard(UserBoardState board)
         {
             var index = Boards.IndexOf(board);
             if (index == -1)

@@ -1,9 +1,10 @@
 using System.Text;
 using UnityEngine;
+using Utils.Serialization;
 
-namespace Utils.Serialization
+namespace Core
 {
-    public sealed class BoardData : ISerializable
+    public sealed class UserBoardState : ISerializable
     {
         public int Version;
         public string Name;
@@ -61,10 +62,10 @@ namespace Utils.Serialization
             }
         }
 
-        public static BoardData GetInitial(Vector2Int boardSize)
+        public static UserBoardState GetInitial(Vector2Int boardSize)
         {
             var size = boardSize.x * boardSize.y;
-            var result = new BoardData
+            var result = new UserBoardState
             {
                 Version = 1,
                 Name = $"test{size}",

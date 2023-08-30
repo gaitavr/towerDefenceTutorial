@@ -15,7 +15,7 @@ namespace GamePlay.Modes
     {
         [SerializeField] private EditorHud _hud;
 
-        private BoardData _boardData;
+        private UserBoardState _boardData;
         private Stack<BaseBoardActionRecord> _commandsHistory;
 
         private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
@@ -34,7 +34,7 @@ namespace GamePlay.Modes
             SceneContext.I.Initialize();
 
             _boardData = UserState.TryGetBoard(boardContext.Name);
-            _boardData ??= BoardData.GetInitial(boardContext.Size);
+            _boardData ??= UserBoardState.GetInitial(boardContext.Size);
             GameBoard.Initialize(_boardData);
         }
 

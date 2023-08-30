@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Utils.Serialization;
+﻿using Core;
+using UnityEngine;
 
 namespace Gameplay
 {
@@ -14,7 +14,7 @@ namespace Gameplay
             Size = size;
         }
 
-        public BoardContext(BoardData boardData)
+        public BoardContext(UserBoardState boardData)
         {
             Name = boardData.Name;
             Size = new Vector2Int(boardData.X, boardData.Y);

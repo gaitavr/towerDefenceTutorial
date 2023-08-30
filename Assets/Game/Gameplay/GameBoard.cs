@@ -20,11 +20,11 @@ namespace GamePlay.Defend
         private readonly List<GameTile> _spawnPoints = new();
         private readonly List<GameTileContent> _contentToUpdate = new();
 
-        private BoardData _boardData;
+        private UserBoardState _boardData;
         public byte X => _boardData.X;
         public byte Y => _boardData.Y;
 
-        public void Initialize(BoardData boardData)
+        public void Initialize(UserBoardState boardData)
         {
             _boardData = boardData;
             var offset = new Vector2((X - 1) * 0.5f, (Y - 1) * 0.5f);
