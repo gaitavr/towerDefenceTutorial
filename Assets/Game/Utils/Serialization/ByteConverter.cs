@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Utils.Serialization
 {
@@ -46,6 +47,15 @@ namespace Utils.Serialization
                 destination[offset + i] = source[i];
             }
             return source.Length;
+        }
+
+        public static int AddToStream(List<byte> source, byte[] destination, int offset)
+        {
+            for (var i = 0; i < source.Count; i++)
+            {
+                destination[offset + i] = source[i];
+            }
+            return source.Count;
         }
 
         public static int ReturnFromStream(byte[] source, int offset, out byte destination)

@@ -8,6 +8,7 @@ using Core;
 using Utils;
 using System;
 using Gameplay;
+using Utils.Extensions;
 
 namespace MainMenu
 {
