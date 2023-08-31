@@ -34,7 +34,7 @@ namespace GamePlay.Modes
             SceneContext.I.Initialize();
 
             _boardData = UserState.TryGetBoard(boardContext.Name);
-            _boardData ??= UserBoardState.GetInitial(boardContext.Size);
+            _boardData ??= UserBoardState.GetInitial(boardContext.Size, boardContext.Name);
             GameBoard.Initialize(_boardData);
         }
 

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Utils.Serialization;
 using System;
-using System.Linq;
 
 namespace Core
 {
@@ -19,15 +18,16 @@ namespace Core
         {
             var socialBytes = Social.Serialize();
             var currenciesBytes = Currencies.Serialize();
-            var boardsBytes = SerializeList(Boards.Cast<ISerializable>());
-            var scenariosBytes = SerializeList(AttackScenarios.Cast<ISerializable>());
+            var boardsBytes = SerializationUtils.SerializeList(Boards);
+            var scenariosBytes = SerializationUtils.SerializeList(AttackScenarios);
+
             var result = new byte[
                 sizeof(int) //Version
                 + sizeof(int) //Id
                 + sizeof(int) + socialBytes.Length //Social lenght
                 + sizeof(int) + currenciesBytes.Length //Currencies lenght
-                + sizeof(byte) + boardsBytes.Count
-                + sizeof(byte) + scenariosBytes.Count];
+                + boardsBytes.Count
+                + scenariosBytes.Count];
 
             var offset = 0;
             offset += ByteConverter.AddToStream(Version, result, offset);
@@ -45,22 +45,6 @@ namespace Core
             return result;
         }
 
-        private List<byte> SerializeList(IEnumerable<ISerializable> sources)
-        {
-            var count = sources.Count();
-            var result = new List<byte>(count * 2048)
-            {
-                (byte)count
-            };
-            foreach (var source in sources)
-            {
-                var serializedSource = source.Serialize();
-                result.AddRange(ByteConverter.Serialize(serializedSource.Length));
-                result.AddRange(serializedSource);
-            }
-            return result;
-        }
-
         public void Deserialize(byte[] data)
         {
             var offset = 0;
@@ -68,32 +52,11 @@ namespace Core
             offset += ByteConverter.ReturnFromStream(data, offset, out Version);
             offset += ByteConverter.ReturnFromStream(data, offset, out Id);
 
-            Social = Deserialize<UserSocialState>(data, ref offset);
-            Currencies = Deserialize<UserCurrenciesState>(data, ref offset);
+            Social = SerializationUtils.Deserialize<UserSocialState>(data, ref offset);
+            Currencies = SerializationUtils.Deserialize<UserCurrenciesState>(data, ref offset);
 
-            Boards = DeserializeList<UserBoardState>(data, ref offset);
-            AttackScenarios = DeserializeList<UserAttackScenarioState>(data, ref offset);
-        }
-
-        private T Deserialize<T>(byte[] data, ref int offset) where T : ISerializable, new()
-        {
-            var result = new T();
-            offset += ByteConverter.ReturnFromStream(data, offset, out int objectSize);
-            offset += ByteConverter.ReturnFromStream(data, offset, objectSize, out var bytesToRead);
-            result.Deserialize(bytesToRead);
-            return result;
-        }
-
-        private List<T> DeserializeList<T>(byte[] data, ref int offset) where T : ISerializable, new()
-        {
-            offset += ByteConverter.ReturnFromStream(data, offset, out byte objectsCount);
-            var result = new List<T>(objectsCount);
-            for (int i = 0; i < objectsCount; i++)
-            {
-                var obj = Deserialize<T>(data, ref offset);
-                result.Add(obj);
-            }
-            return result;
+            Boards = SerializationUtils.DeserializeList<UserBoardState>(data, ref offset);
+            AttackScenarios = SerializationUtils.DeserializeList<UserAttackScenarioState>(data, ref offset);
         }
 
         public static UserAccountState GetInitial(string name)
@@ -115,6 +78,9 @@ namespace Core
                 },
                 Boards = new List<UserBoardState>(),
                 AttackScenarios = new List<UserAttackScenarioState>()
+                {
+                    UserAttackScenarioState.GetInitial("ïnitial")
+                }
             };
         }
     }

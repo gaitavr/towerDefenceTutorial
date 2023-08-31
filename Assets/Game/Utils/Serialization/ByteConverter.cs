@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace Utils.Serialization
 {
@@ -17,6 +18,16 @@ namespace Utils.Serialization
             destination[offset + 1] = (byte)(source >> 16);
             destination[offset + 2] = (byte)(source >> 8);
             destination[offset + 3] = (byte)source;
+            return 4;
+        }
+
+        //TODO check posibility to write directly to destination
+        public static unsafe int AddToStream(float source, byte[] destination, int offset)
+        {
+            var bytes = new byte[4];
+            fixed (byte* b = bytes)
+                *((int*)b) = *(int*)&source;
+            AddToStream(bytes, destination, offset);
             return 4;
         }
 
@@ -71,6 +82,15 @@ namespace Utils.Serialization
             destination |= source[offset + 1] << 16;
             destination |= source[offset + 2] << 8;
             destination |= source[offset + 3];
+            return 4;
+        }
+
+        public static unsafe int ReturnFromStream(byte[] source, int offset, out float destination)
+        {
+            fixed (byte* ptr = &source[offset])
+            {
+                destination = * ((float*)(int*)ptr);
+            }
             return 4;
         }
 

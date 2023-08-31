@@ -8,7 +8,6 @@ using UnityEngine;
 using Core.Pause;
 using Cysharp.Threading.Tasks;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using Utils.Serialization;
 using Core;
 using GamePlay.Defend;
 using GamePlay.Attack;
@@ -65,7 +64,7 @@ namespace GamePlay.Modes
             ProjectContext.I.PauseManager.Register(this);
             SceneContext.I.Initialize();
             _environment = environment;
-            var initialData = UserBoardState.GetInitial(_boardSize);
+            var initialData = UserBoardState.GetInitial(_boardSize, $"quick_{_boardSize}");
             GameBoard.Initialize(initialData);
         }
 

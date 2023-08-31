@@ -18,7 +18,10 @@ namespace Core
             var nameBytes = Encoding.UTF8.GetBytes(Name);
             var avatarBytes = Encoding.UTF8.GetBytes(AvatarPath);
 
-            var result = new byte[sizeof(int) + sizeof(byte) + facebookIdBytes.Length + sizeof(byte) + nameBytes.Length
+            var result = new byte[
+                sizeof(int) 
+                + sizeof(byte) + facebookIdBytes.Length 
+                + sizeof(byte) + nameBytes.Length
                 + sizeof(byte) + avatarBytes.Length];
 
             var offset = 0;
@@ -42,17 +45,9 @@ namespace Core
 
             offset += ByteConverter.ReturnFromStream(data, offset, out Version);
 
-            offset += ByteConverter.ReturnFromStream(data, offset, out byte facebookIdSize);
-            offset += ByteConverter.ReturnFromStream(data, offset, facebookIdSize, out var facebookIdBytes);
-            FacebookId = Encoding.UTF8.GetString(facebookIdBytes);
-
-            offset += ByteConverter.ReturnFromStream(data, offset, out byte nameSize);
-            offset += ByteConverter.ReturnFromStream(data, offset, nameSize, out var nameBytes);
-            Name = Encoding.UTF8.GetString(nameBytes);
-
-            offset += ByteConverter.ReturnFromStream(data, offset, out byte avatarPathSize);
-            offset += ByteConverter.ReturnFromStream(data, offset, avatarPathSize, out var avatarPathBytes);
-            AvatarPath = Encoding.UTF8.GetString(avatarPathBytes);
+            FacebookId = SerializationUtils.DeserealizeString(data, ref offset);
+            Name = SerializationUtils.DeserealizeString(data, ref offset);
+            AvatarPath = SerializationUtils.DeserealizeString(data, ref offset);
         }
     }
 }

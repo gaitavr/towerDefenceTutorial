@@ -16,8 +16,12 @@ namespace Core
         public byte[] Serialize()
         {
             var nameBytes = Encoding.UTF8.GetBytes(Name);
-            var result = new byte[sizeof(int) + sizeof(byte) + nameBytes.Length + sizeof(byte) * 2 +
-                                  sizeof(byte) * Content.Length + sizeof(byte) * Levels.Length];
+            var result = new byte[
+                sizeof(int) 
+                + sizeof(byte) + nameBytes.Length 
+                + sizeof(byte) * 2 
+                + sizeof(byte) * Content.Length 
+                + sizeof(byte) * Levels.Length];
 
             var offset = 0;
             offset += ByteConverter.AddToStream(Version, result, offset);
@@ -45,9 +49,7 @@ namespace Core
 
             offset += ByteConverter.ReturnFromStream(data, offset, out Version);
 
-            offset += ByteConverter.ReturnFromStream(data, offset, out byte nameSize);
-            offset += ByteConverter.ReturnFromStream(data, offset, nameSize, out var nameBytes);
-            Name = Encoding.UTF8.GetString(nameBytes);
+            Name = SerializationUtils.DeserealizeString(data, ref offset);
             offset += ByteConverter.ReturnFromStream(data, offset, out X);
             offset += ByteConverter.ReturnFromStream(data, offset, out Y);
 
@@ -62,13 +64,13 @@ namespace Core
             }
         }
 
-        public static UserBoardState GetInitial(Vector2Int boardSize)
+        public static UserBoardState GetInitial(Vector2Int boardSize, string name)
         {
             var size = boardSize.x * boardSize.y;
             var result = new UserBoardState
             {
                 Version = 1,
-                Name = $"test{size}",
+                Name = name,
                 X = (byte)boardSize.x,
                 Y = (byte)boardSize.y,
                 Content = new GameTileContentType[size],
