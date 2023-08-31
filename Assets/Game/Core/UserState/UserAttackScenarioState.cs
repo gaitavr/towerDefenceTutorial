@@ -56,15 +56,29 @@ namespace Core
                             {
                                 Version = 1,//TODO think about it
                                 EnemyType = EnemyType.Chomper,
-                                Count = 100,
+                                Count = 30,
                                 Cooldown = 0.25f
                             },
                             new SpawnSequence()
                             {
                                 Version = 1,
                                 EnemyType = EnemyType.Golem,
-                                Count = 5,
+                                Count = 10,
                                 Cooldown = 1.5f
+                            },
+                            new SpawnSequence()
+                            {
+                                Version = 1,
+                                EnemyType = EnemyType.Elien,
+                                Count = 3,
+                                Cooldown = 3.5f
+                            },
+                            new SpawnSequence()
+                            {
+                                Version = 1,
+                                EnemyType = EnemyType.Grenadier,
+                                Count = 1,
+                                Cooldown = 10f
                             },
                         }
                     }

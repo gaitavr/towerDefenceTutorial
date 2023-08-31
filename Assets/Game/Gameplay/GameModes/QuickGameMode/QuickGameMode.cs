@@ -11,6 +11,7 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 using Core;
 using GamePlay.Defend;
 using GamePlay.Attack;
+using Gameplay;
 
 namespace GamePlay.Modes
 {
@@ -21,12 +22,10 @@ namespace GamePlay.Modes
         [SerializeField] private GameResultWindow _gameResultWindow;
         [SerializeField] private PrepareGamePanel _prepareGamePanel;
         [Space]
-        [SerializeField] private GameScenario _scenario;
         [SerializeField, Range(0, 100)] private int _startingPlayerHealth = 10;
         [SerializeField, Range(5f, 30f)] private float _prepareTime = 15f;
 
-        private bool _scenarioInProcess;
-        private GameScenario.State _activeScenario;
+        private AttackScenarioExecutor _attackScenarioExecutor;
         private CancellationTokenSource _prepareCancellation;
         private SceneInstance _environment;
         private int _playerHealth;
@@ -57,6 +56,7 @@ namespace GamePlay.Modes
 
         private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
         private GameBoard GameBoard => SceneContext.I.GameBoard;
+        private UserAccountState UserState => ProjectContext.I.UserContainer.State;
 
         public void Init(SceneInstance environment)
         {
@@ -64,8 +64,8 @@ namespace GamePlay.Modes
             ProjectContext.I.PauseManager.Register(this);
             SceneContext.I.Initialize();
             _environment = environment;
-            var initialData = UserBoardState.GetInitial(_boardSize, $"quick_{_boardSize}");
-            GameBoard.Initialize(initialData);
+            var boardData = UserBoardState.GetInitial(_boardSize, $"quick_{_boardSize}");
+            GameBoard.Initialize(boardData);
         }
 
         private void Update()
@@ -78,19 +78,19 @@ namespace GamePlay.Modes
                 BeginNewGame();
             }
 
-            if (_scenarioInProcess)
+            if (_attackScenarioExecutor != null)
             {
-                var waves = _activeScenario.GetWaves();
+                var waves = _attackScenarioExecutor.GetWaves();
                 _defenderHud.UpdateScenarioWaves(waves.currentWave, waves.wavesCount);
                 if (PlayerHealth <= 0)
                 {
-                    _scenarioInProcess = false;
+                    _attackScenarioExecutor = null;
                     _gameResultWindow.Show(GameResultType.Defeat, BeginNewGame, GoToMainMenu);
                 }
 
-                if (_activeScenario.Progress() == false && _enemies.IsEmpty)
+                if (_attackScenarioExecutor.MoveNext() == false && _enemies.IsEmpty)
                 {
-                    _scenarioInProcess = false;
+                    _attackScenarioExecutor = null;
                     _gameResultWindow.Show(GameResultType.Victory, BeginNewGame, GoToMainMenu);
                 }
             }
@@ -116,10 +116,7 @@ namespace GamePlay.Modes
                 _prepareCancellation = new CancellationTokenSource();
                 var prepareResult = await _prepareGamePanel.Prepare(_prepareTime, _prepareCancellation.Token);
                 if (prepareResult)
-                {
-                    _activeScenario = _scenario.Begin();
-                    _scenarioInProcess = true;
-                }
+                    _attackScenarioExecutor = new AttackScenarioExecutor(UserState.AttackScenarios[0], SceneContext.I.EnemyFactory);
             }
             catch (TaskCanceledException _)
             {
@@ -131,7 +128,7 @@ namespace GamePlay.Modes
         {
             _defenderHud.QuitGame -= GoToMainMenu;
             TilesBuilder.SetActive(false);
-            _scenarioInProcess = false;
+            _attackScenarioExecutor = null;
             _prepareCancellation?.Cancel();
             _prepareCancellation?.Dispose();
             _enemies.Clear();
