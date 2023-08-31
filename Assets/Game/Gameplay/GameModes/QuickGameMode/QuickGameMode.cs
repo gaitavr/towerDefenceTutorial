@@ -10,7 +10,6 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using Core;
 using GamePlay.Defend;
-using GamePlay.Attack;
 using Gameplay;
 
 namespace GamePlay.Modes
@@ -25,7 +24,7 @@ namespace GamePlay.Modes
         [SerializeField, Range(0, 100)] private int _startingPlayerHealth = 10;
         [SerializeField, Range(5f, 30f)] private float _prepareTime = 15f;
 
-        private AttackScenarioExecutor _attackScenarioExecutor;
+        private AttackScenarioProcessor _attackScenarioExecutor;
         private CancellationTokenSource _prepareCancellation;
         private SceneInstance _environment;
         private int _playerHealth;
@@ -73,28 +72,7 @@ namespace GamePlay.Modes
             if (IsPaused || _instance == null)
                 return;
 
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                BeginNewGame();
-            }
-
-            if (_attackScenarioExecutor != null)
-            {
-                var waves = _attackScenarioExecutor.GetWaves();
-                _defenderHud.UpdateScenarioWaves(waves.currentWave, waves.wavesCount);
-                if (PlayerHealth <= 0)
-                {
-                    _attackScenarioExecutor = null;
-                    _gameResultWindow.Show(GameResultType.Defeat, BeginNewGame, GoToMainMenu);
-                }
-
-                if (_attackScenarioExecutor.MoveNext() == false && _enemies.IsEmpty)
-                {
-                    _attackScenarioExecutor = null;
-                    _gameResultWindow.Show(GameResultType.Victory, BeginNewGame, GoToMainMenu);
-                }
-            }
-
+            UpdateScenario();
             _enemies.GameUpdate();
             Physics.SyncTransforms();
             GameBoard.GameUpdate();
@@ -103,9 +81,31 @@ namespace GamePlay.Modes
             _nonEnemies.GameUpdate();
         }
 
+        private void UpdateScenario()
+        {
+            if (_attackScenarioExecutor != null && _attackScenarioExecutor.IsRunning)
+            {
+                var waves = _attackScenarioExecutor.GetWaves();
+                _defenderHud.UpdateScenarioWaves(waves.currentWave, waves.wavesCount);
+
+                if (PlayerHealth <= 0)
+                {
+                    _attackScenarioExecutor.IsRunning = false;
+                    _gameResultWindow.Show(GameResultType.Defeat, BeginNewGame, GoToMainMenu);
+                }
+
+                if (_attackScenarioExecutor.Process() == false && _enemies.IsEmpty)
+                {
+                    _attackScenarioExecutor.IsRunning = false;
+                    _gameResultWindow.Show(GameResultType.Victory, BeginNewGame, GoToMainMenu);
+                }
+            }
+        }
+
         public async void BeginNewGame()
         {
             Cleanup();
+            ProjectContext.I.UserContainer.IsFreeTiles = true;
             TilesBuilder.SetActive(true);
             PlayerHealth = _startingPlayerHealth;
             _defenderHud.QuitGame += GoToMainMenu;
@@ -116,7 +116,10 @@ namespace GamePlay.Modes
                 _prepareCancellation = new CancellationTokenSource();
                 var prepareResult = await _prepareGamePanel.Prepare(_prepareTime, _prepareCancellation.Token);
                 if (prepareResult)
-                    _attackScenarioExecutor = new AttackScenarioExecutor(UserState.AttackScenarios[0], SceneContext.I.EnemyFactory);
+                {
+                    _attackScenarioExecutor = new AttackScenarioProcessor(UserState.AttackScenarios[0], SceneContext.I.EnemyFactory, GameBoard);
+                    _attackScenarioExecutor.EnemySpawned += OnEnemySpawned;
+                }
             }
             catch (TaskCanceledException _)
             {
@@ -128,12 +131,15 @@ namespace GamePlay.Modes
         {
             _defenderHud.QuitGame -= GoToMainMenu;
             TilesBuilder.SetActive(false);
+            if(_attackScenarioExecutor != null)
+                _attackScenarioExecutor.EnemySpawned -= OnEnemySpawned;
             _attackScenarioExecutor = null;
             _prepareCancellation?.Cancel();
             _prepareCancellation?.Dispose();
             _enemies.Clear();
             _nonEnemies.Clear();
             GameBoard.Clear();
+            ProjectContext.I.UserContainer.IsFreeTiles = false;
         }
 
         private void GoToMainMenu()
@@ -142,14 +148,6 @@ namespace GamePlay.Modes
             operations.Enqueue(new ClearGameOperation(this));
             ProjectContext.I.AssetProvider.UnloadAdditiveScene(_environment).Forget();
             ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(operations).Forget();
-        }
-
-        public static void SpawnEnemy(EnemyFactory factory, EnemyType enemyType)
-        {
-            var spawnPoint = _instance.GameBoard.GetRandomSpawnPoint();
-            var enemy = factory.Get(enemyType);
-            enemy.SpawnOn(spawnPoint);
-            _instance._enemies.Add(enemy);
         }
 
         public static Shell SpawnShell()
@@ -169,6 +167,11 @@ namespace GamePlay.Modes
         public static void EnemyReachedDestination()
         {
             _instance.PlayerHealth--;
+        }
+
+        private void OnEnemySpawned(GameBehavior gameBehavior)
+        {
+            _enemies.Add(gameBehavior);
         }
 
         void IPauseHandler.SetPaused(bool isPaused)

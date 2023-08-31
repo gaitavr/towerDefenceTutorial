@@ -1,29 +1,33 @@
 ﻿using Core;
 using GamePlay.Attack;
-using GamePlay.Modes;
-using System.Collections;
+using GamePlay.Defend;
+using System;
 using UnityEngine;
 using static Core.UserAttackScenarioState;
 
 namespace Gameplay
 {
-    public sealed class AttackScenarioExecutor : IEnumerator
+    public sealed class AttackScenarioProcessor
     {
         private readonly UserAttackScenarioState _scenario;
         private readonly EnemyFactory _enemyFactory;
+        private readonly GameBoard _gameBoard;
 
         private int _currendWaveIndex;
         private int _currentSequenceIndex;
         private float _spawnCooldown;
         private int _spawnCount;
 
-        public object Current => null;
+        public bool IsRunning { get; set; }
+        public event Action<GameBehavior> EnemySpawned;
 
-        public AttackScenarioExecutor(UserAttackScenarioState scenario, EnemyFactory enemyFactory)
+        public AttackScenarioProcessor(UserAttackScenarioState scenario, EnemyFactory enemyFactory,
+            GameBoard gameBoard)
         {
             _scenario = scenario;
             _enemyFactory = enemyFactory;
-            _currentSequenceIndex = 3;
+            _gameBoard = gameBoard;
+            IsRunning = true;
         }
 
         public (int currentWave, int wavesCount) GetWaves()
@@ -31,7 +35,7 @@ namespace Gameplay
             return (_currendWaveIndex + 1, _scenario.Waves.Count + 1);
         }
 
-        public bool MoveNext()
+        public bool Process()
         {
             if (_currendWaveIndex >= _scenario.Waves.Count)
                 return false;
@@ -42,14 +46,6 @@ namespace Gameplay
                 _currendWaveIndex++;
 
             return _currendWaveIndex < _scenario.Waves.Count;
-        }
-
-        public void Reset()
-        {
-            _currendWaveIndex = 0;
-            _currentSequenceIndex = 0;
-            _spawnCooldown = 0;
-            _spawnCount = 0;
         }
 
         private bool ProcessWave(Wave wave)
@@ -72,10 +68,18 @@ namespace Gameplay
             {
                 _spawnCooldown = 0;
                 _spawnCount++;
-                QuickGameMode.SpawnEnemy(_enemyFactory, sequence.EnemyType);
+                SpawnEnemy(_enemyFactory, sequence.EnemyType);
             }
 
             return _spawnCount >= sequence.Count;
+        }
+
+        private void SpawnEnemy(EnemyFactory factory, EnemyType enemyType)
+        {
+            var spawnPoint = _gameBoard.GetRandomSpawnPoint();
+            var enemy = factory.Get(enemyType);
+            enemy.SpawnOn(spawnPoint);
+            EnemySpawned?.Invoke(enemy);
         }
     }
 }
