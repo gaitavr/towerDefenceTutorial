@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using Core;
 using Core.Loading;
 using Cysharp.Threading.Tasks;
+using Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,27 +11,44 @@ namespace MainMenu
     public sealed class MainMenu : MonoBehaviour
     {
         [SerializeField] private Canvas _canvas;
-        [SerializeField] private Button _quickGameBtn;
-        [SerializeField] private Button _editBoardBtn;
-        [SerializeField] private BoardsEditorMenu _editorMenu;
-        
+        [SerializeField] private Button _pvpButton;
+        [SerializeField] private Button _quickGameButton;
+        [SerializeField] private Button _boardsButton;
+        [SerializeField] private Button _scenariosButton;
+        [SerializeField] private BoardsEditorMenu _boardsMenu;
+
+        private UserAccountState UserState => ProjectContext.I.UserContainer.State;
+
         private void Start()
         {
             _canvas.worldCamera = ProjectContext.I.UICamera;
-            _quickGameBtn.onClick.AddListener(OnQuickGameBtnClicked);
-            _editBoardBtn.onClick.AddListener(OnEditorBtnClicked);
+            _pvpButton.onClick.AddListener(OnPvPButtonClicked);
+            _quickGameButton.onClick.AddListener(OnQuickGameButtonnClicked);
+            _boardsButton.onClick.AddListener(OnBoardsButtonClicked);
+            _scenariosButton.onClick.AddListener(OnScenariosButtonClicked);
         }
 
-        private void OnQuickGameBtnClicked()
+        private void OnPvPButtonClicked()
         {
-            var operations = new Queue<ILoadingOperation>();
-            operations.Enqueue(new QuickGameLoadingOperation());
-            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(operations).Forget();
+            var boardContext = new BoardContext(UserState.Boards[0]);//TODO temporary
+            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new PvpModeLoadingOperation(boardContext))
+                .Forget();
         }
 
-        private void OnEditorBtnClicked()
+        private void OnQuickGameButtonnClicked()
         {
-            _editorMenu.Show();
+            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new QuickGameLoadingOperation())
+                .Forget();
+        }
+
+        private void OnBoardsButtonClicked()
+        {
+            _boardsMenu.Show();
+        }
+
+        private void OnScenariosButtonClicked()
+        {
+            //Show scenario edit window
         }
     }
 }

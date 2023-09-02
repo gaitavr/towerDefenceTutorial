@@ -1,4 +1,6 @@
-﻿using GamePlay.Defend;
+﻿using Assets.Game.Gameplay.Attack.Common;
+using Core;
+using GamePlay.Defend;
 using GamePlay.Modes;
 using UnityEngine;
 using Utils.Extensions;
@@ -23,22 +25,25 @@ namespace GamePlay.Attack
         private float _speed;
         private float _originalSpeed;
         private float _tempSpeedFactor;
+        private int _damage;
 
         public float Scale { get; private set; }
         private float Health { get; set; }
 
         public DebuffEnemyMediator DebuffMediator { get; private set; }
+        protected IEnemyInteructionProxy InterructionProxy => SceneContext.I.EnemyInteructionProxy;
 
         private const float CHANGE_DIR_SPEED_MULTIPLIER = 0.8f;
 
-        public void Initialize(float scale, float pathOffset, float speed, float health)
+        public void Initialize(EnemyContext context)
         {
-            _originalSpeed = speed;
-            _model.localScale = new Vector3(scale, scale, scale);
-            _pathOffset = pathOffset;
-            _speed = speed;
-            Scale = scale;
-            Health = health;
+            _originalSpeed = context.Speed;
+            _model.localScale = new Vector3(context.Scale, context.Scale, context.Scale);
+            _pathOffset = context.PathOffset;
+            _speed = context.Speed;
+            Scale = context.Scale;
+            Health = context.Health;
+            _damage = context.Damage;
             DebuffMediator = new DebuffEnemyMediator(this);
             _view.Init(this);
         }
@@ -92,7 +97,7 @@ namespace GamePlay.Attack
             {
                 if (_tileTo == null)
                 {
-                    QuickGameMode.EnemyReachedDestination();
+                    InterructionProxy.EnemyReachedDestination(_damage);
                     Recycle();
                     return false;
                 }

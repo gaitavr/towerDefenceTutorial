@@ -26,12 +26,12 @@ namespace GamePlay.Modes
         {
             SceneContext.I.ContentFactory
         };
-        public string SceneName => Constants.Scenes.EDITOR_MODE;
+        public string SceneName => Constants.Scenes.BOARD_EDITOR_MODE;
 
         public void Init(BoardContext boardContext)
         {
             _commandsHistory = new Stack<BaseBoardActionRecord>();
-            SceneContext.I.Initialize();
+            SceneContext.I.Initialize(null);
 
             _boardData = UserState.TryGetBoard(boardContext.Name);
             _boardData ??= UserBoardState.GetInitial(boardContext.Size, boardContext.Name);
@@ -67,9 +67,8 @@ namespace GamePlay.Modes
 
         private void GoToMainMenu()
         {
-            var operations = new Queue<ILoadingOperation>();
-            operations.Enqueue(new ClearGameOperation(this));
-            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(operations).Forget();
+            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new ClearGameOperation(this))
+                .Forget();
         }
 
         private void OnSaveClicked()

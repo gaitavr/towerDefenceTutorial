@@ -27,6 +27,9 @@ MonoBehaviour:
     Health:
       _min: 100
       _max: 438.35443
+    Damage:
+      _min: 1
+      _max: 5
   _elien:
     Prefab: {fileID: 5567957360134411496, guid: 9e625070c194b444d9622adacf4f428b,
       type: 3}
@@ -42,6 +45,9 @@ MonoBehaviour:
     Health:
       _min: 225.31645
       _max: 551.1392
+    Damage:
+      _min: 20
+      _max: 30
   _golem:
     Prefab: {fileID: 5567957360134411496, guid: 9b19805576d1f5e4db875a33f302d91f,
       type: 3}
@@ -57,6 +63,9 @@ MonoBehaviour:
     Health:
       _min: 567.6582
       _max: 780.69617
+    Damage:
+      _min: 5
+      _max: 25
   _grenadier:
     Prefab: {fileID: 998669896641354974, guid: e3cd1b8fa5cb29e449c7db04f93ed05b, type: 3}
     Scale:
@@ -71,3 +80,6 @@ MonoBehaviour:
     Health:
       _min: 864.43036
       _max: 1000
+    Damage:
+      _min: 50
+      _max: 100

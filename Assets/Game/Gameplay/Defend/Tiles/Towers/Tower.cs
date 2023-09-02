@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using Core;
+using GamePlay.Modes;
+using UnityEngine;
 
 namespace GamePlay.Defend
 {
     public abstract class Tower : GameTileContent
     {
         [SerializeField, Range(1.5f, 10.5f)] protected float _targetingRange = 1.5f;
+
+        protected IEnemyInteructionProxy InterructionProxy => SceneContext.I.EnemyInteructionProxy;
 
         protected bool IsAcquireTarget(out TargetPoint target)
         {

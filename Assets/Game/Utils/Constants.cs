@@ -6,8 +6,9 @@ namespace Utils
         {
             public const string MAIN_MENU = "MainMenu";
             public const string LOGIN = "Login";
+            public const string PVP_MODE = "PvpMode";
             public const string QUICK_GAME_MODE = "QuickGameMode";
-            public const string EDITOR_MODE = "EditorMode";
+            public const string BOARD_EDITOR_MODE = "BoardEditorMode";
         }
 
         public sealed class Game

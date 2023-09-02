@@ -73,9 +73,8 @@ namespace MainMenu
 
         private void LoadBoard(BoardContext boardContext)
         {
-            var loadingOperations = new Queue<ILoadingOperation>();
-            loadingOperations.Enqueue(new EditorModeLoadingOperation(boardContext));
-            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(loadingOperations).Forget();
+            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new EditorModeLoadingOperation(boardContext))
+                .Forget();
         }
 
         public void Select(BoardsEditorMenuItem item) => LoadBoard(item.Context);

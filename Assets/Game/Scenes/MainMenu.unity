@@ -1794,7 +1794,7 @@ GameObject:
   - component: {fileID: 1020835982}
   - component: {fileID: 1020835981}
   m_Layer: 5
-  m_Name: Button2
+  m_Name: ScenariosListButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1817,7 +1817,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -51.4}
+  m_AnchoredPosition: {x: 0, y: -153}
   m_SizeDelta: {x: 431, y: 103}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1020835981
@@ -2095,7 +2095,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: BUTTON 3
+  m_text: QUICK GAME
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5c975f1bdd997a94b86d6aee1ad8abb4, type: 2}
   m_sharedMaterial: {fileID: 3150521420399975424, guid: 5c975f1bdd997a94b86d6aee1ad8abb4,
@@ -3233,7 +3233,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: BUTTON 2
+  m_text: SCENARIOS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5c975f1bdd997a94b86d6aee1ad8abb4, type: 2}
   m_sharedMaterial: {fileID: 3150521420399975424, guid: 5c975f1bdd997a94b86d6aee1ad8abb4,
@@ -3420,7 +3420,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 8110.2095}
+  m_AnchoredPosition: {x: 0, y: 50828.406}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1460646306
@@ -3719,7 +3719,7 @@ GameObject:
   - component: {fileID: 1604420281}
   - component: {fileID: 1604420280}
   m_Layer: 5
-  m_Name: Button3
+  m_Name: QuickGameButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3742,7 +3742,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -153.1}
+  m_AnchoredPosition: {x: 0, y: 53.24}
   m_SizeDelta: {x: 431, y: 103}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1604420280
@@ -5508,7 +5508,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: EDITOR
+  m_text: BOARDS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5c975f1bdd997a94b86d6aee1ad8abb4, type: 2}
   m_sharedMaterial: {fileID: 3150521420399975424, guid: 5c975f1bdd997a94b86d6aee1ad8abb4,
@@ -6164,9 +6164,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 9107539002654093835}
-  _quickGameBtn: {fileID: 9001121651956005173}
-  _editBoardBtn: {fileID: 8999871176300360059}
-  _editorMenu: {fileID: 1803400409631660674}
+  _pvpButton: {fileID: 9001121651956005173}
+  _quickGameButton: {fileID: 1604420280}
+  _boardsButton: {fileID: 8999871176300360059}
+  _scenariosButton: {fileID: 1020835981}
+  _boardsMenu: {fileID: 1803400409631660674}
 --- !u!1 &9041460118824829449
 GameObject:
   m_ObjectHideFlags: 0
@@ -6180,7 +6182,7 @@ GameObject:
   - component: {fileID: 9000717574431770219}
   - component: {fileID: 9001121651956005173}
   m_Layer: 5
-  m_Name: QuickGameButton
+  m_Name: PvPButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6242,7 +6244,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: QUICK GAME
+  m_text: PVP with others
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5c975f1bdd997a94b86d6aee1ad8abb4, type: 2}
   m_sharedMaterial: {fileID: 3150521420399975424, guid: 5c975f1bdd997a94b86d6aee1ad8abb4,
@@ -6366,9 +6368,9 @@ RectTransform:
   - {fileID: 9108141608402999625}
   - {fileID: 8831837013140050610}
   - {fileID: 9106289619681448023}
+  - {fileID: 1604420279}
   - {fileID: 9106741522703981817}
   - {fileID: 1020835980}
-  - {fileID: 1604420279}
   - {fileID: 7659293041032753847}
   - {fileID: 1601265554}
   - {fileID: 488574935}
@@ -6397,7 +6399,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 53.24}
+  m_AnchoredPosition: {x: 0, y: -49.3}
   m_SizeDelta: {x: 431, y: 103}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &9107338091779875163

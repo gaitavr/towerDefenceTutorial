@@ -26,7 +26,7 @@ namespace GamePlay.Defend
 
             if (p.y <= 0f)
             {
-                QuickGameMode.SpawnExplosion().Initialize(_targetPoint, _blastRadius, _damage);
+                InterructionProxy.SpawnExplosion().Initialize(_targetPoint, _blastRadius, _damage);
                 OriginFactory.Reclaim(this);
                 return false;
             }
@@ -37,7 +37,7 @@ namespace GamePlay.Defend
             d.y -= 9.81f * _age;
             transform.localRotation = Quaternion.LookRotation(d);
 
-            QuickGameMode.SpawnExplosion().Initialize(p, 0.1f);
+            InterructionProxy.SpawnExplosion().Initialize(p, 0.1f);
 
             return true;
         }
