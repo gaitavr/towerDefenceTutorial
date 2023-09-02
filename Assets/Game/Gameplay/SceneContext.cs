@@ -27,7 +27,7 @@ namespace Core
         public GameTileRaycaster GameTileRaycaster { get; private set; }
         public TilesViewControllerRouter TilesViewControllerRouter { get; private set; }
         public IEnumerable<GameTileViewController> TileViewControllers => _tileViewControllers;
-        public IEnemyInteructionProxy EnemyInteructionProxy { get; private set; }
+        public IGameEntityInteructionProxy EnemyInteructionProxy { get; private set; }
 
         public static SceneContext I { get; private set; }
 
@@ -36,7 +36,7 @@ namespace Core
             I = this;
         }
         
-        public void Initialize(IEnemyInteructionProxy enemyInteructionProxy)
+        public void Initialize(IGameEntityInteructionProxy enemyInteructionProxy)
         {
             EnemyInteructionProxy = enemyInteructionProxy;
 

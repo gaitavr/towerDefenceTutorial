@@ -3,7 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class PrepareGamePanel : MonoBehaviour
+public sealed class PrepareGamePanel : MonoBehaviour
 {
     [SerializeField] private GameObject[] _colors;
     [SerializeField] private GameObject _go;

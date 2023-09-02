@@ -31,7 +31,7 @@ namespace GamePlay.Attack
         private float Health { get; set; }
 
         public DebuffEnemyMediator DebuffMediator { get; private set; }
-        protected IEnemyInteructionProxy InterructionProxy => SceneContext.I.EnemyInteructionProxy;
+        protected IGameEntityInteructionProxy InterructionProxy => SceneContext.I.EnemyInteructionProxy;
 
         private const float CHANGE_DIR_SPEED_MULTIPLIER = 0.8f;
 

@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-using Core;
+using System;
 using Core.Loading;
 using Cysharp.Threading.Tasks;
-using Gameplay;
+using GamePlay.Modes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,8 +15,7 @@ namespace MainMenu
         [SerializeField] private Button _boardsButton;
         [SerializeField] private Button _scenariosButton;
         [SerializeField] private BoardsEditorMenu _boardsMenu;
-
-        private UserAccountState UserState => ProjectContext.I.UserContainer.State;
+        [SerializeField] private PvpSelectionMenu _pvpSelectionMenu;
 
         private void Start()
         {
@@ -28,11 +26,28 @@ namespace MainMenu
             _scenariosButton.onClick.AddListener(OnScenariosButtonClicked);
         }
 
-        private void OnPvPButtonClicked()
+        private async void OnPvPButtonClicked()
         {
-            var boardContext = new BoardContext(UserState.Boards[0]);//TODO temporary
-            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new PvpModeLoadingOperation(boardContext))
-                .Forget();
+            try
+            {
+                var groupType = await _pvpSelectionMenu.SelectGroup();
+                if (groupType == PvpGroupType.Unknown)
+                    return;
+
+                switch (groupType)
+                {
+                    case PvpGroupType.Attack:
+                    case PvpGroupType.Defend:
+                        ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(
+                            new PvpModeLoadingOperation(groupType, _pvpSelectionMenu.BoardState, _pvpSelectionMenu.AttackScenarioState))
+                            .Forget();
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"{nameof(MainMenu)} OnPvPButtonClicked exception: {e.Message}");
+            }
         }
 
         private void OnQuickGameButtonnClicked()

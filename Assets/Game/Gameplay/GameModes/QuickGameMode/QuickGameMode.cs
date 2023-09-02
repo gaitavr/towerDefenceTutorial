@@ -14,7 +14,7 @@ using Gameplay;
 
 namespace GamePlay.Modes
 {
-    public sealed class QuickGameMode : MonoBehaviour, IGameModeCleaner, IPauseHandler, IEnemyInteructionProxy
+    public sealed class QuickGameMode : MonoBehaviour, IGameModeCleaner, IPauseHandler, IGameEntityInteructionProxy
     {
         [SerializeField] private Vector2Int _boardSize;
         [SerializeField] private DefenderHud _defenderHud;
@@ -64,6 +64,8 @@ namespace GamePlay.Modes
             _environment = environment;
             var boardData = UserBoardState.GetInitial(_boardSize, $"quick_{_boardSize}");
             GameBoard.Initialize(boardData);
+            _attackScenarioExecutor = new AttackScenarioProcessor(UserState.AttackScenarios[0], SceneContext.I.EnemyFactory, GameBoard);
+            _attackScenarioExecutor.EnemySpawned += OnEnemySpawned;
             _isInited = true;
         }
 
@@ -91,20 +93,19 @@ namespace GamePlay.Modes
                 if (PlayerHealth <= 0)
                 {
                     _attackScenarioExecutor.IsRunning = false;
-                    _gameResultWindow.Show(GameResultType.Defeat, BeginNewGame, GoToMainMenu);
+                    _gameResultWindow.Show(GameResultType.Defeat, Restart, GoToMainMenu);
                 }
 
                 if (_attackScenarioExecutor.Process() == false && _enemies.IsEmpty)
                 {
                     _attackScenarioExecutor.IsRunning = false;
-                    _gameResultWindow.Show(GameResultType.Victory, BeginNewGame, GoToMainMenu);
+                    _gameResultWindow.Show(GameResultType.Victory, Restart, GoToMainMenu);
                 }
             }
         }
 
         public async void BeginNewGame()
         {
-            Cleanup();
             ProjectContext.I.UserContainer.IsFreeTiles = true;
             TilesBuilder.SetActive(true);
             PlayerHealth = _startingPlayerHealth;
@@ -117,14 +118,19 @@ namespace GamePlay.Modes
                 var prepareResult = await _prepareGamePanel.Prepare(_prepareTime, _prepareCancellation.Token);
                 if (prepareResult)
                 {
-                    _attackScenarioExecutor = new AttackScenarioProcessor(UserState.AttackScenarios[0], SceneContext.I.EnemyFactory, GameBoard);
-                    _attackScenarioExecutor.EnemySpawned += OnEnemySpawned;
+                    _attackScenarioExecutor.IsRunning = true;
                 }
             }
             catch (TaskCanceledException _)
             {
 
             }
+        }
+
+        public void Restart()
+        {
+            Cleanup();
+            BeginNewGame();
         }
 
         public void Cleanup()
@@ -149,21 +155,21 @@ namespace GamePlay.Modes
                 .Forget();
         }
 
-        Shell IEnemyInteructionProxy.SpawnShell()
+        Shell IGameEntityInteructionProxy.SpawnShell()
         {
             var shell = SceneContext.I.WarFactory.Shell;
             _nonEnemies.Add(shell);
             return shell;
         }
 
-        Explosion IEnemyInteructionProxy.SpawnExplosion()
+        Explosion IGameEntityInteructionProxy.SpawnExplosion()
         {
             var explosion = SceneContext.I.WarFactory.Explosion;
             _nonEnemies.Add(explosion);
             return explosion;
         }
 
-        void IEnemyInteructionProxy.EnemyReachedDestination(int damage)
+        void IGameEntityInteructionProxy.EnemyReachedDestination(int damage)
         {
             PlayerHealth -= damage;
         }

@@ -2,7 +2,7 @@
 
 namespace GamePlay.Modes
 {
-    public interface IEnemyInteructionProxy
+    public interface IGameEntityInteructionProxy
     {
         Shell SpawnShell();
 

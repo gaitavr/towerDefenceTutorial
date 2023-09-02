@@ -7,7 +7,7 @@ namespace GamePlay.Defend
     {
         public WarFactory OriginFactory { get; set; }
 
-        protected IEnemyInteructionProxy InterructionProxy => SceneContext.I.EnemyInteructionProxy;
+        protected IGameEntityInteructionProxy InterructionProxy => SceneContext.I.EnemyInteructionProxy;
 
         public override void Recycle()
         {

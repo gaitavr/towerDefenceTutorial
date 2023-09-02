@@ -27,7 +27,6 @@ namespace Gameplay
             _scenario = scenario;
             _enemyFactory = enemyFactory;
             _gameBoard = gameBoard;
-            IsRunning = true;
         }
 
         public (int currentWave, int wavesCount) GetWaves()

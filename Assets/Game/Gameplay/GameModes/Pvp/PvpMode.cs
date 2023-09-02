@@ -6,17 +6,18 @@ using UnityEngine;
 using Core.Pause;
 using Core.Loading;
 using Core.UI;
-using Utils.Extensions;
 using Cysharp.Threading.Tasks;
+using GameResult;
 
 namespace GamePlay.Modes
 {
-    public sealed class PvpMode : MonoBehaviour, IGameModeCleaner, IPauseHandler, IEnemyInteructionProxy
+    public sealed class PvpMode : MonoBehaviour, IGameModeCleaner, IPauseHandler, IGameEntityInteructionProxy
     {
         [SerializeField] private DefenderHud _defenderHud;
+        [SerializeField] private GameResultWindow _gameResultWindow;
 
         private AttackScenarioProcessor _attackScenarioExecutor;
-        private UserAttackScenarioState _scenarioState;
+        private PvpGroupType _currentGroup;
         private int _playerHealth;
         private int _initialPlayerHealth;
         private bool _isInited;
@@ -44,18 +45,19 @@ namespace GamePlay.Modes
 
         public string SceneName => Utils.Constants.Scenes.PVP_MODE;
         private GameBoard GameBoard => SceneContext.I.GameBoard;
-        private UserAccountState UserState => ProjectContext.I.UserContainer.State;
 
-        public void Init(BoardContext boardContext, UserAttackScenarioState scenarioState)
+        public void Init(PvpGroupType groupType, UserBoardState boardState, UserAttackScenarioState scenarioState)
         {
-            _scenarioState = scenarioState;
             ProjectContext.I.PauseManager.Register(this);
             SceneContext.I.Initialize(this);
 
+            _currentGroup = groupType;
+            _attackScenarioExecutor = new AttackScenarioProcessor(scenarioState, SceneContext.I.EnemyFactory, GameBoard);
+            _attackScenarioExecutor.EnemySpawned += OnEnemySpawned;
+
             _initialPlayerHealth = 100;
 
-            var boardData = UserState.TryGetBoard(boardContext.Name);
-            GameBoard.Initialize(boardData);
+            GameBoard.Initialize(boardState);
             _isInited = true;
         }
 
@@ -78,28 +80,39 @@ namespace GamePlay.Modes
                 var waves = _attackScenarioExecutor.GetWaves();
                 _defenderHud.UpdateScenarioWaves(waves.currentWave, waves.wavesCount);
 
+                GameResultType gameResult;
+
                 if (PlayerHealth <= 0)
                 {
                     _attackScenarioExecutor.IsRunning = false;
-                    //_gameResultWindow.Show(GameResultType.Defeat, BeginNewGame, GoToMainMenu);
+                    gameResult = _currentGroup == PvpGroupType.Attack
+                        ? GameResultType.Victory
+                        : GameResultType.Defeat;
+                    _gameResultWindow.Show(gameResult, Restart, GoToMainMenu);
                 }
 
                 if (_attackScenarioExecutor.Process() == false && _enemies.IsEmpty)
                 {
                     _attackScenarioExecutor.IsRunning = false;
-                    //_gameResultWindow.Show(GameResultType.Victory, BeginNewGame, GoToMainMenu);
+                    gameResult = _currentGroup == PvpGroupType.Attack
+                        ? GameResultType.Defeat
+                        : GameResultType.Victory;
+                    _gameResultWindow.Show(gameResult, Restart, GoToMainMenu);
                 }
             }
         }
 
         public void BeginNewGame()
         {
-            Cleanup();
             PlayerHealth = _initialPlayerHealth;
             _defenderHud.QuitGame += GoToMainMenu;
+            _attackScenarioExecutor.IsRunning = true;
+        }
 
-            _attackScenarioExecutor = new AttackScenarioProcessor(_scenarioState, SceneContext.I.EnemyFactory, GameBoard);
-            _attackScenarioExecutor.EnemySpawned += OnEnemySpawned;
+        public void Restart()
+        {
+            Cleanup();
+            BeginNewGame();
         }
 
         public void Cleanup()
@@ -119,21 +132,21 @@ namespace GamePlay.Modes
                 .Forget();
         }
 
-        Shell IEnemyInteructionProxy.SpawnShell()
+        Shell IGameEntityInteructionProxy.SpawnShell()
         {
             var shell = SceneContext.I.WarFactory.Shell;
             _nonEnemies.Add(shell);
             return shell;
         }
 
-        Explosion IEnemyInteructionProxy.SpawnExplosion()
+        Explosion IGameEntityInteructionProxy.SpawnExplosion()
         {
             var explosion = SceneContext.I.WarFactory.Explosion;
             _nonEnemies.Add(explosion);
             return explosion;
         }
 
-        void IEnemyInteructionProxy.EnemyReachedDestination(int damage)
+        void IGameEntityInteructionProxy.EnemyReachedDestination(int damage)
         {
             PlayerHealth -= damage;
         }

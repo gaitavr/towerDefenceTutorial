@@ -1,5 +1,4 @@
 ﻿using Cysharp.Threading.Tasks;
-using Gameplay;
 using GamePlay.Modes;
 using System;
 using UnityEngine.SceneManagement;
@@ -12,11 +11,15 @@ namespace Core.Loading
     {
         public string Description => "Searching oponent...";
 
-        private readonly BoardContext _boardContext;
+        private readonly PvpGroupType _groupType;
+        private readonly UserBoardState _boardState;
+        private readonly UserAttackScenarioState _attackScenarioState;
 
-        public PvpModeLoadingOperation(BoardContext boardContext)
+        public PvpModeLoadingOperation(PvpGroupType groupType, UserBoardState boardState, UserAttackScenarioState attackScenarioState)
         {
-            _boardContext = boardContext;
+            _groupType = groupType;
+            _boardState = boardState;
+            _attackScenarioState = attackScenarioState;
         }
 
         public async UniTask Load(Action<float> onProgress)
@@ -32,7 +35,7 @@ namespace Core.Loading
             var scene = SceneManager.GetSceneByName(Constants.Scenes.PVP_MODE);
             var pvpMode = scene.GetRoot<PvpMode>();
 
-            pvpMode.Init(_boardContext, UserAttackScenarioState.GetInitial("test"));
+            pvpMode.Init(_groupType, _boardState, _attackScenarioState);
             onProgress?.Invoke(1.0f);
             pvpMode.BeginNewGame();
         }

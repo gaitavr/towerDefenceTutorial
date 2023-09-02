@@ -8,7 +8,7 @@ namespace GamePlay.Defend
     {
         [SerializeField, Range(1.5f, 10.5f)] protected float _targetingRange = 1.5f;
 
-        protected IEnemyInteructionProxy InterructionProxy => SceneContext.I.EnemyInteructionProxy;
+        protected IGameEntityInteructionProxy InterructionProxy => SceneContext.I.EnemyInteructionProxy;
 
         protected bool IsAcquireTarget(out TargetPoint target)
         {

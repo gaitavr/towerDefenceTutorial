@@ -2677,6 +2677,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defenderHud: {fileID: 1077215522}
+  _gameResultWindow: {fileID: 1247649732}
 --- !u!1 &1717496883
 GameObject:
   m_ObjectHideFlags: 0
