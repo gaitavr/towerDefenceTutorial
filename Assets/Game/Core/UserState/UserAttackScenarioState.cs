@@ -56,6 +56,41 @@ namespace Core
                             {
                                 Version = 1,//TODO think about it
                                 EnemyType = EnemyType.Chomper,
+                                Count = 10,
+                                Cooldown = 0.25f
+                            },
+                            new SpawnSequence()
+                            {
+                                Version = 1,
+                                EnemyType = EnemyType.Golem,
+                                Count = 5,
+                                Cooldown = 1.0f
+                            },
+                            new SpawnSequence()
+                            {
+                                Version = 1,
+                                EnemyType = EnemyType.Elien,
+                                Count = 3,
+                                Cooldown = 0.75f
+                            },
+                            new SpawnSequence()
+                            {
+                                Version = 1,
+                                EnemyType = EnemyType.Grenadier,
+                                Count = 1,
+                                Cooldown = 5f
+                            },
+                        }
+                    },
+                    new Wave()
+                    {
+                        Version = 1,
+                        Sequences = new List<SpawnSequence>()
+                        {
+                            new SpawnSequence()
+                            {
+                                Version = 1,//TODO think about it
+                                EnemyType = EnemyType.Chomper,
                                 Count = 30,
                                 Cooldown = 0.25f
                             },
@@ -63,22 +98,57 @@ namespace Core
                             {
                                 Version = 1,
                                 EnemyType = EnemyType.Golem,
-                                Count = 10,
-                                Cooldown = 1.5f
+                                Count = 15,
+                                Cooldown = 1.0f
                             },
                             new SpawnSequence()
                             {
                                 Version = 1,
                                 EnemyType = EnemyType.Elien,
-                                Count = 3,
-                                Cooldown = 3.5f
+                                Count = 9,
+                                Cooldown = 0.75f
                             },
                             new SpawnSequence()
                             {
                                 Version = 1,
                                 EnemyType = EnemyType.Grenadier,
-                                Count = 1,
-                                Cooldown = 10f
+                                Count = 3,
+                                Cooldown = 5f
+                            },
+                        }
+                    },
+                    new Wave()
+                    {
+                        Version = 1,
+                        Sequences = new List<SpawnSequence>()
+                        {
+                            new SpawnSequence()
+                            {
+                                Version = 1,//TODO think about it
+                                EnemyType = EnemyType.Chomper,
+                                Count = 100,
+                                Cooldown = 0.25f
+                            },
+                            new SpawnSequence()
+                            {
+                                Version = 1,
+                                EnemyType = EnemyType.Golem,
+                                Count = 25,
+                                Cooldown = 1.0f
+                            },
+                            new SpawnSequence()
+                            {
+                                Version = 1,
+                                EnemyType = EnemyType.Elien,
+                                Count = 15,
+                                Cooldown = 0.75f
+                            },
+                            new SpawnSequence()
+                            {
+                                Version = 1,
+                                EnemyType = EnemyType.Grenadier,
+                                Count = 10,
+                                Cooldown = 5f
                             },
                         }
                     }

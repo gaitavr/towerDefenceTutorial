@@ -64,7 +64,7 @@ namespace GamePlay.Modes
             _environment = environment;
             var boardData = UserBoardState.GetInitial(_boardSize, $"quick_{_boardSize}");
             GameBoard.Initialize(boardData);
-            _attackScenarioExecutor = new AttackScenarioProcessor(UserState.AttackScenarios[0], SceneContext.I.EnemyFactory, GameBoard);
+            _attackScenarioExecutor = new AttackScenarioProcessor(UserState.AttackScenario, SceneContext.I.EnemyFactory, GameBoard);
             _attackScenarioExecutor.EnemySpawned += OnEnemySpawned;
             _isInited = true;
         }

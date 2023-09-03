@@ -12,14 +12,14 @@ namespace Core
         public UserSocialState Social;
         public UserCurrenciesState Currencies;
         public List<UserBoardState> Boards;
-        public List<UserAttackScenarioState> AttackScenarios;
+        public UserAttackScenarioState AttackScenario;
 
         public byte[] Serialize()
         {
             var socialBytes = Social.Serialize();
             var currenciesBytes = Currencies.Serialize();
             var boardsBytes = SerializationUtils.SerializeList(Boards);
-            var scenariosBytes = SerializationUtils.SerializeList(AttackScenarios);
+            var scenarioBytes = AttackScenario.Serialize();
 
             var result = new byte[
                 sizeof(int) //Version
@@ -27,7 +27,7 @@ namespace Core
                 + sizeof(int) + socialBytes.Length //Social lenght
                 + sizeof(int) + currenciesBytes.Length //Currencies lenght
                 + boardsBytes.Count
-                + scenariosBytes.Count];
+                + sizeof(int) + scenarioBytes.Length]; //AttackScenario lenght
 
             var offset = 0;
             offset += ByteConverter.AddToStream(Version, result, offset);
@@ -40,7 +40,9 @@ namespace Core
             offset += ByteConverter.AddToStream(currenciesBytes, result, offset);
 
             offset += ByteConverter.AddToStream(boardsBytes, result, offset);
-            offset += ByteConverter.AddToStream(scenariosBytes, result, offset);
+
+            offset += ByteConverter.AddToStream(scenarioBytes.Length, result, offset);
+            offset += ByteConverter.AddToStream(scenarioBytes, result, offset);
 
             return result;
         }
@@ -56,7 +58,7 @@ namespace Core
             Currencies = SerializationUtils.Deserialize<UserCurrenciesState>(data, ref offset);
 
             Boards = SerializationUtils.DeserializeList<UserBoardState>(data, ref offset);
-            AttackScenarios = SerializationUtils.DeserializeList<UserAttackScenarioState>(data, ref offset);
+            AttackScenario = SerializationUtils.Deserialize<UserAttackScenarioState>(data, ref offset);
         }
 
         public static UserAccountState GetInitial(string name)
@@ -74,13 +76,11 @@ namespace Core
                 Currencies = new UserCurrenciesState()
                 {
                     Crystals = 1000,
-                    Gas = 250
+                    Gas = 250,
+                    Energy = 100
                 },
                 Boards = new List<UserBoardState>(),
-                AttackScenarios = new List<UserAttackScenarioState>()
-                {
-                    UserAttackScenarioState.GetInitial("ïnitial")
-                }
+                AttackScenario = UserAttackScenarioState.GetInitial("ïnitial")
             };
         }
     }

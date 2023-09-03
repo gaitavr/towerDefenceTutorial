@@ -16,7 +16,7 @@ namespace MainMenu
         private UniTaskCompletionSource<PvpGroupType> _selectionCompletion;
 
         public UserBoardState BoardState => UserState.Boards[0];//TODO temporary
-        public UserAttackScenarioState AttackScenarioState => UserState.AttackScenarios[0];//TODO temporary
+        public UserAttackScenarioState AttackScenarioState => UserState.AttackScenario;
 
         private UserAccountState UserState => ProjectContext.I.UserContainer.State;
 
