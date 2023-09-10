@@ -21,7 +21,7 @@ namespace Core
 
             var offset = 0;
             offset += ByteConverter.AddToStream(Version, result, offset);
-            offset += ByteConverter.AddToStream(CreationDate.Ticks, result, offset);
+            offset += ByteConverter.AddToStream((ulong)CreationDate.Ticks, result, offset);
             offset += ByteConverter.AddToStream(wavesBytes, result, offset);
 
             return result;
@@ -152,7 +152,8 @@ namespace Core
                 var sequencesBytes = SerializationUtils.SerializeList(Sequences);
 
                 var result = new byte[
-                    sizeof(int) + sequencesBytes.Count];
+                    sizeof(int) 
+                    + sequencesBytes.Count];
 
                 var offset = 0;
                 offset += ByteConverter.AddToStream(Version, result, offset);
