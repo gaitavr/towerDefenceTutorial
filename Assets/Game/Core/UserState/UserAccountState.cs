@@ -80,7 +80,7 @@ namespace Core
                     Energy = 100
                 },
                 Boards = new List<UserBoardState>(),
-                AttackScenario = UserAttackScenarioState.GetInitial("ïnitial")
+                AttackScenario = UserAttackScenarioState.GetInitial()
             };
         }
     }

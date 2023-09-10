@@ -13,8 +13,9 @@ namespace MainMenu
         [SerializeField] private Button _pvpButton;
         [SerializeField] private Button _quickGameButton;
         [SerializeField] private Button _boardsButton;
-        [SerializeField] private Button _scenariosButton;
+        [SerializeField] private Button _scenarioButton;
         [SerializeField] private BoardsEditorMenu _boardsMenu;
+        [SerializeField] private AttackScenarioEditorMenu _attackScenarioEditorMenu;
         [SerializeField] private PvpSelectionMenu _pvpSelectionMenu;
 
         private void Start()
@@ -23,7 +24,7 @@ namespace MainMenu
             _pvpButton.onClick.AddListener(OnPvPButtonClicked);
             _quickGameButton.onClick.AddListener(OnQuickGameButtonnClicked);
             _boardsButton.onClick.AddListener(OnBoardsButtonClicked);
-            _scenariosButton.onClick.AddListener(OnScenariosButtonClicked);
+            _scenarioButton.onClick.AddListener(OnScenarioButtonClicked);
         }
 
         private async void OnPvPButtonClicked()
@@ -61,9 +62,9 @@ namespace MainMenu
             _boardsMenu.Show();
         }
 
-        private void OnScenariosButtonClicked()
+        private void OnScenarioButtonClicked()
         {
-            //Show scenario edit window
+            _attackScenarioEditorMenu.Show();
         }
     }
 }
