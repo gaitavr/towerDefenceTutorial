@@ -129,10 +129,26 @@ namespace MainMenu
             textSource.text = $"{prefix}: {amount}";
         }
 
-        void IAttackScenarioViewController.SetNewEnemyCount(EnemyType enemyType, int newCount)
+        void IAttackScenarioViewController.Recalculate()
         {
-            _usedEnergy += UserContainer.CalculateUsedEnergy(enemyType, newCount);
+            _usedEnergy = CalculateUsedEnergy();
             SetEnergyText(_usedEnergyText, _usedEnergy, ENERGY_USED);
+        }
+
+        private int CalculateUsedEnergy()
+        {
+            var result = 0;
+            foreach (var item in _items)
+            {
+                var difference = item.GetDifference();
+                foreach (var diff in difference)
+                {
+                    var temp = UserContainer.CalculateUsedEnergy(diff.Key, diff.Value);
+                    temp = Mathf.Max(0, temp);
+                    result += temp;
+                }
+            }
+            return result;
         }
     }
 }

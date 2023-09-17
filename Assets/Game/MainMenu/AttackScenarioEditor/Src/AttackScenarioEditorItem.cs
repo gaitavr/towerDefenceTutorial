@@ -1,6 +1,7 @@
 ﻿using Core;
 using GamePlay.Attack;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -12,22 +13,6 @@ namespace MainMenu
         [SerializeField] private EnemyGroup[] _enemiesGroups;
 
         private IAttackScenarioViewController _viewController;
-        
-        private void Awake()
-        {
-            foreach (var enemyGroup in _enemiesGroups)
-            {
-                enemyGroup.OnCountChanged(OnEnemyCountChanged);
-            }
-        }
-
-        private void OnDestroy()
-        {
-            foreach (var enemyGroup in _enemiesGroups)
-            {
-                enemyGroup.Dispose();
-            }
-        }
 
         public int GetEnemiesCount(EnemyType enemyType)
         {
@@ -37,6 +22,11 @@ namespace MainMenu
 
         public void Init(UserAttackScenarioState.Wave wave, IAttackScenarioViewController viewController)
         {
+            foreach (var enemyGroup in _enemiesGroups)
+            {
+                enemyGroup.EnemyCountField.onValueChanged.RemoveAllListeners();
+            }
+            
             _viewController = viewController;
             foreach (var sequence in wave.Sequences)
             {
@@ -44,14 +34,27 @@ namespace MainMenu
                 enemyGroup.EnemyCountField.text = sequence.Count.ToString();
                 if(enemyGroup.InitialCount < 0)
                     enemyGroup.InitialCount = sequence.Count;
-
+            }
+            
+            foreach (var enemyGroup in _enemiesGroups)
+            {
+                enemyGroup.EnemyCountField.onValueChanged.AddListener(OnEnemyCountChanged);
             }
         }
-
-        private void OnEnemyCountChanged(EnemyGroup enemyGroup)
+        
+        public IReadOnlyDictionary<EnemyType, int> GetDifference()
         {
-            var difference = enemyGroup.CurrentCount - enemyGroup.InitialCount;
-            _viewController.SetNewEnemyCount(enemyGroup.EnemyType, difference);
+            var result = new Dictionary<EnemyType, int>();
+            foreach (var group in _enemiesGroups)
+            {
+                result[group.EnemyType] = group.CurrentCount - group.InitialCount;
+            }
+            return result;
+        }
+
+        private void OnEnemyCountChanged(string _)
+        {
+            _viewController.Recalculate();
         }
 
         [Serializable]
@@ -61,21 +64,7 @@ namespace MainMenu
             public TMP_InputField EnemyCountField;
 
             public int InitialCount { get; set; } = -1;
-            public int CurrentCount => int.Parse(EnemyCountField.text);
-
-            public void OnCountChanged(Action<EnemyGroup> action)
-            {
-                EnemyCountField.onValueChanged.AddListener((t) =>
-                {
-                    if(CurrentCount >= InitialCount)
-                        action(this);
-                });
-            }
-
-            public void Dispose()
-            {
-                EnemyCountField.onValueChanged.RemoveAllListeners();
-            }
+            public int CurrentCount => int.TryParse(EnemyCountField.text, out var count) ? count : 0;
         }
     }
 }
