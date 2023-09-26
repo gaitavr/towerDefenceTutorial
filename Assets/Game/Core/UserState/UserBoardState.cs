@@ -1,4 +1,3 @@
-using System.Text;
 using UnityEngine;
 using Utils.Serialization;
 
@@ -6,62 +5,57 @@ namespace Core
 {
     public sealed class UserBoardState : ISerializable
     {
-        public int Version;
+        public short Version;
         public string Name;
         public byte X;
         public byte Y;
         public GameTileContentType[] Content;
         public byte[] Levels;
 
-        public byte[] Serialize()
+        public short GetLenght()
         {
-            var nameBytes = Encoding.UTF8.GetBytes(Name);
-            var result = new byte[
-                sizeof(int) 
-                + sizeof(byte) + nameBytes.Length 
-                + sizeof(byte) * 2 
+            var lenght = sizeof(short)
+                + SerializationUtils.GetSizeOfString(Name)
+                + sizeof(byte) + sizeof(byte)
                 + sizeof(byte) * Content.Length 
-                + sizeof(byte) * Levels.Length];
-
-            var offset = 0;
-            offset += ByteConverter.AddToStream(Version, result, offset);
-            offset += ByteConverter.AddToStream((byte)nameBytes.Length, result, offset);
-            offset += ByteConverter.AddToStream(nameBytes, result, offset);
-            offset += ByteConverter.AddToStream(X, result, offset);
-            offset += ByteConverter.AddToStream(Y, result, offset);
+                + sizeof(byte) * Levels.Length;
+            
+            return (short)lenght;
+        }
+        
+        public void Serialize(byte[] data, ref int offset)
+        {
+            offset += ByteConverter.AddToStream(Version, data, offset);
+            SerializationUtils.SerializeString(Name, data, ref offset);
+            offset += ByteConverter.AddToStream(X, data, offset);
+            offset += ByteConverter.AddToStream(Y, data, offset);
 
             foreach (var c in Content)
             {
-                offset += ByteConverter.AddToStream((byte)c, result, offset);
+                offset += ByteConverter.AddToStream((byte)c, data, offset);
             }
 
             foreach (var l in Levels)
             {
-                offset += ByteConverter.AddToStream(l, result, offset);
+                offset += ByteConverter.AddToStream(l, data, offset);
             }
-
-            return result;
         }
 
-        public void Deserialize(byte[] data)
+        public void Deserialize(byte[] data, ref int offset)
         {
-            var offset = 0;
-
             offset += ByteConverter.ReturnFromStream(data, offset, out Version);
-
-            Name = SerializationUtils.DeserealizeString(data, ref offset);
+            Name = SerializationUtils.DeserializeString(data, ref offset);
             offset += ByteConverter.ReturnFromStream(data, offset, out X);
             offset += ByteConverter.ReturnFromStream(data, offset, out Y);
 
-            int size = X * Y;
+            var size = X * Y;
             offset += ByteConverter.ReturnFromStream(data, offset, size, out byte[] content);
-            offset += ByteConverter.ReturnFromStream(data, offset, size, out Levels);
-
             Content = new GameTileContentType[content.Length];
             for (var i = 0; i < content.Length; i++)
             {
                 Content[i] = (GameTileContentType)content[i];
             }
+            offset += ByteConverter.ReturnFromStream(data, offset, size, out Levels);
         }
 
         public static UserBoardState GetInitial(Vector2Int boardSize, string name)

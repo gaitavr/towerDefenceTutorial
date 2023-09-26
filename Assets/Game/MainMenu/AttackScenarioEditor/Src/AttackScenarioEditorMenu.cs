@@ -95,7 +95,7 @@ namespace MainMenu
                 var wave = AccountState.AttackScenario.Waves[i];
                 foreach (var sequence in wave.Sequences)
                 {
-                    sequence.Count = _items[i].GetEnemiesCount(sequence.EnemyType);
+                    sequence.Count = (short)_items[i].GetEnemiesCount(sequence.EnemyType);
                 }
             }
         }

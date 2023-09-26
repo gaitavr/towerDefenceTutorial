@@ -7,33 +7,28 @@ namespace Core
 {
     public sealed class UserAttackScenarioState : ISerializable
     {
-        public int Version;
+        public short Version;
         public DateTime CreationDate;
         public List<Wave> Waves;
 
-        public byte[] Serialize()
+        public short GetLenght()
         {
-            var wavesBytes = SerializationUtils.SerializeList(Waves);
-            var result = new byte[
-                sizeof(int) 
-                + sizeof(long)
-                + wavesBytes.Count];
-
-            var offset = 0;
-            offset += ByteConverter.AddToStream(Version, result, offset);
-            offset += ByteConverter.AddToStream((ulong)CreationDate.Ticks, result, offset);
-            offset += ByteConverter.AddToStream(wavesBytes, result, offset);
-
-            return result;
+            var lenght = sizeof(short) + sizeof(long) + SerializationUtils.GetSizeOfList(Waves);
+            return (short)lenght;
         }
 
-        public void Deserialize(byte[] data)
+        public void Serialize(byte[] data, ref int offset)
         {
-            var offset = 0;
+            offset += ByteConverter.AddToStream(Version, data, offset);
+            offset += ByteConverter.AddToStream(CreationDate.Ticks, data, offset);
+            SerializationUtils.SerializeList(Waves, data,ref  offset);
+        }
 
+        public void Deserialize(byte[] data, ref int offset)
+        {
             offset += ByteConverter.ReturnFromStream(data, offset, out Version);
-            offset += ByteConverter.ReturnFromStream(data, offset, out ulong ticks);
-            CreationDate = new DateTime((long)ticks);
+            offset += ByteConverter.ReturnFromStream(data, offset, out long ticks);
+            CreationDate = new DateTime(ticks);
             Waves = SerializationUtils.DeserializeList<Wave>(data, ref offset);
         }
 
@@ -144,28 +139,23 @@ namespace Core
 
         public sealed class Wave : ISerializable
         {
-            public int Version;
+            public short Version;
             public List<SpawnSequence> Sequences;
 
-            public byte[] Serialize()
+            public short GetLenght()
             {
-                var sequencesBytes = SerializationUtils.SerializeList(Sequences);
-
-                var result = new byte[
-                    sizeof(int) 
-                    + sequencesBytes.Count];
-
-                var offset = 0;
-                offset += ByteConverter.AddToStream(Version, result, offset);
-                offset += ByteConverter.AddToStream(sequencesBytes, result, offset);
-
-                return result;
+                var lenght = sizeof(short) + SerializationUtils.GetSizeOfList(Sequences);
+                return (short)lenght;
             }
 
-            public void Deserialize(byte[] data)
+            public void Serialize(byte[] data, ref int offset)
             {
-                var offset = 0;
+                offset += ByteConverter.AddToStream(Version, data, offset);
+                SerializationUtils.SerializeList(Sequences, data, ref offset);
+            }
 
+            public void Deserialize(byte[] data, ref int offset)
+            {
                 offset += ByteConverter.ReturnFromStream(data, offset, out Version);
                 Sequences = SerializationUtils.DeserializeList<SpawnSequence>(data, ref offset);
             }
@@ -174,28 +164,24 @@ namespace Core
         public sealed class SpawnSequence : ISerializable
         {
             public EnemyType EnemyType;
-            public int Count;
+            public short Count;
             public float Cooldown;
 
-            public byte[] Serialize()
+            public short GetLenght()
             {
-                var result = new byte[
-                    + sizeof(byte)
-                    + sizeof(int)
-                    + sizeof(float)];
-
-                var offset = 0;
-                offset += ByteConverter.AddToStream((byte)EnemyType, result, offset);
-                offset += ByteConverter.AddToStream(Count, result, offset);
-                offset += ByteConverter.AddToStream(Cooldown, result, offset);
-
-                return result;
+                var lenght = sizeof(byte) + sizeof(short) + sizeof(float);
+                return (short)lenght;
+            }
+            
+            public void Serialize(byte[] data, ref int offset)
+            {
+                offset += ByteConverter.AddToStream((byte)EnemyType, data, offset);
+                offset += ByteConverter.AddToStream(Count, data, offset);
+                offset += ByteConverter.AddToStream(Cooldown, data, offset);
             }
 
-            public void Deserialize(byte[] data)
+            public void Deserialize(byte[] data, ref int offset)
             {
-                var offset = 0;
-
                 offset += ByteConverter.ReturnFromStream(data, offset, out byte enemyType);
                 EnemyType = (EnemyType)enemyType;
                 offset += ByteConverter.ReturnFromStream(data, offset, out Count);

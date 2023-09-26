@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace Utils.Serialization
 {
@@ -9,6 +8,13 @@ namespace Utils.Serialization
         {
             destination[offset] = source;
             return 1;
+        }
+        
+        public static int AddToStream(short source, byte[] destination, int offset)
+        {
+            destination[offset] = (byte)(source >> 8);
+            destination[offset + 1] = (byte)source;
+            return 2;
         }
 
         public static int AddToStream(int source, byte[] destination, int offset)
@@ -30,14 +36,7 @@ namespace Utils.Serialization
             return 4;
         }
 
-        public static byte[] Serialize(int source)
-        {
-            var result = new byte[4];
-            AddToStream(source, result, 0);
-            return result;
-        }
-
-        public static int AddToStream(ulong source, byte[] destination, int offset)
+        public static int AddToStream(long source, byte[] destination, int offset)
         {
             destination[offset] = (byte)(source >> 56);
             destination[offset + 1] = (byte)(source >> 48);
@@ -59,19 +58,17 @@ namespace Utils.Serialization
             return source.Length;
         }
 
-        public static int AddToStream(List<byte> source, byte[] destination, int offset)
-        {
-            for (var i = 0; i < source.Count; i++)
-            {
-                destination[offset + i] = source[i];
-            }
-            return source.Count;
-        }
-
         public static int ReturnFromStream(byte[] source, int offset, out byte destination)
         {
             destination = source[offset];
             return 1;
+        }
+        
+        public static int ReturnFromStream(byte[] source, int offset, out short destination)
+        {
+            destination = (short)(source[offset] << 8);
+            destination |= source[offset + 1];
+            return 2;
         }
 
         public static int ReturnFromStream(byte[] source, int offset, out int destination)
@@ -93,17 +90,17 @@ namespace Utils.Serialization
             return 4;
         }
 
-        public static int ReturnFromStream(byte[] source, int offset, out ulong destination)
+        public static int ReturnFromStream(byte[] source, int offset, out long destination)
         {
             destination = 0;
-            destination |= (ulong)source[offset] << 56;
-            destination |= (ulong)source[offset + 1] << 48;
-            destination |= (ulong)source[offset + 2] << 40;
-            destination |= (ulong)source[offset + 3] << 32;
-            destination |= (ulong)source[offset + 4] << 24;
-            destination |= (ulong)source[offset + 5] << 16;
-            destination |= (ulong)source[offset + 6] << 8;
-            destination |= (ulong)source[offset + 7];
+            destination |= (long)source[offset] << 56;
+            destination |= (long)source[offset + 1] << 48;
+            destination |= (long)source[offset + 2] << 40;
+            destination |= (long)source[offset + 3] << 32;
+            destination |= (long)source[offset + 4] << 24;
+            destination |= (long)source[offset + 5] << 16;
+            destination |= (long)source[offset + 6] << 8;
+            destination |= (long)source[offset + 7];
             return 8;
         }
 

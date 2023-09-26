@@ -1,10 +1,10 @@
 ﻿
-
 namespace Utils.Serialization
 {
     public interface ISerializable
     {
-        byte[] Serialize();
-        void Deserialize(byte[] data);
+        short GetLenght();
+        void Serialize(byte[] data, ref int offset);
+        void Deserialize(byte[] data, ref int offset);
     }
 }

@@ -6,57 +6,46 @@ namespace Core
 {
     public sealed class UserAccountState : ISerializable
     {
-        public int Version;
+        public short Version;
         public int Id;
-
         public UserSocialState Social;
         public UserCurrenciesState Currencies;
         public List<UserBoardState> Boards;
         public UserAttackScenarioState AttackScenario;
-
-        public byte[] Serialize()
+        
+        public short GetLenght()
         {
-            var socialBytes = Social.Serialize();
-            var currenciesBytes = Currencies.Serialize();
-            var boardsBytes = SerializationUtils.SerializeList(Boards);
-            var scenarioBytes = AttackScenario.Serialize();
-
-            var result = new byte[
-                sizeof(int) //Version
-                + sizeof(int) //Id
-                + sizeof(int) + socialBytes.Length //Social lenght
-                + sizeof(int) + currenciesBytes.Length //Currencies lenght
-                + boardsBytes.Count
-                + sizeof(int) + scenarioBytes.Length]; //AttackScenario lenght
-
-            var offset = 0;
-            offset += ByteConverter.AddToStream(Version, result, offset);
-            offset += ByteConverter.AddToStream(Id, result, offset);
-
-            offset += ByteConverter.AddToStream(socialBytes.Length, result, offset);
-            offset += ByteConverter.AddToStream(socialBytes, result, offset);
-
-            offset += ByteConverter.AddToStream(currenciesBytes.Length, result, offset);
-            offset += ByteConverter.AddToStream(currenciesBytes, result, offset);
-
-            offset += ByteConverter.AddToStream(boardsBytes, result, offset);
-
-            offset += ByteConverter.AddToStream(scenarioBytes.Length, result, offset);
-            offset += ByteConverter.AddToStream(scenarioBytes, result, offset);
-
-            return result;
+            var lenght = sizeof(short) 
+                + sizeof(int) 
+                + Social.GetLenght()
+                + Currencies.GetLenght()
+                + SerializationUtils.GetSizeOfList(Boards)
+                + AttackScenario.GetLenght();
+            return (short)lenght;
         }
 
-        public void Deserialize(byte[] data)
+        public void Serialize(byte[] data, ref int offset)
         {
-            var offset = 0;
+            offset += ByteConverter.AddToStream(Version, data, offset);
+            offset += ByteConverter.AddToStream(Id, data, offset);
 
+            Social.Serialize(data, ref offset);
+            
+            Currencies.Serialize(data, ref offset);
+
+            SerializationUtils.SerializeList(Boards, data, ref offset);
+            
+            AttackScenario.Serialize(data, ref offset);
+        }
+
+        public void Deserialize(byte[] data, ref int offset)
+        {
             offset += ByteConverter.ReturnFromStream(data, offset, out Version);
             offset += ByteConverter.ReturnFromStream(data, offset, out Id);
 
             Social = SerializationUtils.Deserialize<UserSocialState>(data, ref offset);
             Currencies = SerializationUtils.Deserialize<UserCurrenciesState>(data, ref offset);
-
+            
             Boards = SerializationUtils.DeserializeList<UserBoardState>(data, ref offset);
             AttackScenario = SerializationUtils.Deserialize<UserAttackScenarioState>(data, ref offset);
         }
