@@ -21,7 +21,7 @@ namespace GamePlay.Modes
         private SceneInstance _environment;
         private int _currentPlayerHealth;
         private int _maxPlayerHealth;
-        private bool _isInited;
+        private bool _isRunning;
 
         private readonly GameBehaviorCollection _enemies = new();
         private readonly GameBehaviorCollection _nonEnemies = new();
@@ -60,12 +60,11 @@ namespace GamePlay.Modes
             _attackScenarioExecutor.EnemySpawned += OnEnemySpawned;
 
             _maxPlayerHealth = 100;
-            _isInited = true;
         }
 
         private void Update()
         {
-            if (IsPaused || _isInited == false)
+            if (IsPaused || _isRunning == false)
                 return;
 
             UpdateScenario();
@@ -101,6 +100,7 @@ namespace GamePlay.Modes
             PlayerHealth = _maxPlayerHealth;
             _hudUI.QuitGame += GoToMainMenu;
             _attackScenarioExecutor.IsRunning = true;
+            _isRunning = true;
         }
 
         public void Restart()
@@ -111,6 +111,7 @@ namespace GamePlay.Modes
 
         public void Cleanup()
         {
+            _isRunning = false;
             _hudUI.QuitGame -= GoToMainMenu;
             if (_attackScenarioExecutor != null)
                 _attackScenarioExecutor.EnemySpawned -= OnEnemySpawned;
