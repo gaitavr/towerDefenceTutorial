@@ -7,7 +7,7 @@ using GamePlay.Modes;
 
 namespace Core.Loading
 {
-    public sealed class QuickGameLoadingOperation : ILoadingOperation
+    public sealed class DefendModeLoadingOperation : ILoadingOperation
     {
         public string Description => "Quick game loading...";
         
@@ -23,12 +23,13 @@ namespace Core.Loading
             onProgress?.Invoke(0.7f);
             
             var scene = SceneManager.GetSceneByName(Constants.Scenes.DEFEND_MODE);
-            var quickGameMode = scene.GetRoot<DefendMode>();
+            var defendMode = scene.GetRoot<DefendMode>();
             var environment = await ProjectContext.I.AssetProvider.LoadSceneAdditive("Sand");
 
-            quickGameMode.Init(environment);
+            var attackScenario = ProjectContext.I.UserContainer.State.AttackScenario;//TODO find
+            defendMode.Init(attackScenario, environment);
             onProgress?.Invoke(1.0f);
-            quickGameMode.BeginNewGame();
+            defendMode.BeginNewGame();
         }
     }
 }

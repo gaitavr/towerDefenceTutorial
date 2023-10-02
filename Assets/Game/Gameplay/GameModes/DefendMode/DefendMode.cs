@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.UI;
@@ -16,18 +17,13 @@ namespace GamePlay.Modes
 {
     public sealed class DefendMode : MonoBehaviour, IGameModeCleaner, IPauseHandler, IGameEntityInteructionProxy
     {
-        [SerializeField] private Vector2Int _boardSize;
-        [SerializeField] private DefenderHud _defenderHud;
+        [SerializeField] private HudUI _hudUI;
         [SerializeField] private GameResultWindow _gameResultWindow;
-        [SerializeField] private PrepareGamePanel _prepareGamePanel;
-        [Space]
-        [SerializeField, Range(0, 100)] private int _startingPlayerHealth = 10;
-        [SerializeField, Range(5f, 30f)] private float _prepareTime = 15f;
 
         private AttackScenarioProcessor _attackScenarioExecutor;
-        private CancellationTokenSource _prepareCancellation;
         private SceneInstance _environment;
-        private int _playerHealth;
+        private int _currentPlayerHealth;
+        private int _maxPlayerHealth;
         private bool _isInited;
 
         private readonly GameBehaviorCollection _enemies = new();
@@ -37,11 +33,11 @@ namespace GamePlay.Modes
 
         private int PlayerHealth
         {
-            get => _playerHealth;
+            get => _currentPlayerHealth;
             set
             {
-                _playerHealth = Mathf.Max(0, value);
-                _defenderHud.UpdatePlayerHealth(_playerHealth, _startingPlayerHealth);
+                _currentPlayerHealth = Mathf.Max(0, value);
+                _hudUI.UpdatePlayerHealth(_currentPlayerHealth, _maxPlayerHealth);
             }
         }
 
@@ -50,22 +46,23 @@ namespace GamePlay.Modes
             SceneContext.I.ContentFactory, SceneContext.I.WarFactory,
             SceneContext.I.EnemyFactory
         };
-
         public string SceneName => Utils.Constants.Scenes.DEFEND_MODE;
-
-        private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
         private GameBoard GameBoard => SceneContext.I.GameBoard;
         private UserAccountState UserState => ProjectContext.I.UserContainer.State;
 
-        public void Init(SceneInstance environment)
+        public void Init(UserAttackScenarioState scenarioState, SceneInstance environment)
         {
             ProjectContext.I.PauseManager.Register(this);
             SceneContext.I.Initialize(this);
+            
             _environment = environment;
-            var boardData = UserBoardState.GetInitial(_boardSize, $"quick_{_boardSize}");//TODO make toggle for current board
-            GameBoard.Initialize(boardData);
-            _attackScenarioExecutor = new AttackScenarioProcessor(UserState.AttackScenario, SceneContext.I.EnemyFactory, GameBoard);
+            var selectedBoard = UserState.Boards.FirstOrDefault(b => b.Selected);
+            GameBoard.Initialize(selectedBoard);
+            
+            _attackScenarioExecutor = new AttackScenarioProcessor(scenarioState, SceneContext.I.EnemyFactory, GameBoard);
             _attackScenarioExecutor.EnemySpawned += OnEnemySpawned;
+            
+            _maxPlayerHealth = 100;
             _isInited = true;
         }
 
@@ -78,53 +75,35 @@ namespace GamePlay.Modes
             _enemies.GameUpdate();
             Physics.SyncTransforms();
             GameBoard.GameUpdate();
-            SceneContext.I.GameTileRaycaster.GameUpdate();
-            TilesBuilder.GameUpdate();
             _nonEnemies.GameUpdate();
         }
 
         private void UpdateScenario()
         {
-            if (_attackScenarioExecutor != null && _attackScenarioExecutor.IsRunning)
+            if (_attackScenarioExecutor is not { IsRunning: true }) 
+                return;
+            
+            var waves = _attackScenarioExecutor.GetWaves();
+            _hudUI.UpdateScenarioWaves(waves.currentWave, waves.wavesCount);
+
+            if (PlayerHealth <= 0)
             {
-                var waves = _attackScenarioExecutor.GetWaves();
-                _defenderHud.UpdateScenarioWaves(waves.currentWave, waves.wavesCount);
+                _attackScenarioExecutor.IsRunning = false;
+                _gameResultWindow.Show(GameResultType.Defeat, Restart, GoToMainMenu);
+            }
 
-                if (PlayerHealth <= 0)
-                {
-                    _attackScenarioExecutor.IsRunning = false;
-                    _gameResultWindow.Show(GameResultType.Defeat, Restart, GoToMainMenu);
-                }
-
-                if (_attackScenarioExecutor.Process() == false && _enemies.IsEmpty)
-                {
-                    _attackScenarioExecutor.IsRunning = false;
-                    _gameResultWindow.Show(GameResultType.Victory, Restart, GoToMainMenu);
-                }
+            if (_attackScenarioExecutor.Process() == false && _enemies.IsEmpty)
+            {
+                _attackScenarioExecutor.IsRunning = false;
+                _gameResultWindow.Show(GameResultType.Victory, Restart, GoToMainMenu);
             }
         }
 
-        public async void BeginNewGame()
+        public void BeginNewGame()
         {
-            ProjectContext.I.UserContainer.IsFreeTiles = true;
-            TilesBuilder.SetActive(true);
-            PlayerHealth = _startingPlayerHealth;
-            _defenderHud.QuitGame += GoToMainMenu;
-
-            try
-            {
-                _prepareCancellation?.Dispose();
-                _prepareCancellation = new CancellationTokenSource();
-                var prepareResult = await _prepareGamePanel.Prepare(_prepareTime, _prepareCancellation.Token);
-                if (prepareResult)
-                {
-                    _attackScenarioExecutor.IsRunning = true;
-                }
-            }
-            catch (TaskCanceledException _)
-            {
-
-            }
+            PlayerHealth = _maxPlayerHealth;
+            _hudUI.QuitGame += GoToMainMenu;
+            _attackScenarioExecutor.IsRunning = true;
         }
 
         public void Restart()
@@ -135,17 +114,13 @@ namespace GamePlay.Modes
 
         public void Cleanup()
         {
-            _defenderHud.QuitGame -= GoToMainMenu;
-            TilesBuilder.SetActive(false);
+            _hudUI.QuitGame -= GoToMainMenu;
             if(_attackScenarioExecutor != null)
                 _attackScenarioExecutor.EnemySpawned -= OnEnemySpawned;
             _attackScenarioExecutor = null;
-            _prepareCancellation?.Cancel();
-            _prepareCancellation?.Dispose();
             _enemies.Clear();
             _nonEnemies.Clear();
             GameBoard.Clear();
-            ProjectContext.I.UserContainer.IsFreeTiles = false;
         }
 
         private void GoToMainMenu()

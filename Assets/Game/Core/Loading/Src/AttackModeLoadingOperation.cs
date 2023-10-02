@@ -12,13 +12,6 @@ namespace Core.Loading
     {
         public string Description => "Searching oponent...";
 
-        private readonly UserAttackScenarioState _attackScenarioState;
-
-        public AttackModeLoadingOperation(UserAttackScenarioState attackScenarioState)
-        {
-            _attackScenarioState = attackScenarioState;
-        }
-
         public async UniTask Load(Action<float> onProgress)
         {
             onProgress?.Invoke(0.3f);
@@ -30,12 +23,13 @@ namespace Core.Loading
             onProgress?.Invoke(0.7f);
 
             var scene = SceneManager.GetSceneByName(Constants.Scenes.ATTACK_MODE);
-            var pvpMode = scene.GetRoot<AttackMode>();
+            var attackMode = scene.GetRoot<AttackMode>();
+            var environment = await ProjectContext.I.AssetProvider.LoadSceneAdditive("Sand");
 
             var boardState = UserBoardState.GetInitial(new Vector2Int(5, 5), "test");//TODO search real board
-            pvpMode.Init(boardState, _attackScenarioState);
+            attackMode.Init(boardState, environment);
             onProgress?.Invoke(1.0f);
-            pvpMode.BeginNewGame();
+            attackMode.BeginNewGame();
         }
     }
 }

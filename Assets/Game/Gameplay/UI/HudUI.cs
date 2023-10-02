@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Core.UI
 {
-    public class DefenderHud : MonoBehaviour
+    public class HudUI : MonoBehaviour
     {
         [SerializeField] private Canvas _canvas;
         [SerializeField] private TextMeshProUGUI _wavesText;

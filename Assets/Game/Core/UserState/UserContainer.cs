@@ -9,8 +9,6 @@ namespace Core
         public UserAccountState State { get; set; }
         public AppConfiguration Configuration { get; set; }
 
-        public bool IsFreeTiles { get; set; }
-
         public bool IsBuildAllowed(GameTileContentType tileContentType)
         {
             return State.Currencies.Crystals >= Configuration.GetBuildCost(tileContentType);
@@ -33,8 +31,6 @@ namespace Core
 
         private void ChangeAfterBuild(GameTileContentType tileContentType, bool isPositive)
         {
-            if (IsFreeTiles)
-                return;
             var buildCost = Configuration.GetBuildCost(tileContentType);
             if (isPositive == false)
                 buildCost *= -1;
@@ -58,8 +54,6 @@ namespace Core
 
         private void ChangeAfterUpgrade(GameTileContentType tileContentType, int level, bool isPositive)
         {
-            if (IsFreeTiles)
-                return;
             var upgradeCost = Configuration.GetUpgradeCost(tileContentType, level);
             if (isPositive == false)
                 upgradeCost *= -1;

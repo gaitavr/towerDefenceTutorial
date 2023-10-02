@@ -11,6 +11,7 @@ namespace Core
         public byte Y;
         public GameTileContentType[] Content;
         public byte[] Levels;
+        public bool Selected = true; // TODO implement logic
 
         public short GetLenght()
         {
@@ -18,7 +19,8 @@ namespace Core
                 + SerializationUtils.GetSizeOfString(Name)
                 + sizeof(byte) + sizeof(byte)
                 + sizeof(byte) * Content.Length 
-                + sizeof(byte) * Levels.Length;
+                + sizeof(byte) * Levels.Length
+                + sizeof(bool);
             
             return (short)lenght;
         }

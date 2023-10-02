@@ -2676,7 +2676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 668b20a2166226f48aaf91a55f9b29a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defenderHud: {fileID: 1077215522}
+  _hudUI: {fileID: 1077215522}
   _gameResultWindow: {fileID: 1247649732}
 --- !u!1 &1717496883
 GameObject:

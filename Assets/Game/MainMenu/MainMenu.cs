@@ -15,8 +15,6 @@ namespace MainMenu
         [SerializeField] private Button _boardsButton;
         [SerializeField] private BoardsEditorMenu _boardsMenu;
         [SerializeField] private AttackScenarioEditorMenu _attackScenarioEditorMenu;
-
-        private UserAccountState AccountState => ProjectContext.I.UserContainer.State;
         
         private void Start()
         {
@@ -32,7 +30,7 @@ namespace MainMenu
             {
                 await _attackScenarioEditorMenu.Show();
                 ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(
-                        new AttackModeLoadingOperation(AccountState.AttackScenario))
+                        new AttackModeLoadingOperation())
                     .Forget();
             }
             catch (Exception e)
@@ -43,7 +41,7 @@ namespace MainMenu
 
         private void OnDefendButtonClicked()
         {
-            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new QuickGameLoadingOperation())
+            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new DefendModeLoadingOperation())
                 .Forget();
         }
 

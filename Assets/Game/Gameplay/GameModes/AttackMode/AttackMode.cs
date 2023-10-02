@@ -8,17 +8,19 @@ using Core.Loading;
 using Core.UI;
 using Cysharp.Threading.Tasks;
 using GameResult;
+using UnityEngine.ResourceManagement.ResourceProviders;
 
 namespace GamePlay.Modes
 {
     public sealed class AttackMode : MonoBehaviour, IGameModeCleaner, IPauseHandler, IGameEntityInteructionProxy
     {
-        [SerializeField] private DefenderHud _defenderHud;
+        [SerializeField] private HudUI _hudUI;
         [SerializeField] private GameResultWindow _gameResultWindow;
 
         private AttackScenarioProcessor _attackScenarioExecutor;
-        private int _playerHealth;
-        private int _initialPlayerHealth;
+        private SceneInstance _environment;
+        private int _currentPlayerHealth;
+        private int _maxPlayerHealth;
         private bool _isInited;
 
         private readonly GameBehaviorCollection _enemies = new();
@@ -28,11 +30,11 @@ namespace GamePlay.Modes
 
         private int PlayerHealth
         {
-            get => _playerHealth;
+            get => _currentPlayerHealth;
             set
             {
-                _playerHealth = Mathf.Max(0, value);
-                _defenderHud.UpdatePlayerHealth(_playerHealth, _initialPlayerHealth);
+                _currentPlayerHealth = Mathf.Max(0, value);
+                _hudUI.UpdatePlayerHealth(_currentPlayerHealth, _maxPlayerHealth);
             }
         }
 
@@ -44,18 +46,20 @@ namespace GamePlay.Modes
 
         public string SceneName => Utils.Constants.Scenes.ATTACK_MODE;
         private GameBoard GameBoard => SceneContext.I.GameBoard;
+        private UserAccountState UserState => ProjectContext.I.UserContainer.State;
 
-        public void Init(UserBoardState boardState, UserAttackScenarioState scenarioState)
+        public void Init(UserBoardState opponentBoard, SceneInstance environment)
         {
             ProjectContext.I.PauseManager.Register(this);
             SceneContext.I.Initialize(this);
 
-            _attackScenarioExecutor = new AttackScenarioProcessor(scenarioState, SceneContext.I.EnemyFactory, GameBoard);
+            _environment = environment;
+            GameBoard.Initialize(opponentBoard);
+            
+            _attackScenarioExecutor = new AttackScenarioProcessor(UserState.AttackScenario, SceneContext.I.EnemyFactory, GameBoard);
             _attackScenarioExecutor.EnemySpawned += OnEnemySpawned;
 
-            _initialPlayerHealth = 100;
-
-            GameBoard.Initialize(boardState);
+            _maxPlayerHealth = 100;
             _isInited = true;
         }
 
@@ -73,33 +77,29 @@ namespace GamePlay.Modes
 
         private void UpdateScenario()
         {
-            if (_attackScenarioExecutor != null && _attackScenarioExecutor.IsRunning)
+            if (_attackScenarioExecutor is not { IsRunning: true }) 
+                return;
+            
+            var waves = _attackScenarioExecutor.GetWaves();
+            _hudUI.UpdateScenarioWaves(waves.currentWave, waves.wavesCount);
+
+            if (PlayerHealth <= 0)
             {
-                var waves = _attackScenarioExecutor.GetWaves();
-                _defenderHud.UpdateScenarioWaves(waves.currentWave, waves.wavesCount);
+                _attackScenarioExecutor.IsRunning = false;
+                _gameResultWindow.Show(GameResultType.Victory, Restart, GoToMainMenu);
+            }
 
-                GameResultType gameResult;
-
-                if (PlayerHealth <= 0)
-                {
-                    _attackScenarioExecutor.IsRunning = false;
-                    gameResult = GameResultType.Victory;
-                    _gameResultWindow.Show(gameResult, Restart, GoToMainMenu);
-                }
-
-                if (_attackScenarioExecutor.Process() == false && _enemies.IsEmpty)
-                {
-                    _attackScenarioExecutor.IsRunning = false;
-                    gameResult = GameResultType.Defeat;
-                    _gameResultWindow.Show(gameResult, Restart, GoToMainMenu);
-                }
+            if (_attackScenarioExecutor.Process() == false && _enemies.IsEmpty)
+            {
+                _attackScenarioExecutor.IsRunning = false;
+                _gameResultWindow.Show(GameResultType.Defeat, Restart, GoToMainMenu);
             }
         }
 
         public void BeginNewGame()
         {
-            PlayerHealth = _initialPlayerHealth;
-            _defenderHud.QuitGame += GoToMainMenu;
+            PlayerHealth = _maxPlayerHealth;
+            _hudUI.QuitGame += GoToMainMenu;
             _attackScenarioExecutor.IsRunning = true;
         }
 
@@ -111,7 +111,7 @@ namespace GamePlay.Modes
 
         public void Cleanup()
         {
-            _defenderHud.QuitGame -= GoToMainMenu;
+            _hudUI.QuitGame -= GoToMainMenu;
             if (_attackScenarioExecutor != null)
                 _attackScenarioExecutor.EnemySpawned -= OnEnemySpawned;
             _attackScenarioExecutor = null;
@@ -122,6 +122,7 @@ namespace GamePlay.Modes
 
         private void GoToMainMenu()
         {
+            ProjectContext.I.AssetProvider.UnloadAdditiveScene(_environment).Forget();
             ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new ClearGameOperation(this))
                 .Forget();
         }
