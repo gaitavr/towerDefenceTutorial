@@ -1,7 +1,7 @@
 using System;
+using Core;
 using Core.Loading;
 using Cysharp.Threading.Tasks;
-using GamePlay.Modes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,48 +10,38 @@ namespace MainMenu
     public sealed class MainMenu : MonoBehaviour
     {
         [SerializeField] private Canvas _canvas;
-        [SerializeField] private Button _pvpButton;
-        [SerializeField] private Button _quickGameButton;
+        [SerializeField] private Button _attackButton;
+        [SerializeField] private Button _defendButton;
         [SerializeField] private Button _boardsButton;
-        [SerializeField] private Button _scenarioButton;
         [SerializeField] private BoardsEditorMenu _boardsMenu;
         [SerializeField] private AttackScenarioEditorMenu _attackScenarioEditorMenu;
-        [SerializeField] private PvpSelectionMenu _pvpSelectionMenu;
 
+        private UserAccountState AccountState => ProjectContext.I.UserContainer.State;
+        
         private void Start()
         {
             _canvas.worldCamera = ProjectContext.I.UICamera;
-            _pvpButton.onClick.AddListener(OnPvPButtonClicked);
-            _quickGameButton.onClick.AddListener(OnQuickGameButtonnClicked);
+            _attackButton.onClick.AddListener(OnAttackButtonClicked);
+            _defendButton.onClick.AddListener(OnDefendButtonClicked);
             _boardsButton.onClick.AddListener(OnBoardsButtonClicked);
-            _scenarioButton.onClick.AddListener(OnScenarioButtonClicked);
         }
 
-        private async void OnPvPButtonClicked()
+        private async void OnAttackButtonClicked()
         {
             try
             {
-                var groupType = await _pvpSelectionMenu.SelectGroup();
-                if (groupType == PvpGroupType.Unknown)
-                    return;
-
-                switch (groupType)
-                {
-                    case PvpGroupType.Attack:
-                    case PvpGroupType.Defend:
-                        ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(
-                            new PvpModeLoadingOperation(groupType, _pvpSelectionMenu.BoardState, _pvpSelectionMenu.AttackScenarioState))
-                            .Forget();
-                        break;
-                }
+                await _attackScenarioEditorMenu.Show();
+                ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(
+                        new AttackModeLoadingOperation(AccountState.AttackScenario))
+                    .Forget();
             }
             catch (Exception e)
             {
-                Debug.LogError($"{nameof(MainMenu)} OnPvPButtonClicked exception: {e.Message}");
+                Debug.LogError($"{nameof(MainMenu)} {nameof(OnAttackButtonClicked)} exception: {e.Message}");
             }
         }
 
-        private void OnQuickGameButtonnClicked()
+        private void OnDefendButtonClicked()
         {
             ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new QuickGameLoadingOperation())
                 .Forget();
@@ -60,11 +50,6 @@ namespace MainMenu
         private void OnBoardsButtonClicked()
         {
             _boardsMenu.Show();
-        }
-
-        private void OnScenarioButtonClicked()
-        {
-            _attackScenarioEditorMenu.Show();
         }
     }
 }

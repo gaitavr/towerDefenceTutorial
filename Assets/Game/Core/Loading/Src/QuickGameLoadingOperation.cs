@@ -14,7 +14,7 @@ namespace Core.Loading
         public async UniTask Load(Action<float> onProgress)
         {
             onProgress?.Invoke(0.3f);
-            var loadOp = SceneManager.LoadSceneAsync(Constants.Scenes.QUICK_GAME_MODE, 
+            var loadOp = SceneManager.LoadSceneAsync(Constants.Scenes.DEFEND_MODE, 
                 LoadSceneMode.Single);
             while (loadOp.isDone == false)
             {
@@ -22,8 +22,8 @@ namespace Core.Loading
             }
             onProgress?.Invoke(0.7f);
             
-            var scene = SceneManager.GetSceneByName(Constants.Scenes.QUICK_GAME_MODE);
-            var quickGameMode = scene.GetRoot<QuickGameMode>();
+            var scene = SceneManager.GetSceneByName(Constants.Scenes.DEFEND_MODE);
+            var quickGameMode = scene.GetRoot<DefendMode>();
             var environment = await ProjectContext.I.AssetProvider.LoadSceneAdditive("Sand");
 
             quickGameMode.Init(environment);

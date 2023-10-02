@@ -1,9 +1,8 @@
-using System;
 using Core;
 using Core.Communication;
 using System.Collections.Generic;
 using System.Linq;
-using GamePlay.Attack;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +26,7 @@ namespace MainMenu
 
         private readonly List<AttackScenarioEditorItem> _items = new();
         private int _usedEnergy;
+        private UniTaskCompletionSource _showCompletion;
 
         private UserAccountState AccountState => ProjectContext.I.UserContainer.State;
 
@@ -40,8 +40,10 @@ namespace MainMenu
             _resetButton.onClick.AddListener(OnResetButtonClicked);
         }
 
-        public void Show()
+        public UniTask Show()
         {
+            _showCompletion = new UniTaskCompletionSource();
+            
             foreach (var item in AccountState.AttackScenario.Waves.Select(_ => Instantiate(_itemPrefab, _contentParent)))
             {
                 item.gameObject.SetActive(true);
@@ -53,6 +55,8 @@ namespace MainMenu
 
             _canvas.worldCamera = ProjectContext.I.UICamera;
             _canvas.enabled = true;
+
+            return _showCompletion.Task;
         }
 
         private void ReInit()
@@ -122,6 +126,7 @@ namespace MainMenu
                 Destroy(element.gameObject);
             }
             _items.Clear();
+            _showCompletion?.TrySetResult();
         }
 
         private void SetEnergyText(TMP_Text textSource, int amount, string prefix)

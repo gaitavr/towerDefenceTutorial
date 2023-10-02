@@ -14,7 +14,7 @@ using Gameplay;
 
 namespace GamePlay.Modes
 {
-    public sealed class QuickGameMode : MonoBehaviour, IGameModeCleaner, IPauseHandler, IGameEntityInteructionProxy
+    public sealed class DefendMode : MonoBehaviour, IGameModeCleaner, IPauseHandler, IGameEntityInteructionProxy
     {
         [SerializeField] private Vector2Int _boardSize;
         [SerializeField] private DefenderHud _defenderHud;
@@ -51,7 +51,7 @@ namespace GamePlay.Modes
             SceneContext.I.EnemyFactory
         };
 
-        public string SceneName => Utils.Constants.Scenes.QUICK_GAME_MODE;
+        public string SceneName => Utils.Constants.Scenes.DEFEND_MODE;
 
         private TilesBuilderViewController TilesBuilder => SceneContext.I.TilesBuilder;
         private GameBoard GameBoard => SceneContext.I.GameBoard;
@@ -62,7 +62,7 @@ namespace GamePlay.Modes
             ProjectContext.I.PauseManager.Register(this);
             SceneContext.I.Initialize(this);
             _environment = environment;
-            var boardData = UserBoardState.GetInitial(_boardSize, $"quick_{_boardSize}");
+            var boardData = UserBoardState.GetInitial(_boardSize, $"quick_{_boardSize}");//TODO make toggle for current board
             GameBoard.Initialize(boardData);
             _attackScenarioExecutor = new AttackScenarioProcessor(UserState.AttackScenario, SceneContext.I.EnemyFactory, GameBoard);
             _attackScenarioExecutor.EnemySpawned += OnEnemySpawned;

@@ -11,13 +11,12 @@ using GameResult;
 
 namespace GamePlay.Modes
 {
-    public sealed class PvpMode : MonoBehaviour, IGameModeCleaner, IPauseHandler, IGameEntityInteructionProxy
+    public sealed class AttackMode : MonoBehaviour, IGameModeCleaner, IPauseHandler, IGameEntityInteructionProxy
     {
         [SerializeField] private DefenderHud _defenderHud;
         [SerializeField] private GameResultWindow _gameResultWindow;
 
         private AttackScenarioProcessor _attackScenarioExecutor;
-        private PvpGroupType _currentGroup;
         private int _playerHealth;
         private int _initialPlayerHealth;
         private bool _isInited;
@@ -43,15 +42,14 @@ namespace GamePlay.Modes
             SceneContext.I.EnemyFactory
         };
 
-        public string SceneName => Utils.Constants.Scenes.PVP_MODE;
+        public string SceneName => Utils.Constants.Scenes.ATTACK_MODE;
         private GameBoard GameBoard => SceneContext.I.GameBoard;
 
-        public void Init(PvpGroupType groupType, UserBoardState boardState, UserAttackScenarioState scenarioState)
+        public void Init(UserBoardState boardState, UserAttackScenarioState scenarioState)
         {
             ProjectContext.I.PauseManager.Register(this);
             SceneContext.I.Initialize(this);
 
-            _currentGroup = groupType;
             _attackScenarioExecutor = new AttackScenarioProcessor(scenarioState, SceneContext.I.EnemyFactory, GameBoard);
             _attackScenarioExecutor.EnemySpawned += OnEnemySpawned;
 
@@ -85,18 +83,14 @@ namespace GamePlay.Modes
                 if (PlayerHealth <= 0)
                 {
                     _attackScenarioExecutor.IsRunning = false;
-                    gameResult = _currentGroup == PvpGroupType.Attack
-                        ? GameResultType.Victory
-                        : GameResultType.Defeat;
+                    gameResult = GameResultType.Victory;
                     _gameResultWindow.Show(gameResult, Restart, GoToMainMenu);
                 }
 
                 if (_attackScenarioExecutor.Process() == false && _enemies.IsEmpty)
                 {
                     _attackScenarioExecutor.IsRunning = false;
-                    gameResult = _currentGroup == PvpGroupType.Attack
-                        ? GameResultType.Defeat
-                        : GameResultType.Victory;
+                    gameResult = GameResultType.Defeat;
                     _gameResultWindow.Show(gameResult, Restart, GoToMainMenu);
                 }
             }

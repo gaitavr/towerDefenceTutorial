@@ -13,7 +13,7 @@ namespace Gameplay
         private readonly EnemyFactory _enemyFactory;
         private readonly GameBoard _gameBoard;
 
-        private int _currendWaveIndex;
+        private int _currentWaveIndex;
         private int _currentSequenceIndex;
         private float _spawnCooldown;
         private int _spawnCount;
@@ -31,20 +31,20 @@ namespace Gameplay
 
         public (int currentWave, int wavesCount) GetWaves()
         {
-            return (_currendWaveIndex + 1, _scenario.Waves.Count + 1);
+            return (_currentWaveIndex + 1, _scenario.Waves.Count + 1);
         }
 
         public bool Process()
         {
-            if (_currendWaveIndex >= _scenario.Waves.Count)
+            if (_currentWaveIndex >= _scenario.Waves.Count)
                 return false;
 
-            var wave = _scenario.Waves[_currendWaveIndex];
+            var wave = _scenario.Waves[_currentWaveIndex];
             var isWaveFinished = ProcessWave(wave);
             if (isWaveFinished)
-                _currendWaveIndex++;
+                _currentWaveIndex++;
 
-            return _currendWaveIndex < _scenario.Waves.Count;
+            return _currentWaveIndex < _scenario.Waves.Count;
         }
 
         private bool ProcessWave(Wave wave)
