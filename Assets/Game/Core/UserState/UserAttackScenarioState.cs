@@ -37,7 +37,7 @@ namespace Core
             return new UserAttackScenarioState()
             {
                 Version = 1,
-                CreationDate = DateTime.Now,
+                CreationDate = DateTime.UtcNow,
                 Waves = new List<Wave>()
                 {
                     new Wave()

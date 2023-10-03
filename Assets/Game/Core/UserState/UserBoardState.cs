@@ -11,7 +11,7 @@ namespace Core
         public byte Y;
         public GameTileContentType[] Content;
         public byte[] Levels;
-        public bool Selected = true; // TODO implement logic
+        public bool Selected;
 
         public short GetLenght()
         {
@@ -20,7 +20,7 @@ namespace Core
                 + sizeof(byte) + sizeof(byte)
                 + sizeof(byte) * Content.Length 
                 + sizeof(byte) * Levels.Length
-                + sizeof(bool);
+                + sizeof(byte);
             
             return (short)lenght;
         }
@@ -41,6 +41,8 @@ namespace Core
             {
                 offset += ByteConverter.AddToStream(l, data, offset);
             }
+
+            offset += ByteConverter.AddToStream(Selected, data, offset);
         }
 
         public void Deserialize(byte[] data, ref int offset)
@@ -58,6 +60,8 @@ namespace Core
                 Content[i] = (GameTileContentType)content[i];
             }
             offset += ByteConverter.ReturnFromStream(data, offset, size, out Levels);
+            
+            offset += ByteConverter.ReturnFromStream(data, offset, out Selected);
         }
 
         public static UserBoardState GetInitial(Vector2Int boardSize, string name)

@@ -1,3 +1,4 @@
+using System;
 using Core;
 using Core.Communication;
 using System.Collections.Generic;
@@ -43,6 +44,7 @@ namespace MainMenu
         public UniTask Show()
         {
             _showCompletion = new UniTaskCompletionSource();
+            CheckScenarioExpiration();
             
             foreach (var item in AccountState.AttackScenario.Waves.Select(_ => Instantiate(_itemPrefab, _contentParent)))
             {
@@ -57,6 +59,16 @@ namespace MainMenu
             _canvas.enabled = true;
 
             return _showCompletion.Task;
+        }
+
+        private void CheckScenarioExpiration()
+        {
+            var scenarioCreationSpan = AccountState.AttackScenario.CreationDate - DateTime.UtcNow;
+            if (scenarioCreationSpan.TotalHours >= 24)
+            {
+                AccountState.AttackScenario = UserAttackScenarioState.GetInitial();
+                UserStateCommunicator.SaveUserState(AccountState);
+            }
         }
 
         private void ReInit()

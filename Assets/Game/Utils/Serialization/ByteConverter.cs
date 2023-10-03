@@ -10,6 +10,12 @@ namespace Utils.Serialization
             return 1;
         }
         
+        public static int AddToStream(bool source, byte[] destination, int offset)
+        {
+            destination[offset] = (byte)(source ? 1 : 0);
+            return 1;
+        }
+        
         public static int AddToStream(short source, byte[] destination, int offset)
         {
             destination[offset] = (byte)(source >> 8);
@@ -61,6 +67,13 @@ namespace Utils.Serialization
         public static int ReturnFromStream(byte[] source, int offset, out byte destination)
         {
             destination = source[offset];
+            return 1;
+        }
+        
+        public static int ReturnFromStream(byte[] source, int offset, out bool destination)
+        {
+            var temp = source[offset];
+            destination = temp == 1;
             return 1;
         }
         
