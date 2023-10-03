@@ -1,7 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using GamePlay.Modes;
 using System;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
 using Utils.Extensions;
@@ -10,7 +9,7 @@ namespace Core.Loading
 {
     public sealed class AttackModeLoadingOperation : ILoadingOperation
     {
-        public string Description => "Searching oponent...";
+        public string Description => "Searching defender...";
 
         public async UniTask Load(Action<float> onProgress)
         {
@@ -20,13 +19,14 @@ namespace Core.Loading
             {
                 await UniTask.Yield();
             }
-            onProgress?.Invoke(0.7f);
+            onProgress?.Invoke(0.55f);
 
             var scene = SceneManager.GetSceneByName(Constants.Scenes.ATTACK_MODE);
             var attackMode = scene.GetRoot<AttackMode>();
             var environment = await ProjectContext.I.AssetProvider.LoadSceneAdditive("Sand");
-
-            var boardState = UserBoardState.GetInitial(new Vector2Int(5, 5), "test");//TODO search real board
+            onProgress?.Invoke(0.85f);
+            
+            var boardState = await ProjectContext.I.PvpCommunicator.GetBoard();
             attackMode.Init(boardState, environment);
             onProgress?.Invoke(1.0f);
             attackMode.BeginNewGame();
