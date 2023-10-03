@@ -89,13 +89,15 @@ namespace GamePlay.Modes
             {
                 _attackScenarioExecutor.IsRunning = false;
                 _gameResultWindow.Show(GameResultType.Defeat, Restart, GoToMainMenu);
+                UserState.Currencies.ChangeEnergy(5);
             }
-
-            if (_attackScenarioExecutor.Process() == false && _enemies.IsEmpty)
+            else if (_attackScenarioExecutor.Process() == false && _enemies.IsEmpty)
             {
                 _attackScenarioExecutor.IsRunning = false;
                 _gameResultWindow.Show(GameResultType.Victory, Restart, GoToMainMenu);
+                UserState.Currencies.ChangeEnergy(25);
             }
+            ProjectContext.I.UserStateCommunicator.SaveUserState(UserState);
         }
 
         public void BeginNewGame()
