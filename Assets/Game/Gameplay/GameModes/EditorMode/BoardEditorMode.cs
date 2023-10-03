@@ -35,6 +35,7 @@ namespace GamePlay.Modes
 
             _boardData = UserState.TryGetBoard(boardContext.Name);
             _boardData ??= UserBoardState.GetInitial(boardContext.Size, boardContext.Name);
+            _boardData.Selected = boardContext.IsSelected;
             GameBoard.Initialize(_boardData);
         }
 

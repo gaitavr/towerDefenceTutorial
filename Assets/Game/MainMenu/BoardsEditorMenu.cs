@@ -53,7 +53,8 @@ namespace MainMenu
             var boardSizeY = Constants.Game.MIN_BOARD_SIZE +
                 (Constants.Game.MAX_BOARD_SIZE - Constants.Game.MIN_BOARD_SIZE) * _boardSizeYslider.value;
             var boardSize = new Vector2Int((int)boardSizeX, (int)boardSizeY);
-            LoadBoard(new BoardContext(_boardNameField.text, boardSize));
+            var isSelected = UserState.Boards.Count == 0;
+            LoadBoard(new BoardContext(_boardNameField.text, boardSize, isSelected));
         }
 
         private void OnCloseBtnClicked()
@@ -114,8 +115,6 @@ namespace MainMenu
                     return;
 
                 var board = UserState.TryGetBoard(item.Context.Name);
-                if (board == null)
-                    return;
                 board.Name = newName;
 
                 var saveResult = await ProjectContext.I.UserStateCommunicator.SaveUserState(UserState);
@@ -123,6 +122,32 @@ namespace MainMenu
             catch (Exception e)
             {
                 Debug.LogError($"Delete board exception: {e.Message}");
+            }
+        }
+
+        public async void SetActive(BoardsEditorMenuItem item)
+        {
+            try
+            {
+                foreach (var i in _items)
+                {
+                    var board = UserState.TryGetBoard(i.Context.Name);
+                    if (item == i)
+                    {
+                        board.Selected = true;
+                    }
+                    else
+                    {
+                        i.SetInactive();
+                        board.Selected = false;
+                    }
+                }
+
+                var saveResult = await ProjectContext.I.UserStateCommunicator.SaveUserState(UserState);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"SetActive board exception: {e.Message}");
             }
         }
     }

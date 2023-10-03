@@ -10,6 +10,8 @@ namespace Core.Loading
     public sealed class DefendModeLoadingOperation : ILoadingOperation
     {
         public string Description => "Quick game loading...";
+
+        private UserAccountState UserAccountState => ProjectContext.I.UserContainer.State;
         
         public async UniTask Load(Action<float> onProgress)
         {
@@ -26,7 +28,7 @@ namespace Core.Loading
             var defendMode = scene.GetRoot<DefendMode>();
             var environment = await ProjectContext.I.AssetProvider.LoadSceneAdditive("Sand");
 
-            var attackScenario = ProjectContext.I.UserContainer.State.AttackScenario;//TODO find
+            var attackScenario = UserAccountState.AttackScenario;//TODO find
             defendMode.Init(attackScenario, environment);
             onProgress?.Invoke(1.0f);
             defendMode.BeginNewGame();

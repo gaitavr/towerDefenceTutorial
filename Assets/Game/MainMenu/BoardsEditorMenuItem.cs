@@ -12,6 +12,7 @@ namespace MainMenu
         [SerializeField] private Button _selectButton;
         [SerializeField] private Button _deleteButton;
         [SerializeField] private Button _renameButton;
+        [SerializeField] private Toggle _currentToggle;
 
         private IBoardEditorMenuController _controller;
         private string _initialName;
@@ -25,6 +26,7 @@ namespace MainMenu
 
             _nameField.text = _initialName = Context.Name;
             _sizeText.text = $"Size: {Context.Size.x}x{Context.Size.y}";
+            _currentToggle.isOn = context.IsSelected;
 
             _selectButton.onClick.AddListener(() =>
             {
@@ -38,9 +40,16 @@ namespace MainMenu
             {
                 _controller.Rename(this, _nameField.text);
             });
+            _currentToggle.onValueChanged.AddListener((isActive) =>
+            {
+                if(isActive)
+                    _controller.SetActive(this);
+            });
             _nameField.onValueChanged.AddListener(OnNameChanged);
             OnNameChanged(Context.Name);
         }
+
+        public void SetInactive() => _currentToggle.isOn = false;
 
         private void OnNameChanged(string text)
         {

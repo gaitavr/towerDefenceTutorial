@@ -4,6 +4,7 @@ using Core.Loading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace MainMenu
 {
@@ -15,6 +16,8 @@ namespace MainMenu
         [SerializeField] private Button _boardsButton;
         [SerializeField] private BoardsEditorMenu _boardsMenu;
         [SerializeField] private AttackScenarioEditorMenu _attackScenarioEditorMenu;
+        
+        private UserAccountState UserAccountState => ProjectContext.I.UserContainer.State;
         
         private void Start()
         {
@@ -39,10 +42,27 @@ namespace MainMenu
             }
         }
 
-        private void OnDefendButtonClicked()
+        private async void OnDefendButtonClicked()
         {
-            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new DefendModeLoadingOperation())
-                .Forget();
+            try
+            {
+                if (UserAccountState.Boards.Count == 0)
+                {
+                    var alertPopup = await AlertPopup.Load();
+                    await alertPopup.Value.AwaitForDecision("No boards found! Create board first");
+                    alertPopup.Dispose();
+                }
+                else
+                {
+                    ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new DefendModeLoadingOperation())
+                        .Forget();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"{nameof(MainMenu)} {nameof(OnDefendButtonClicked)} exception: {e.Message}");
+            }
+            
         }
 
         private void OnBoardsButtonClicked()
