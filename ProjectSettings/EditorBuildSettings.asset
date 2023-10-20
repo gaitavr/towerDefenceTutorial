@@ -12,11 +12,14 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/MainMenu.unity
     guid: 2b506d0e3fbc8d645b377856b9da5f4d
   - enabled: 1
-    path: Assets/Game/Scenes/EditorMode.unity
+    path: Assets/Game/Scenes/BoardEditorMode.unity
     guid: a4940a230cadcfd48ac256338e79c1f1
   - enabled: 1
-    path: Assets/Game/Scenes/QuickGameMode.unity
+    path: Assets/Game/Scenes/DefendMode.unity
     guid: 99a85963493959341a197526b3d70e64
+  - enabled: 1
+    path: Assets/Game/Scenes/AttackMode.unity
+    guid: 243c2969705d39e4c8f34398b58f5874
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 385f8339b535efb43afc1d2a8514ba18,
       type: 2}

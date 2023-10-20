@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using GamePlay.Defend;
 using GamePlay.Attack;
+using GamePlay.Modes;
 
 namespace Core
 {
@@ -26,6 +27,7 @@ namespace Core
         public GameTileRaycaster GameTileRaycaster { get; private set; }
         public TilesViewControllerRouter TilesViewControllerRouter { get; private set; }
         public IEnumerable<GameTileViewController> TileViewControllers => _tileViewControllers;
+        public IGameEntityInteructionProxy EnemyInteructionProxy { get; private set; }
 
         public static SceneContext I { get; private set; }
 
@@ -34,8 +36,10 @@ namespace Core
             I = this;
         }
         
-        public void Initialize()
+        public void Initialize(IGameEntityInteructionProxy enemyInteructionProxy)
         {
+            EnemyInteructionProxy = enemyInteructionProxy;
+
             GameTileRaycaster = new GameTileRaycaster(_mainCamera, GameBoard);
             TilesViewControllerRouter = new TilesViewControllerRouter(GameTileRaycaster);
             TilesBuilder = new TilesBuilderViewController(ContentFactory, GameTileRaycaster,

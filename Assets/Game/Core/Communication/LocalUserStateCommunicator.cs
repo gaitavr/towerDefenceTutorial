@@ -11,7 +11,10 @@ namespace Core.Communication
 
         public UniTask<bool> SaveUserState(UserAccountState state)
         {
-            var writeBytes = state.Serialize();
+            var offset = 0;
+            var lenght = state.GetLenght();
+            var writeBytes = new byte[lenght];
+            state.Serialize(writeBytes, ref offset);
             File.WriteAllBytes(Path, writeBytes);
             return UniTask.FromResult(true);
         }
@@ -22,8 +25,9 @@ namespace Core.Communication
             var path = Path;
             if (File.Exists(path))
             {
-                var readBytes = File.ReadAllBytes(path);
-                result.Deserialize(readBytes);
+                var readBytes = await File.ReadAllBytesAsync(path);
+                var offset = 0;
+                result.Deserialize(readBytes, ref offset);
             }
             await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
             return result;

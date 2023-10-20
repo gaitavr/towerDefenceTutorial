@@ -6,14 +6,12 @@ using UnityEngine;
 public class GameBehaviorCollection
 {
     private List<GameBehavior> _behaviors = new();
-    private List<Transform> _transforms = new();
 
     public bool IsEmpty => _behaviors.Count == 0;
 
     public void Add(GameBehavior behavior)
     {
         _behaviors.Add(behavior);
-        _transforms.Add(behavior.transform);
     }
 
     public void GameUpdate()
@@ -46,6 +44,4 @@ public class GameBehaviorCollection
             _behaviors[i].SetPaused(isPaused);
         }
     }
-    
-    public Transform[] GetAllTransforms() => _transforms.ToArray();
 }

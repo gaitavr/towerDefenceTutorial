@@ -11,6 +11,7 @@ public sealed class ProjectContext : MonoBehaviour
 
     public UserContainer UserContainer { get; private set; }
     public IUserStateCommunicator UserStateCommunicator { get; private set; }
+    public IPvpCommunicator PvpCommunicator { get; private set; }
     public LoadingScreenProvider LoadingScreenProvider { get; private set; }
     public AssetProvider AssetProvider { get; private set; }
     public PauseManager PauseManager { get; private set; }
@@ -28,6 +29,7 @@ public sealed class ProjectContext : MonoBehaviour
     {
         UserContainer = new UserContainer();
         UserStateCommunicator = new LocalUserStateCommunicator();
+        PvpCommunicator = new LocalPvpCommunicator();
         LoadingScreenProvider = new LoadingScreenProvider();
         AssetProvider = new AssetProvider();
         PauseManager = new PauseManager();

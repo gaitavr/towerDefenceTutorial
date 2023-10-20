@@ -3,7 +3,6 @@ using Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using Utils.Extensions;
-using GamePlay;
 using GamePlay.Modes;
 using Gameplay;
 
@@ -23,20 +22,19 @@ namespace Core.Loading
         public async UniTask Load(Action<float> onProgress)
         {
             onProgress?.Invoke(0.3f);
-            var loadOp = SceneManager.LoadSceneAsync(Constants.Scenes.EDITOR_MODE, 
+            var loadOp = SceneManager.LoadSceneAsync(Constants.Scenes.BOARD_EDITOR_MODE, 
                 LoadSceneMode.Single);
             while (loadOp.isDone == false)
             {
-                await UniTask.Delay(1);
+                await UniTask.Yield();
             }
             
-            var scene = SceneManager.GetSceneByName(Constants.Scenes.EDITOR_MODE);
+            var scene = SceneManager.GetSceneByName(Constants.Scenes.BOARD_EDITOR_MODE);
             var editorGame = scene.GetRoot<BoardEditorMode>();
-            editorGame.Init(_boardContext);
-            onProgress?.Invoke(0.9f);
             
-            editorGame.StartProcessing();
+            editorGame.Init(_boardContext);
             onProgress?.Invoke(1.0f);
+            editorGame.StartProcessing();
         }
     }
 }

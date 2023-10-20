@@ -9,6 +9,19 @@ namespace Utils.Serialization
             destination[offset] = source;
             return 1;
         }
+        
+        public static int AddToStream(bool source, byte[] destination, int offset)
+        {
+            destination[offset] = (byte)(source ? 1 : 0);
+            return 1;
+        }
+        
+        public static int AddToStream(short source, byte[] destination, int offset)
+        {
+            destination[offset] = (byte)(source >> 8);
+            destination[offset + 1] = (byte)source;
+            return 2;
+        }
 
         public static int AddToStream(int source, byte[] destination, int offset)
         {
@@ -19,14 +32,17 @@ namespace Utils.Serialization
             return 4;
         }
 
-        public static byte[] Serialize(int source)
+        //TODO check posibility to write directly to destination
+        public static unsafe int AddToStream(float source, byte[] destination, int offset)
         {
-            var result = new byte[4];
-            AddToStream(source, result, 0);
-            return result;
+            var bytes = new byte[4];
+            fixed (byte* b = bytes)
+                *((int*)b) = *(int*)&source;
+            AddToStream(bytes, destination, offset);
+            return 4;
         }
 
-        public static int AddToStream(ulong source, byte[] destination, int offset)
+        public static int AddToStream(long source, byte[] destination, int offset)
         {
             destination[offset] = (byte)(source >> 56);
             destination[offset + 1] = (byte)(source >> 48);
@@ -53,6 +69,20 @@ namespace Utils.Serialization
             destination = source[offset];
             return 1;
         }
+        
+        public static int ReturnFromStream(byte[] source, int offset, out bool destination)
+        {
+            var temp = source[offset];
+            destination = temp == 1;
+            return 1;
+        }
+        
+        public static int ReturnFromStream(byte[] source, int offset, out short destination)
+        {
+            destination = (short)(source[offset] << 8);
+            destination |= source[offset + 1];
+            return 2;
+        }
 
         public static int ReturnFromStream(byte[] source, int offset, out int destination)
         {
@@ -64,17 +94,26 @@ namespace Utils.Serialization
             return 4;
         }
 
-        public static int ReturnFromStream(byte[] source, int offset, out ulong destination)
+        public static unsafe int ReturnFromStream(byte[] source, int offset, out float destination)
+        {
+            fixed (byte* ptr = &source[offset])
+            {
+                destination = * ((float*)(int*)ptr);
+            }
+            return 4;
+        }
+
+        public static int ReturnFromStream(byte[] source, int offset, out long destination)
         {
             destination = 0;
-            destination |= (ulong)source[offset] << 56;
-            destination |= (ulong)source[offset + 1] << 48;
-            destination |= (ulong)source[offset + 2] << 40;
-            destination |= (ulong)source[offset + 3] << 32;
-            destination |= (ulong)source[offset + 4] << 24;
-            destination |= (ulong)source[offset + 5] << 16;
-            destination |= (ulong)source[offset + 6] << 8;
-            destination |= (ulong)source[offset + 7];
+            destination |= (long)source[offset] << 56;
+            destination |= (long)source[offset + 1] << 48;
+            destination |= (long)source[offset + 2] << 40;
+            destination |= (long)source[offset + 3] << 32;
+            destination |= (long)source[offset + 4] << 24;
+            destination |= (long)source[offset + 5] << 16;
+            destination |= (long)source[offset + 6] << 8;
+            destination |= (long)source[offset + 7];
             return 8;
         }
 

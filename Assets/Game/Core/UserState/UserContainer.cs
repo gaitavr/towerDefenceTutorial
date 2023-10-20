@@ -1,5 +1,7 @@
 ﻿
 
+using GamePlay.Attack;
+
 namespace Core
 {
     public sealed class UserContainer
@@ -43,6 +45,11 @@ namespace Core
         public void RefundAfterUpgrade(GameTileContentType tileContentType, int level)
         {
             ChangeAfterUpgrade(tileContentType, level, true);
+        }
+
+        public int CalculateUsedEnergy(EnemyType enemyType, int enemiesCount)
+        {
+            return Configuration.GetEnemyCost(enemyType) * enemiesCount;
         }
 
         private void ChangeAfterUpgrade(GameTileContentType tileContentType, int level, bool isPositive)

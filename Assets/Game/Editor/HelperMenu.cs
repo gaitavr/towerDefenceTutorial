@@ -32,10 +32,12 @@ namespace Editor
             {
                 var bytes = File.ReadAllBytes(path);
                 var state = new UserAccountState();
-                state.Deserialize(bytes);
+                var offset = 0;
+                state.Deserialize(bytes, ref offset);
                 state.Currencies.ChangeCrystals(100000);
                 state.Currencies.ChangeGas(1000);
-                bytes = state.Serialize();
+                offset = 0;
+                state.Serialize(bytes, ref offset);
                 File.WriteAllBytes(path, bytes);
             }
         }

@@ -1,9 +1,12 @@
 ﻿
 
-public enum EnemyType
+namespace GamePlay.Attack
 {
-    Golem,
-    Elien,
-    Chomper,
-    Grenadier
+    public enum EnemyType : byte
+    {
+        Golem = 1,
+        Elien = 2,
+        Chomper = 3,
+        Grenadier = 4,
+    }
 }

@@ -78,7 +78,7 @@ namespace GamePlay.Defend
 
             _rotator.localRotation = Quaternion.LookRotation(dir);
 
-            QuickGameMode.SpawnShell().Initialize(launchPoint, targetPoint,
+            InterructionProxy.SpawnShell().Initialize(launchPoint, targetPoint,
                 new Vector3(s * cosTheta * dir.x, s * sinTheta, s * cosTheta * dir.z), _shellBlastRadius, _damage);
         }
     }

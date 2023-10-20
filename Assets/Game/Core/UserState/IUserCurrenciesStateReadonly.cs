@@ -6,6 +6,7 @@ namespace Core
     {
         int Crystals { get; }
         int Gas { get; }
+        int Energy { get; }
 
         event Action Changed;
     }

@@ -2,6 +2,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using Login;
 using Utils.Assets;
+using Utils.Extensions;
 
 namespace Core.Loading
 {

@@ -1,3 +1,6 @@
+using GamePlay.Attack;
+using System;
+
 namespace Core
 {
     public sealed class AppConfiguration
@@ -34,6 +37,24 @@ namespace Core
                     return 100 * level;
             }
             return 0;
+        }
+
+        public int GetEnemyCost(EnemyType enemyType)
+        {
+            switch (enemyType)
+            {
+                case EnemyType.Chomper:
+                    return 1;
+                case EnemyType.Golem:
+                    return 5;
+                case EnemyType.Elien:
+                    return 10;
+                case EnemyType.Grenadier:
+                    return 25;
+                default:
+                    throw new ArgumentOutOfRangeException($"Canot process cost of {enemyType}");
+            }
+
         }
     }
 }

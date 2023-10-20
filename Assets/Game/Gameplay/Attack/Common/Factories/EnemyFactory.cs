@@ -8,8 +8,7 @@ namespace GamePlay.Attack
             var config = GetConfig(type);
             Enemy instance = CreateGameObjectInstance(config.Prefab);
             instance.OriginFactory = this;
-            instance.Initialize(config.Scale.RandomValueInRange, config.PathOffset.RandomValueInRange,
-                config.Speed.RandomValueInRange, config.Health.RandomValueInRange);
+            instance.Initialize(config.ToContext());
             return instance;
         }
 
